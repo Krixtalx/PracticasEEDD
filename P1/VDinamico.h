@@ -20,8 +20,12 @@
 
 template<class T>
 class VDinamico {
-    int tamL, tamF;
+private:
+    int tamL, tamF; //Tamaño lógico y tamaño fisico
     T* buffer;
+    bool sorted=false;
+    void aumentarTamF();
+    void disminuirTamF();
 
 public:
     VDinamico();
@@ -141,12 +145,17 @@ T& VDinamico<T>::operator[](int pos) {
  * @post Inserta el dato en la posicion indicada, desplazando el resto de datos
  */
 template<class T>
-void VDinamico<T>::insertarDato(T& dato, unsigned int pos = UINT_MAX) {
+void VDinamico<T>::insertarDato(T& dato, unsigned int pos) {
     //TODO: Excep. si pos no esta en el rango permitido
     if (pos == UINT_MAX) {
         buffer[tamL++] = dato;
     } else {
-        //TODO: Metodo aumentarVector() cuando tamL == tamF
+        tamL++;
+        
+        if (tamL == tamF) {
+            aumentarTamF();
+        }
+
         for (int i = tamL; i > pos; i--) {
             buffer[i] = buffer[i - 1];
         }
@@ -161,15 +170,46 @@ void VDinamico<T>::insertarDato(T& dato, unsigned int pos = UINT_MAX) {
  * @post Elimina el dato indicado y reorganiza los elementos del vector
  */
 template<class T>
-void VDinamico<T>::eliminarDato(unsigned int pos = UINT_MAX) {
+void VDinamico<T>::eliminarDato(unsigned int pos) {
     //TODO: Excep. si pos no esta en el rango permitido
-    //TODO: Metodo disminuirVector() cuando tamL*3 <= tamF
+    
     if (pos != UINT_MAX) {
         for (int i = pos; i + 1 < tamL; i++) {
             buffer[i] = buffer[i + 1];
         }
+    }else{
+        buffer[tamL]=0;
     }
+    
     tamL--;
+    
+    if(tamL*3<=tamF)
+        disminuirTamF();
+}
+
+/**
+* @brief Crea un nuevo buffer con el doble de tamaño físico, copia todos los elementos del buffer anterior y borra el anterior buffer
+* @post  El anterior buffer queda eliminado
+*/
+template <class T>
+void VDinamico<T>::aumentarTamF(){
+    int prevTamF=tamF;
+    T* NuevoBuffer = new T[tamF*=2];
+    for (int i = 0; i < prevTamF; i++) {
+        NuevoBuffer[i]=buffer[i];
+    }
+}
+
+/**
+* @brief Crea un nuevo buffer con la mitad de tamaño físico, copia todos los elementos del buffer anterior y borra el anterior buffer
+* @post  El anterior buffer queda eliminado
+*/
+template <class T>
+void VDinamico<T>::disminuirTamF(){
+    T* NuevoBuffer = new T[tamF/=2];
+    for (int i = 0; i < tamF; i++) {
+        NuevoBuffer[i]=buffer[i];
+    }
 }
 #endif /* VDINAMICO_H */
 
