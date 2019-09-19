@@ -40,5 +40,7 @@ public:
     void eliminarDato(unsigned int pos = UINT_MAX);
 };
 
+
+
 #endif /* VDINAMICO_H */
 
