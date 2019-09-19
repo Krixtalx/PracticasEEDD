@@ -23,9 +23,6 @@ class VDinamico {
     int tamL, tamF;
     T* buffer;
 
-    void inicializar();
-    void aumentarVector();
-
 public:
     VDinamico();
     VDinamico(unsigned int atamL);
@@ -40,7 +37,17 @@ public:
     void eliminarDato(unsigned int pos = UINT_MAX);
 };
 
+template<class T>
+VDinamico<T>::VDinamico(): tamF(1), tamL(0){
+    buffer = new T[tamF];
+}
 
+template<class T>
+VDinamico<T>::VDinamico(unsigned int atamL): tamL(atamL), tamF(1){
+    while(tamF < tamL)
+        tamF *= 2;
+    buffer = new T[tamF];
+}
 
 #endif /* VDINAMICO_H */
 
