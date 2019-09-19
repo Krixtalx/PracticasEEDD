@@ -22,7 +22,7 @@ template<class T>
 class VDinamico {
     int tamL, tamF;
     T** buffer;
-    
+
     void inicializar();
     void aumentarVector();
 
@@ -42,7 +42,7 @@ public:
 
 template<class T>
 VDinamico<T>::VDinamico() : tamF(1), tamL(0) {
-    *buffer = new T[tamF];  //Crea el buffer en memoria dinamica
+    buffer = new *T[tamF]; //Crea el buffer en memoria dinamica
     inicializar();
 }
 
@@ -50,7 +50,7 @@ VDinamico<T>::VDinamico() : tamF(1), tamL(0) {
  * @brief Metodo privado para inicializar cada valor del vector
  */
 template<class T>
-void VDinamico<T>::inicializar(){
+void VDinamico<T>::inicializar() {
     for (int i = 0; i < tamF; i++) {
         buffer[i] = new T;
     }
@@ -62,7 +62,7 @@ void VDinamico<T>::inicializar(){
  * @post Crea un vector en memoria dinamica cuyo tamaño es una potencia de 2 mayor que tamL
  */
 template<class T>
-VDinamico<T>::VDinamico(unsigned int atamL){
+VDinamico<T>::VDinamico(unsigned int atamL) {
     tamF = 1;
     tamL = atamL;
     while (tamF <= atamL)
@@ -126,14 +126,14 @@ int VDinamico<T>::getTamL() const {
  */
 template<class T>
 T& VDinamico<T>::operator=(VDinamico<T>& asig) {
-    delete[] *buffer;
+    delete[] * buffer;
     tamF = asig.tamF;
     tamL = asig.tamL;
     *buffer = new T[tamF];
-    for(int i = 0; i < tamL; i++){
+    for (int i = 0; i < tamL; i++) {
         *buffer[i] = asig[i];
     }
-    
+
     return *this;
 }
 
@@ -154,22 +154,24 @@ T& VDinamico<T>::operator[](int value) {
  * @post Inserta el dato en la posicion indicada o al final si no se especifica una posicion
  */
 template<class T>
-void VDinamico<T>::insertarDato(T& dato, unsigned int pos){
-    if(pos == UINT_MAX){
+void VDinamico<T>::insertarDato(T& dato, unsigned int pos) {
+    if (pos == UINT_MAX) {
         *buffer[tamL++] = dato;
-    }else{
+    } else {
         *buffer[pos] = dato;
         tamL++;
     }
 }
 
-
 template<class T>
-void VDinamico<T>::eliminarDato(unsigned int pos){
+void VDinamico<T>::eliminarDato(unsigned int pos) {
+    tamL--;
     delete buffer[pos];
     for (int i = pos; i < tamL; i++) {
         buffer[pos] = buffer[pos++];
     }
+    delete buffer[tamL];
+    buffer[tamL] = new T;
 }
 #endif /* VDINAMICO_H */
 
