@@ -15,6 +15,7 @@
 #define VDINAMICO_H
 
 #include <climits>
+#include <stdexcept>
 
 //TODO: Lanzar excepciones BAD_ALLOC
 
@@ -23,7 +24,7 @@ class VDinamico {
 private:
     int tamL, tamF; //Tamaño lógico y tamaño fisico
     T* buffer;
-    bool sorted=false;
+    bool sorted = false;
     void aumentarTamF();
     void disminuirTamF();
 
@@ -134,8 +135,10 @@ T& VDinamico<T>::operator=(VDinamico<T>& asig) {
  */
 template<class T>
 T& VDinamico<T>::operator[](int pos) {
-    //TODO: Excep. si pos no esta en el rango permitido
-    return buffer[pos];
+    if (pos < 0 || pos >= tamF) {
+        throw std::out_of_range("Posicion no valida");
+    } else
+        return buffer[pos];
 }
 
 /**
@@ -146,21 +149,24 @@ T& VDinamico<T>::operator[](int pos) {
  */
 template<class T>
 void VDinamico<T>::insertarDato(T& dato, unsigned int pos) {
-    //TODO: Excep. si pos no esta en el rango permitido
-    if (pos == UINT_MAX) {
-        buffer[tamL++] = dato;
+    if (pos < 0 || pos >= tamF) {
+        throw std::out_of_range("Posicion no valida");
     } else {
-        tamL++;
-        
-        if (tamL == tamF) {
-            aumentarTamF();
-        }
+        if (pos == UINT_MAX) {
+            buffer[tamL++] = dato;
+        } else {
+            tamL++;
 
-        for (int i = tamL; i > pos; i--) {
-            buffer[i] = buffer[i - 1];
+            if (tamL == tamF) {
+                aumentarTamF();
+            }
+
+            for (int i = tamL; i > pos; i--) {
+                buffer[i] = buffer[i - 1];
+            }
+            buffer[pos] = dato;
+            tamL++;
         }
-        buffer[pos] = dato;
-        tamL++;
     }
 }
 
@@ -171,45 +177,51 @@ void VDinamico<T>::insertarDato(T& dato, unsigned int pos) {
  */
 template<class T>
 void VDinamico<T>::eliminarDato(unsigned int pos) {
-    //TODO: Excep. si pos no esta en el rango permitido
-    
-    if (pos != UINT_MAX) {
-        for (int i = pos; i + 1 < tamL; i++) {
-            buffer[i] = buffer[i + 1];
+    if (pos < 0 || pos >= tamF) {
+        throw std::out_of_range("Posicion no valida");
+    } else {
+        if (pos != UINT_MAX) {
+            for (int i = pos; i + 1 < tamL; i++) {
+                buffer[i] = buffer[i + 1];
+            }
+        } else {
+            buffer[tamL] = 0;
         }
-    }else{
-        buffer[tamL]=0;
+
+        tamL--;
+
+        if (tamL * 3 <= tamF)
+            disminuirTamF();
     }
-    
-    tamL--;
-    
-    if(tamL*3<=tamF)
-        disminuirTamF();
 }
 
 /**
-* @brief Crea un nuevo buffer con el doble de tamaño físico, copia todos los elementos del buffer anterior y borra el anterior buffer
-* @post  El anterior buffer queda eliminado
-*/
+ * @brief Crea un nuevo buffer con el doble de tamaño físico, copia todos los elementos del buffer anterior y borra el anterior buffer
+ * @post  El anterior buffer queda eliminado
+ */
 template <class T>
-void VDinamico<T>::aumentarTamF(){
-    int prevTamF=tamF;
-    T* NuevoBuffer = new T[tamF*=2];
+void VDinamico<T>::aumentarTamF() {
+    int prevTamF = tamF;
+    T* NuevoBuffer = new T[tamF *= 2];
     for (int i = 0; i < prevTamF; i++) {
-        NuevoBuffer[i]=buffer[i];
+        NuevoBuffer[i] = buffer[i];
     }
+    delete[] buffer;
+    buffer = NuevoBuffer;
 }
 
 /**
-* @brief Crea un nuevo buffer con la mitad de tamaño físico, copia todos los elementos del buffer anterior y borra el anterior buffer
-* @post  El anterior buffer queda eliminado
-*/
+ * @brief Crea un nuevo buffer con la mitad de tamaño físico, copia todos los elementos del buffer anterior y borra el anterior buffer
+ * @post  El anterior buffer queda eliminado
+ */
 template <class T>
-void VDinamico<T>::disminuirTamF(){
-    T* NuevoBuffer = new T[tamF/=2];
+void VDinamico<T>::disminuirTamF() {
+    T* NuevoBuffer = new T[tamF /= 2];
     for (int i = 0; i < tamF; i++) {
-        NuevoBuffer[i]=buffer[i];
+        NuevoBuffer[i] = buffer[i];
     }
+    delete[] buffer;
+    buffer = NuevoBuffer;
 }
 #endif /* VDINAMICO_H */
 
