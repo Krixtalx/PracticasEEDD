@@ -1,16 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/* 
- * File:   main.cpp
- * Author: jcfer
- *
- * Created on 18 September 2019, 18:03
- */
-
 #include <cstdlib>
 #include <iostream>
 #include <stdlib.h>
@@ -21,27 +8,41 @@ using namespace std;
 void mostrarVDinInt(VDinamico<int> &vD){
     cout << "tamF: " << vD.getTamF() << " tamL:" << vD.getTamL() << endl;
     for (int i = 0; i < vD.getTamL(); i++) {
-        cout << vD[i] << endl;
+        cout << vD[i] << " - ";
     }
+    cout <<endl;
 }
 
 
 int main(int argc, char** argv) {
+    try{
+        VDinamico<int> test(5);
 
-    VDinamico<int> a(5);
+        srand(time(NULL));
+        for (int i = 0; i < 5; i++) {
+            test[i] = (rand() % 100);
+        }
+        mostrarVDinInt(test);
 
-    srand(time(NULL));
-    for (int i = 0; i < 5; i++) {
-        a[i] = rand() % 100;
+        int illoPosUnIntRandomQueMeHeInventaoJaJaEkisde = 1;
+        test.insertarDato(illoPosUnIntRandomQueMeHeInventaoJaJaEkisde, 3);
+        test.insertarDato(34, 4);
+        mostrarVDinInt(test);
+
+        test.eliminarDato(3);
+        mostrarVDinInt(test);    
+
+        int o = 11;
+        test.insertarDato(o).insertarDato(o);
+        mostrarVDinInt(test);
+        test.eliminarDato(0);
+        mostrarVDinInt(test);
+    }catch(std::out_of_range e){
+        cerr<<e.what();
     }
-    mostrarVDinInt(a);
-    
-    int illoPosUnIntRandomQueMeHeInventaoJaJaEkisde = 1;
-    a.insertarDato(illoPosUnIntRandomQueMeHeInventaoJaJaEkisde, 3);
-    mostrarVDinInt(a);
-    
-    a.eliminarDato(3);
-    mostrarVDinInt(a);    
+    return 0;
+}
+
     
 //    cout << "    OOOOOOOOOO    " << endl <<
 //            "  OOOOOOOOOOOOOO  " << endl << 
@@ -73,12 +74,3 @@ int main(int argc, char** argv) {
 //            "  OOOOOOOOOOOOOO  " << endl <<
 //            "    OOOOOOOOOO    " << endl;
     
-    int o = 11;
-    a.insertarDato(o).insertarDato(o).insertarDato(o).insertarDato(o);
-    mostrarVDinInt(a);
-    a.eliminarDato(0).eliminarDato(0).eliminarDato(0).eliminarDato(0).eliminarDato(0);
-    mostrarVDinInt(a);
-    
-    return 0;
-}
-
