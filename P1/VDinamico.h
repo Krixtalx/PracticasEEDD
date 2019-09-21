@@ -1,16 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/* 
- * File:   VDinamico.h
- * Author: jcfer
- *
- * Created on 18 September 2019, 18:24
- */
-
 #ifndef VDINAMICO_H
 #define VDINAMICO_H
 
@@ -34,12 +21,12 @@ public:
     VDinamico(const VDinamico& orig);
     VDinamico(const VDinamico& orig, unsigned int inicio, unsigned int num);
     virtual ~VDinamico();
-    T& getTamF();
-    T& getTamL();
-    T& operator=(VDinamico<T>& asig);
+    int getTamF();
+    int getTamL();
+    VDinamico<T>& operator=(VDinamico<T>& asig);
     T& operator[](int pos);
-    void insertarDato(T& dato, unsigned int pos = UINT_MAX);
-    void eliminarDato(unsigned int pos = UINT_MAX);
+    VDinamico<T>& insertarDato(T dato, unsigned int pos = UINT_MAX);
+    VDinamico<T>& eliminarDato(unsigned int pos = UINT_MAX);
 };
 
 /**
@@ -101,12 +88,12 @@ VDinamico<T>::~VDinamico() {
 }
 
 template<class T>
-T& VDinamico<T>::getTamF() {
+int VDinamico<T>::getTamF() {
     return tamF;
 }
 
 template<class T>
-T& VDinamico<T>::getTamL() {
+int VDinamico<T>::getTamL() {
     return tamL;
 }
 
@@ -117,7 +104,7 @@ T& VDinamico<T>::getTamL() {
  * @return Propio vector para permitir operaciones en cascada
  */
 template<class T>
-T& VDinamico<T>::operator=(VDinamico<T>& asig) {
+VDinamico<T>& VDinamico<T>::operator=(VDinamico<T>& asig) {
     delete[] buffer;
     tamF = asig.tamF;
     tamL = asig.tamL;
@@ -148,8 +135,8 @@ T& VDinamico<T>::operator[](int pos) {
  * @post Inserta el dato en la posicion indicada, desplazando el resto de datos
  */
 template<class T>
-void VDinamico<T>::insertarDato(T& dato, unsigned int pos) {
-    if (pos < 0 || pos >= tamF) {
+VDinamico<T>& VDinamico<T>::insertarDato(T dato, unsigned int pos) {
+    if ((pos < 0 || pos >= tamF)&&pos!=UINT_MAX) {
         throw std::out_of_range("Posicion no valida");
     } else {
         if (pos == UINT_MAX) {
@@ -168,6 +155,7 @@ void VDinamico<T>::insertarDato(T& dato, unsigned int pos) {
             tamL++;
         }
     }
+    return *this;
 }
 
 /**
@@ -176,7 +164,7 @@ void VDinamico<T>::insertarDato(T& dato, unsigned int pos) {
  * @post Elimina el dato indicado y reorganiza los elementos del vector
  */
 template<class T>
-void VDinamico<T>::eliminarDato(unsigned int pos) {
+VDinamico<T>& VDinamico<T>::eliminarDato(unsigned int pos) {
     if (pos < 0 || pos >= tamF) {
         throw std::out_of_range("Posicion no valida");
     } else {
@@ -193,6 +181,7 @@ void VDinamico<T>::eliminarDato(unsigned int pos) {
         if (tamL * 3 <= tamF)
             disminuirTamF();
     }
+    return *this;
 }
 
 /**
@@ -201,9 +190,8 @@ void VDinamico<T>::eliminarDato(unsigned int pos) {
  */
 template <class T>
 void VDinamico<T>::aumentarTamF() {
-    int prevTamF = tamF;
     T* NuevoBuffer = new T[tamF *= 2];
-    for (int i = 0; i < prevTamF; i++) {
+    for (int i = 0; i < tamL; i++) {
         NuevoBuffer[i] = buffer[i];
     }
     delete[] buffer;
