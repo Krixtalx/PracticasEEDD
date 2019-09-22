@@ -123,7 +123,7 @@ int main(int argc, char** argv) {
     }
     cout << endl;
 
-    int wanted = 12;
+    int wanted = 245;
     try {
         int found = test.busca(wanted);
         cout << endl << "ENCONTRADO: " << found+1 << "(" << found << ")" << endl;
