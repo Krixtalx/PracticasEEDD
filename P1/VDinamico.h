@@ -27,6 +27,8 @@ public:
     T& operator[](int pos);
     VDinamico<T>& insertarDato(T dato, unsigned int pos = UINT_MAX);
     VDinamico<T>& eliminarDato(unsigned int pos = UINT_MAX);
+    void ordenar();
+    int busca(T& dato);
 };
 
 /**
@@ -136,7 +138,7 @@ T& VDinamico<T>::operator[](int pos) {
  */
 template<class T>
 VDinamico<T>& VDinamico<T>::insertarDato(T dato, unsigned int pos) {
-    if ((pos < 0 || pos >= tamF)&&pos!=UINT_MAX) {
+    if ((pos < 0 || pos >= tamF) && pos != UINT_MAX) {
         throw std::out_of_range("Posicion no valida");
     } else {
         if (pos == UINT_MAX) {
@@ -210,6 +212,43 @@ void VDinamico<T>::disminuirTamF() {
     }
     delete[] buffer;
     buffer = NuevoBuffer;
+}
+
+/**
+ * @brief Ordena el contenido del vector
+ * @pre La clase T debe tener operator<() sobrecargado
+ * @post Ordena crecientemente los datos almacenados en el buffer
+ */
+template<class T>
+void VDinamico<T>::ordenar() {
+    for (int i = 0; i < tamL - 1; i++) {
+        for (int j = i + 1; j < tamL; j++) {
+            if (!(buffer[i] < buffer[j])) {
+                T temp = buffer[i];
+                buffer[i] = buffer[j];
+                buffer[j] = temp;
+            }
+        }
+    }
+    sorted = true;
+}
+
+template<class T>
+int VDinamico<T>::busca(T& dato){
+    int inicio = 0, final = tamL-1, encontrado = 0;
+    while(inicio <= final){
+        T temp = buffer[inicio];
+        T temp2 = buffer[final];
+        encontrado = (inicio + final)/2;
+        if(buffer[encontrado] < dato){
+            inicio = encontrado + 1;
+        }else if(dato < buffer[encontrado]){
+            final = encontrado - 1;
+        }else{
+            return encontrado;
+        }
+    }
+    throw(std::out_of_range("[VDinamico<T>::busca] Dato no encontrado"));
 }
 #endif /* VDINAMICO_H */
 
