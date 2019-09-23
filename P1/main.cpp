@@ -90,9 +90,10 @@ int main(int argc, char** argv) {
     mostrarVDinCliente(*vClientes);
     
     VDinamico<Cliente> vClientesOrdenado = *vClientes;
-    vClientesOrdenado.ordenar();
+    vClientesOrdenado.ordenar(); //RT, cuando ejecuta esto se tira 4 seg ordenando y parece que ha entrado en un while infinito xDDD
+    
     Cliente Francesco("Francesco");
-    int posicion=vClientesOrdenado.busca(Francesco);
+    int posicion=vClientesOrdenado.busca(Francesco); //El busca este hay que arreglarlo, no funciona.
     cout<<posicion;
 
     delete vClientes;
