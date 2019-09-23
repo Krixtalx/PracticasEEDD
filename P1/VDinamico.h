@@ -4,7 +4,6 @@
 #include <climits>
 #include <stdexcept>
 
-//TODO: Lanzar excepciones BAD_ALLOC
 
 template<class T>
 class VDinamico {
@@ -18,7 +17,7 @@ private:
 public:
     VDinamico();
     VDinamico(unsigned int atamL);
-    VDinamico(const VDinamico& orig);
+    VDinamico(VDinamico& orig);
     VDinamico(const VDinamico& orig, unsigned int inicio, unsigned int num);
     virtual ~VDinamico();
     int getTamF();
@@ -58,7 +57,7 @@ VDinamico<T>::VDinamico(unsigned int atamL) : tamL(atamL), tamF(1) {
  * @post Crea un nuevo vector dinamico igual al vector dado
  */
 template<class T>
-VDinamico<T>::VDinamico(const VDinamico& orig) : tamF(orig.tamF), tamL(orig.tamL) {
+VDinamico<T>::VDinamico(VDinamico& orig) : tamF(orig.tamF), tamL(orig.tamL) {
     buffer = new T[tamF];
     for (int i = 0; i < tamL; i++) {
         buffer[i] = orig[i];
@@ -234,10 +233,12 @@ void VDinamico<T>::ordenar() {
 template<class T>
 int VDinamico<T>::busca(T& dato) {
     int inicio = 0, final = tamL - 1, encontrado = 0;
+    
     while (inicio <= final) {
         T temp = buffer[inicio];
         T temp2 = buffer[final];
         encontrado = (inicio + final) / 2;
+        
         if (buffer[encontrado] < dato) {
             inicio = encontrado + 1;
         } else if (dato < buffer[encontrado]) {

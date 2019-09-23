@@ -12,38 +12,11 @@
 
 using namespace std;
 
-///*
-// coordenadas UTM formadas por latitud y longitud 
-// */
-//
-//struct UTM {
-//    double latitud;
-//    double longitud;
-//
-//    UTM(double _lat, double _long) : latitud(_lat), longitud(_long) {
-//    }
-//};
-//
-///**
-//Clase Cliente
-// **/
-//
-//class Cliente {
-//    string dni;
-//    string pass;
-//    string nombre;
-//    string direccion;
-//    UTM posicion;
-//
-//public:
-//    //Constructor
-//
-//    Cliente(string _dni, string _pass, string _nombre, string _direccion, double _latitud, double _longitud) :
-//    dni(_dni), pass(_pass), nombre(_nombre), direccion(_direccion), posicion(_latitud, _longitud) {
-//    }
-//};
-
 #include "Cliente.h"
+
+void mostrarVDinCliente(VDinamico<Cliente> &vD){
+    cout << "tamF: " << vD.getTamF() << " tamL:" << vD.getTamL() << endl;
+}
 
 void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector) {
     ifstream fe; //Flujo de entrada
@@ -95,7 +68,7 @@ void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector) {
                 //con todos los atributos leídos, se crea el cliente
                 Cliente client(dni, pass, nombre, direccion, dlat, dlon);
                 vector->insertarDato(client);
-                cout << "leido e insertado cliente " << total << "  ";
+                //cout << "leido e insertado cliente " << total << "  ";
             }
         }
 
@@ -109,11 +82,18 @@ void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector) {
 int main(int argc, char** argv) {
 
     VDinamico<Cliente>* vClientes = new VDinamico<Cliente>;
-    cout << "Tam Fisico: " << vClientes->getTamF() << " Tam Logico: " << vClientes->getTamL() << endl;
+    
+    mostrarVDinCliente(*vClientes);
     
     cout << "Comienzo de lectura de un fichero " << endl;
     leeClientes("clientes_v2.csv", vClientes);
-    cout << "Tam Fisico: " << vClientes->getTamF() << " Tam Logico: " << vClientes->getTamL() << endl;
+    mostrarVDinCliente(*vClientes);
+    
+    VDinamico<Cliente> vClientesOrdenado = *vClientes;
+    vClientesOrdenado.ordenar();
+    Cliente Francesco("Francesco");
+    int posicion=vClientesOrdenado.busca(Francesco);
+    cout<<posicion;
 
     delete vClientes;
     return 0;
