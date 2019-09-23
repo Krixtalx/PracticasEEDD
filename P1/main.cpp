@@ -12,38 +12,40 @@
 
 using namespace std;
 
-/*
- coordenadas UTM formadas por latitud y longitud 
- */
+///*
+// coordenadas UTM formadas por latitud y longitud 
+// */
+//
+//struct UTM {
+//    double latitud;
+//    double longitud;
+//
+//    UTM(double _lat, double _long) : latitud(_lat), longitud(_long) {
+//    }
+//};
+//
+///**
+//Clase Cliente
+// **/
+//
+//class Cliente {
+//    string dni;
+//    string pass;
+//    string nombre;
+//    string direccion;
+//    UTM posicion;
+//
+//public:
+//    //Constructor
+//
+//    Cliente(string _dni, string _pass, string _nombre, string _direccion, double _latitud, double _longitud) :
+//    dni(_dni), pass(_pass), nombre(_nombre), direccion(_direccion), posicion(_latitud, _longitud) {
+//    }
+//};
 
-struct UTM {
-    double latitud;
-    double longitud;
+#include "Cliente.h"
 
-    UTM(double _lat, double _long) : latitud(_lat), longitud(_long) {
-    }
-};
-
-/**
-Clase Cliente
- **/
-
-class Cliente {
-    string dni;
-    string pass;
-    string nombre;
-    string direccion;
-    UTM posicion;
-
-public:
-    //Constructor
-
-    Cliente(string _dni, string _pass, string _nombre, string _direccion, double _latitud, double _longitud) :
-    dni(_dni), pass(_pass), nombre(_nombre), direccion(_direccion), posicion(_latitud, _longitud) {
-    }
-};
-
-void leeClientes(string fileNameClientes) {
+void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector) {
     ifstream fe; //Flujo de entrada
     string linea; //Cada línea tiene un clienete
     int total = 0; //Contador de líneas o clientes
@@ -92,7 +94,8 @@ void leeClientes(string fileNameClientes) {
 
                 //con todos los atributos leídos, se crea el cliente
                 Cliente client(dni, pass, nombre, direccion, dlat, dlon);
-                cout << "leido cliente " << total << "  ";
+                vector->insertarDato(client);
+                cout << "leido e insertado cliente " << total << "  ";
             }
         }
 
@@ -105,33 +108,14 @@ void leeClientes(string fileNameClientes) {
 
 int main(int argc, char** argv) {
 
+    VDinamico<Cliente>* vClientes = new VDinamico<Cliente>;
+    cout << "Tam Fisico: " << vClientes->getTamF() << " Tam Logico: " << vClientes->getTamL() << endl;
+    
     cout << "Comienzo de lectura de un fichero " << endl;
+    leeClientes("clientes_v2.csv", vClientes);
+    cout << "Tam Fisico: " << vClientes->getTamF() << " Tam Logico: " << vClientes->getTamL() << endl;
 
-    //    leeClientes ("clientes_v2.csv");
-
-    srand(1);
-    VDinamico<int> test(5);
-    for (int i = 0; i < 5; i++) {
-        test[i] = rand() % 100;
-        cout << test[i] << " ";
-    }
-    cout << endl;
-
-    test.ordenar();
-    for (int i = 0; i < 5; i++) {
-        cout << test[i] << " ";
-    }
-    cout << endl;
-
-    int wanted = 245;
-    try {
-        int found = test.busca(wanted);
-        cout << endl << "ENCONTRADO: " << found+1 << "(" << found << ")" << endl;
-    } catch (std::out_of_range& e) {
-        cout << e.what();
-    }
-
-
+    delete vClientes;
     return 0;
 }
 
