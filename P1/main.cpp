@@ -110,10 +110,16 @@ int main(int argc, char** argv) {
 
     VDinamico<Cliente>* vClientes = new VDinamico<Cliente>;
     cout << "Tam Fisico: " << vClientes->getTamF() << " Tam Logico: " << vClientes->getTamL() << endl;
-    
+
     cout << "Comienzo de lectura de un fichero " << endl;
     leeClientes("clientes_v2.csv", vClientes);
     cout << "Tam Fisico: " << vClientes->getTamF() << " Tam Logico: " << vClientes->getTamL() << endl;
+
+    
+    cout << (*vClientes)[2].GetNombre() << endl;
+
+    vClientes->ordenar(); //Cuando ejecuta esto parece que peta pero en realidad no xd
+    cout << (*vClientes)[2].GetNombre() << endl;
 
     delete vClientes;
     return 0;
