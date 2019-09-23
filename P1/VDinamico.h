@@ -141,21 +141,19 @@ VDinamico<T>& VDinamico<T>::insertarDato(T dato, unsigned int pos) {
     if ((pos < 0 || pos >= tamF) && pos != UINT_MAX) {
         throw std::out_of_range("Posicion no valida");
     } else {
+        if (tamL == tamF) {
+            aumentarTamF();
+        }
         if (pos == UINT_MAX) {
             buffer[tamL++] = dato;
         } else {
             tamL++;
-
-            if (tamL == tamF) {
-                aumentarTamF();
-            }
-
             for (int i = tamL; i > pos; i--) {
                 buffer[i] = buffer[i - 1];
             }
             buffer[pos] = dato;
-            tamL++;
         }
+        
     }
     return *this;
 }
@@ -167,7 +165,7 @@ VDinamico<T>& VDinamico<T>::insertarDato(T dato, unsigned int pos) {
  */
 template<class T>
 VDinamico<T>& VDinamico<T>::eliminarDato(unsigned int pos) {
-    if (pos < 0 || pos >= tamF) {
+    if ((pos < 0 || pos >= tamF) && pos != UINT_MAX) {
         throw std::out_of_range("Posicion no valida");
     } else {
         if (pos != UINT_MAX) {
@@ -234,21 +232,21 @@ void VDinamico<T>::ordenar() {
 }
 
 template<class T>
-int VDinamico<T>::busca(T& dato){
-    int inicio = 0, final = tamL-1, encontrado = 0;
-    while(inicio <= final){
+int VDinamico<T>::busca(T& dato) {
+    int inicio = 0, final = tamL - 1, encontrado = 0;
+    while (inicio <= final) {
         T temp = buffer[inicio];
         T temp2 = buffer[final];
-        encontrado = (inicio + final)/2;
-        if(buffer[encontrado] < dato){
+        encontrado = (inicio + final) / 2;
+        if (buffer[encontrado] < dato) {
             inicio = encontrado + 1;
-        }else if(dato < buffer[encontrado]){
+        } else if (dato < buffer[encontrado]) {
             final = encontrado - 1;
-        }else{
+        } else {
             return encontrado;
         }
     }
-    throw(std::out_of_range("[VDinamico<T>::busca] Dato no encontrado"));
+    return -1;
 }
 #endif /* VDINAMICO_H */
 
