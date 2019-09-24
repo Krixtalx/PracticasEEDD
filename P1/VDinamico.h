@@ -17,14 +17,14 @@ private:
 public:
     VDinamico();
     VDinamico(unsigned int atamL);
-    VDinamico(VDinamico& orig);
+    VDinamico(VDinamico<T>& orig);
     VDinamico(const VDinamico& orig, unsigned int inicio, unsigned int num);
     virtual ~VDinamico();
     int getTamF();
     int getTamL();
     VDinamico<T>& operator=(VDinamico<T>& asig);
     T& operator[](int pos);
-    VDinamico<T>& insertarDato(T dato, unsigned int pos = UINT_MAX);
+    VDinamico<T>& insertarDato(T& dato, unsigned int pos = UINT_MAX);
     VDinamico<T>& eliminarDato(unsigned int pos = UINT_MAX);
     void ordenar();
     int busca(T& dato);
@@ -57,7 +57,7 @@ VDinamico<T>::VDinamico(unsigned int atamL) : tamL(atamL), tamF(1) {
  * @post Crea un nuevo vector dinamico igual al vector dado
  */
 template<class T>
-VDinamico<T>::VDinamico(VDinamico& orig) : tamF(orig.tamF), tamL(orig.tamL) {
+VDinamico<T>::VDinamico(VDinamico<T>& orig) : tamF(orig.tamF), tamL(orig.tamL) {
     buffer = new T[tamF];
     for (int i = 0; i < tamL; i++) {
         buffer[i] = orig[i];
@@ -136,7 +136,7 @@ T& VDinamico<T>::operator[](int pos) {
  * @post Inserta el dato en la posicion indicada, desplazando el resto de datos
  */
 template<class T>
-VDinamico<T>& VDinamico<T>::insertarDato(T dato, unsigned int pos) {
+VDinamico<T>& VDinamico<T>::insertarDato(T& dato, unsigned int pos) {
     if ((pos < 0 || pos >= tamF) && pos != UINT_MAX) {
         throw std::out_of_range("Posicion no valida");
     } else {
@@ -235,8 +235,8 @@ int VDinamico<T>::busca(T& dato) {
     int inicio = 0, final = tamL - 1, encontrado = 0;
     
     while (inicio <= final) {
-        T temp = buffer[inicio];
-        T temp2 = buffer[final];
+//        T temp = buffer[inicio];
+//        T temp2 = buffer[final];
         encontrado = (inicio + final) / 2;
         
         if (buffer[encontrado] < dato) {
