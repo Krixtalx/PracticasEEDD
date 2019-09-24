@@ -14,7 +14,7 @@ using namespace std;
 
 #include "Cliente.h"
 
-void mostrarVDinCliente(VDinamico<Cliente> &vD){
+void mostrarVDinCliente(VDinamico<Cliente> &vD) {
     cout << "tamF: " << vD.getTamF() << " tamL:" << vD.getTamL() << endl;
 }
 
@@ -24,7 +24,7 @@ void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector) {
     int total = 0; //Contador de líneas o clientes
 
     //Variables auxiliares para almacenar los valores leídos
-    string dni, nombre, pass, direccion, latitud, longitud;
+    string dni, nombre, apellido, pass, direccion, latitud, longitud;
     double dlat, dlon;
 
 
@@ -53,7 +53,10 @@ void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector) {
                 getline(ss, pass, ';'); //El caráter ; se lee y se elimina de ss
 
                 //Leemos el nombre
-                getline(ss, nombre, ';'); //El caráter ; se lee y se elimina de ss
+                getline(ss, nombre, ' '); //El caráter ' ' se lee y se elimina de ss
+
+                //Leemos el apellido
+                getline(ss, apellido, ';'); //El carácter ; se lee y se elimina de ss
 
                 //Leemos la dirección
                 getline(ss, direccion, ';'); //El caráter ; se lee y se elimina de ss
@@ -66,7 +69,7 @@ void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector) {
                 dlon = stod(longitud);
 
                 //con todos los atributos leídos, se crea el cliente
-                Cliente client(dni, pass, nombre, direccion, dlat, dlon);
+                Cliente client(dni, pass, nombre, apellido, direccion, dlat, dlon);
                 vector->insertarDato(client);
                 //cout << "leido e insertado cliente " << total << "  ";
             }
@@ -82,21 +85,26 @@ void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector) {
 int main(int argc, char** argv) {
 
     VDinamico<Cliente>* vClientes = new VDinamico<Cliente>;
-    
+
     mostrarVDinCliente(*vClientes);
-    
+
     cout << "Comienzo de lectura de un fichero " << endl;
     leeClientes("clientes_v2.csv", vClientes);
     mostrarVDinCliente(*vClientes);
-    
+//    VDinamico<Cliente> vClientesOrdenado;
+//    vClientesOrdenado = *vClientes
     VDinamico<Cliente> vClientesOrdenado = *vClientes;
-    vClientesOrdenado.ordenar(); //RT, cuando ejecuta esto se tira 4 seg ordenando y parece que ha entrado en un while infinito xDDD
-    
-    Cliente Francesco("Francesco");
-    int posicion=vClientesOrdenado.busca(Francesco); //El busca este hay que arreglarlo, no funciona.
-    cout<<posicion;
+    cout << endl << "TEST: " << vClientesOrdenado[3].GetNombre() << endl;
 
+    vClientesOrdenado.ordenar(); //RT, cuando ejecuta esto se tira 4 seg ordenando y parece que ha entrado en un while infinito xDDD
+
+    Cliente Francesco("Francesco");
+    int posicion = vClientesOrdenado.busca(Francesco); //El busca este hay que arreglarlo, no funciona.
+    cout << posicion;
+
+    
     delete vClientes;
+
     return 0;
 }
 
