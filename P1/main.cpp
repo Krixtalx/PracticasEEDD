@@ -84,25 +84,27 @@ void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector) {
 
 int main(int argc, char** argv) {
 
+
+
     VDinamico<Cliente>* vClientes = new VDinamico<Cliente>;
 
-    mostrarVDinCliente(*vClientes);
 
     cout << "Comienzo de lectura de un fichero " << endl;
     leeClientes("clientes_v2.csv", vClientes);
-    mostrarVDinCliente(*vClientes);
-//    VDinamico<Cliente> vClientesOrdenado;
-//    vClientesOrdenado = *vClientes
-    VDinamico<Cliente> vClientesOrdenado = *vClientes;
-    cout << endl << "TEST: " << vClientesOrdenado[3].GetNombre() << endl;
-
-    vClientesOrdenado.ordenar(); //RT, cuando ejecuta esto se tira 4 seg ordenando y parece que ha entrado en un while infinito xDDD
-
-    Cliente Francesco("Francesco");
-    int posicion = vClientesOrdenado.busca(Francesco); //El busca este hay que arreglarlo, no funciona.
-    cout << posicion;
-
     
+    VDinamico<Cliente> vClientesOrdenado = *vClientes;
+    vClientesOrdenado.ordenar();
+
+    mostrarVDinCliente(vClientesOrdenado);
+    Cliente Francesco("Francesco");
+    int posicion = vClientesOrdenado.busca(Francesco);
+    while (posicion != -1) {
+        vClientesOrdenado.eliminarDato(posicion);
+        posicion = vClientesOrdenado.busca(Francesco);
+    }
+    mostrarVDinCliente(vClientesOrdenado);
+
+
     delete vClientes;
 
     return 0;
