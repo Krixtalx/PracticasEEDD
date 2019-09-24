@@ -32,7 +32,9 @@ Cliente::Cliente(string _dni, string _pass, string _nombre, string _apellido, st
 dni(_dni), pass(_pass), nombre(_nombre), apellido(_apellido), direccion(_direccion), posicion(_latitud, _longitud) {
 }
 
-Cliente::Cliente(const Cliente& orig) {
+Cliente::Cliente(const Cliente& orig): dni(orig.dni), pass(orig.pass), nombre(orig.nombre), apellido(orig.apellido), direccion(orig.direccion) {
+    posicion.latitud = orig.posicion.latitud;
+    posicion.longitud = orig.posicion.longitud;
 }
 
 Cliente::~Cliente() {
