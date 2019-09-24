@@ -171,8 +171,6 @@ VDinamico<T>& VDinamico<T>::eliminarDato(unsigned int pos) {
             for (int i = pos; i + 1 < tamL; i++) {
                 buffer[i] = buffer[i + 1];
             }
-        } else {
-            buffer[tamL] = 0;
         }
 
         tamL--;
