@@ -1,17 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/* 
- * File:   Cliente.cpp
- * Author: jcfer
- * 
- * Created on 23 September 2019, 20:39
- */
-
 #include "Cliente.h"
+#include <cmath>
+#include <complex>
 
 UTM::UTM() : latitud(0), longitud(0) {
 
@@ -51,6 +40,11 @@ bool Cliente::operator<(Cliente& otro) {
     return false;
 }
 
+/**
+ * @brief Operador de asignación
+ * @param right
+ * @return Devuelve this para poder encadenar operadores
+ */
 Cliente& Cliente::operator=(const Cliente& right) {  
     if (this == &right) 
         return *this; 
@@ -65,10 +59,27 @@ Cliente& Cliente::operator=(const Cliente& right) {
     return *this;
 }
 
+/**
+ * @brief Getter del atributo apellido
+ * @return string apellido
+ */
 string Cliente::GetApellido() const {
     return apellido;
 }
 
+/**
+ * @brief Getter del atributo nombre
+ * @return string nombre
+ */
 string Cliente::GetNombre() const {
     return nombre;
+}
+
+/**
+ * @brief Calcula la distancia entre 2 clientes utilizando la formula de la distancia entre 2 puntos
+ * @param otro: Cliente con el que se calcula la distancia
+ * @return La distancia entre los 2 clientes
+ */
+float Cliente::DistanciaCliente(Cliente& otro) {
+    return sqrt(pow((this->posicion.latitud-otro.posicion.latitud),2)+pow((this->posicion.latitud-otro.posicion.latitud),2));
 }

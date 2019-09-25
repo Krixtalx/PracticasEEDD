@@ -88,11 +88,19 @@ VDinamico<T>::~VDinamico() {
     delete[] buffer;
 }
 
+/**
+ * @brief Getter del atributo TamF
+ * @return TamF
+ */
 template<class T>
 int VDinamico<T>::getTamF() {
     return tamF;
 }
 
+/**
+ * @brief Getter del atributo TamL
+ * @return TamL
+ */
 template<class T>
 int VDinamico<T>::getTamL() {
     return tamL;
@@ -151,8 +159,7 @@ VDinamico<T>& VDinamico<T>::insertarDato(T& dato, unsigned int pos) {
                 buffer[i] = buffer[i - 1];
             }
             buffer[pos] = dato;
-        }
-        
+        }  
     }
     return *this;
 }
@@ -228,8 +235,17 @@ void VDinamico<T>::ordenar() {
     sorted = true;
 }
 
+/**
+ * @brief Busca el dato en el vector dinámico utilizando la busqueda dicotómica
+ * @param dato: Dato a buscar
+ * @prev El vector dinámico debe de estar ordenado (Si no, se ordenará antes de comenzar la busqueda)
+ * @return La posición del dato si es encontrado o -1 si no se encuentra
+ */
 template<class T>
 int VDinamico<T>::busca(T& dato) {
+    if(!sorted){
+        VDinamico<T>::ordenar();
+    }
     int inicio = 0, final = tamL - 1, encontrado = 0;
     
     while (inicio <= final) {

@@ -8,14 +8,39 @@
 #include <exception>
 
 #include "VDinamico.h"
-
+#include "Cliente.h"
 
 using namespace std;
 
-#include "Cliente.h"
 
+/**
+ * @brief Muestra el tamaño del vector Dinamico
+ * @param vD: Vector dinamico del que mostrar el tamaño
+ */
 void mostrarVDinCliente(VDinamico<Cliente> &vD) {
     cout << "tamF: " << vD.getTamF() << " tamL:" << vD.getTamL() << endl;
+}
+
+/**
+ * @brief Calcula la mayor distancia entre los elementos del vector Dinamico
+ * @param vD: Vector dinamico de clientes del que se calcularan las distancias
+ * @param pos1: Donde se almacenará la posición del primer cliente
+ * @param pos2: Donde se almacenará la posicion del segundo cliente
+ */
+void CalcularMayorDistancia(VDinamico<Cliente>& vD, int& pos1, int& pos2){
+    float max=-1;
+    float cache=0;
+
+    for (int i = 0; i < vD.getTamL(); i++) {
+        for (int j = i; j < vD.getTamL(); j++) {
+            cache=vD[i].DistanciaCliente(vD[j]);
+            if(cache>max){
+                max=cache;
+                pos1=i;
+                pos2=j;
+            }                
+        }
+    }
 }
 
 void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector) {
@@ -83,11 +108,7 @@ void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector) {
 }
 
 int main(int argc, char** argv) {
-
-
-
     VDinamico<Cliente>* vClientes = new VDinamico<Cliente>;
-
 
     cout << "Comienzo de lectura de un fichero " << endl;
     leeClientes("clientes_v2.csv", vClientes);
@@ -103,10 +124,12 @@ int main(int argc, char** argv) {
         posicion = vClientesOrdenado.busca(Francesco);
     }
     mostrarVDinCliente(vClientesOrdenado);
-
-
+    
+    int pos1, pos2;
+    CalcularMayorDistancia(vClientesOrdenado, pos1, pos2);
+    cout <<"Pos1: "<<pos1<<endl;
+    cout <<"Pos2: "<<pos2<<endl;
     delete vClientes;
 
     return 0;
 }
-

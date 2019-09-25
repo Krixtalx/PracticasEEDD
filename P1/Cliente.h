@@ -3,6 +3,7 @@
 
 #include<string>
 
+
 using namespace std;
 
 /*
@@ -35,6 +36,7 @@ public:
     Cliente& operator=(const Cliente& right);
     string GetApellido() const;
     string GetNombre() const;
+    float DistanciaCliente(Cliente& otro);
 
 };
 
