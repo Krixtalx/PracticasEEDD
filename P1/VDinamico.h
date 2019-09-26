@@ -114,14 +114,18 @@ int VDinamico<T>::getTamL() {
  */
 template<class T>
 VDinamico<T>& VDinamico<T>::operator=(VDinamico<T>& asig) {
-    delete[] buffer;
-    tamF = asig.tamF;
-    tamL = asig.tamL;
-    buffer = new T[tamF];
-    for (int i = 0; i < tamL; i++) {
-        buffer[i] = asig[i];
-    }
-    return *this;
+    if (this=&asig) {
+      return *this;
+    }else{
+      delete[] buffer;
+      tamF = asig.tamF;
+      tamL = asig.tamL;
+      buffer = new T[tamF];
+      for (int i = 0; i < tamL; i++) {
+          buffer[i] = asig[i];
+      }
+      return *this;
+  }
 }
 
 /**
@@ -159,7 +163,7 @@ VDinamico<T>& VDinamico<T>::insertarDato(T& dato, unsigned int pos) {
                 buffer[i] = buffer[i - 1];
             }
             buffer[pos] = dato;
-        }  
+        }
     }
     return *this;
 }
@@ -171,6 +175,9 @@ VDinamico<T>& VDinamico<T>::insertarDato(T& dato, unsigned int pos) {
  */
 template<class T>
 VDinamico<T>& VDinamico<T>::eliminarDato(unsigned int pos) {
+    if(this.tamL == 0){
+      throw(std::out_of_range("[VDinamico<T>::eliminarDato] No hay datos en el vector"));
+    }
     if ((pos < 0 || pos >= tamF) && pos != UINT_MAX) {
         throw std::out_of_range("Posicion no valida");
     } else {
@@ -225,7 +232,7 @@ template<class T>
 void VDinamico<T>::ordenar() {
     for (int i = 0; i < tamL - 1; i++) {
         for (int j = i + 1; j < tamL; j++) {
-            if (!(buffer[i] < buffer[j])) {
+            if (!(buffer[i].menorQue(buffer[j]))) {
                 T temp = buffer[i];
                 buffer[i] = buffer[j];
                 buffer[j] = temp;
@@ -247,12 +254,10 @@ int VDinamico<T>::busca(T& dato) {
         VDinamico<T>::ordenar();
     }
     int inicio = 0, final = tamL - 1, encontrado = 0;
-    
+
     while (inicio <= final) {
-//        T temp = buffer[inicio];
-//        T temp2 = buffer[final];
         encontrado = (inicio + final) / 2;
-        
+
         if (buffer[encontrado] < dato) {
             inicio = encontrado + 1;
         } else if (dato < buffer[encontrado]) {
@@ -264,4 +269,3 @@ int VDinamico<T>::busca(T& dato) {
     return -1;
 }
 #endif /* VDINAMICO_H */
-

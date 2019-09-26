@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <stdexcept>
 #include <exception>
 
 #include "VDinamico.h"
@@ -26,21 +27,22 @@ void mostrarVDinCliente(VDinamico<Cliente> &vD) {
  * @param vD: Vector dinamico de clientes del que se calcularan las distancias
  * @param pos1: Donde se almacenará la posición del primer cliente
  * @param pos2: Donde se almacenará la posicion del segundo cliente
+ * @param distancia: Donde se almacenará la distancia entre los 2
  */
-void CalcularMayorDistancia(VDinamico<Cliente>& vD, int& pos1, int& pos2){
+void CalcularMayorDistancia(VDinamico<Cliente>& vD, int& pos1, int& pos2, float& distancia){
     float max=-1;
-    float cache=0;
 
     for (int i = 0; i < vD.getTamL(); i++) {
         for (int j = i; j < vD.getTamL(); j++) {
-            cache=vD[i].DistanciaCliente(vD[j]);
-            if(cache>max){
-                max=cache;
+            distancia=vD[i].DistanciaCliente(vD[j]);
+            if(distancia>max){
+                max=distancia;
                 pos1=i;
                 pos2=j;
-            }                
+            }
         }
     }
+    distancia=max;
 }
 
 void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector) {
@@ -52,16 +54,14 @@ void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector) {
     string dni, nombre, apellido, pass, direccion, latitud, longitud;
     double dlat, dlon;
 
-
-
-    //Asociamos el flujo al fichero 
+    //Asociamos el flujo al fichero
     fe.open(fileNameClientes);
 
     if (fe.good()) {
         //Mientras no se haya llegado al final del fichero
         while (!fe.eof()) {
             getline(fe, linea); //Toma una línea del fichero
-            stringstream ss; //Stream que trabaja sobre buffer interno         
+            stringstream ss; //Stream que trabaja sobre buffer interno
 
             if (linea != "") {
                 ++total;
@@ -95,7 +95,11 @@ void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector) {
 
                 //con todos los atributos leídos, se crea el cliente
                 Cliente client(dni, pass, nombre, apellido, direccion, dlat, dlon);
-                vector->insertarDato(client);
+                try{
+                  vector->insertarDato(client);
+                }catch (const std::bad_alloc& e) {
+                  std::cout << "bad_alloc: " << e.what() << '\n';
+                }
                 //cout << "leido e insertado cliente " << total << "  ";
             }
         }
@@ -108,27 +112,31 @@ void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector) {
 }
 
 int main(int argc, char** argv) {
+
     VDinamico<Cliente>* vClientes = new VDinamico<Cliente>;
 
     cout << "Comienzo de lectura de un fichero " << endl;
     leeClientes("clientes_v2.csv", vClientes);
-    
+
     VDinamico<Cliente> vClientesOrdenado = *vClientes;
     vClientesOrdenado.ordenar();
 
     mostrarVDinCliente(vClientesOrdenado);
-    Cliente Francesco("Francesco");
+    Cliente Francesco("Maria");
     int posicion = vClientesOrdenado.busca(Francesco);
     while (posicion != -1) {
         vClientesOrdenado.eliminarDato(posicion);
         posicion = vClientesOrdenado.busca(Francesco);
     }
     mostrarVDinCliente(vClientesOrdenado);
-    
+
     int pos1, pos2;
-    CalcularMayorDistancia(vClientesOrdenado, pos1, pos2);
-    cout <<"Pos1: "<<pos1<<endl;
-    cout <<"Pos2: "<<pos2<<endl;
+    float distancia;
+    CalcularMayorDistancia(vClientesOrdenado, pos1, pos2, distancia);
+    cout <<"Pos1: " << pos1 << endl;
+    cout <<"Pos2: " << pos2 << endl;
+    cout << "Distancia: " <<distancia<< endl;
+
     delete vClientes;
 
     return 0;

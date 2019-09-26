@@ -7,7 +7,7 @@
 using namespace std;
 
 /*
- coordenadas UTM formadas por latitud y longitud 
+ coordenadas UTM formadas por latitud y longitud
  */
 
 struct UTM {
@@ -24,6 +24,7 @@ class Cliente {
     string nombre="";
     string apellido="";
     string direccion="";
+    string nombreCompleto="";
     UTM posicion;
 
 public:
@@ -33,6 +34,7 @@ public:
     Cliente(const Cliente& orig);
     virtual ~Cliente();
     bool operator<(Cliente& otro);
+    bool menorQue(Cliente& otro);
     Cliente& operator=(const Cliente& right);
     string GetApellido() const;
     string GetNombre() const;
@@ -41,4 +43,3 @@ public:
 };
 
 #endif /* CLIENTE_H */
-
