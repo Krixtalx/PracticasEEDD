@@ -175,7 +175,7 @@ VDinamico<T>& VDinamico<T>::insertarDato(T& dato, unsigned int pos) {
  */
 template<class T>
 VDinamico<T>& VDinamico<T>::eliminarDato(unsigned int pos) {
-    if(this.tamL == 0){
+    if(this->tamL == 0){
       throw(std::out_of_range("[VDinamico<T>::eliminarDato] No hay datos en el vector"));
     }
     if ((pos < 0 || pos >= tamF) && pos != UINT_MAX) {

@@ -38,6 +38,7 @@ public:
     Cliente& operator=(const Cliente& right);
     string GetApellido() const;
     string GetNombre() const;
+    string GetNombreCompleto() const;
     float DistanciaCliente(Cliente& otro);
 
 };

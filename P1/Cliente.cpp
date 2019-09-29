@@ -42,7 +42,11 @@ bool Cliente::operator<(Cliente& otro) {
     return false;
 }
 
-
+/**
+ *  @brief Compara dos clientes por su nombre completo
+ *  @param otro Cliente a comparar
+ *  @return True si el nombre completo de *this es menor alfabeticamente que el de otro
+ */
 bool Cliente::menorQue(Cliente& otro) {
     if(this->nombreCompleto < otro.nombreCompleto)
         return true;
@@ -52,7 +56,7 @@ bool Cliente::menorQue(Cliente& otro) {
 
 /**
  * @brief Operador de asignación
- * @param right
+ * @param right Cliente del que se copia el estado
  * @return Devuelve this para poder encadenar operadores
  */
 Cliente& Cliente::operator=(const Cliente& right) {
@@ -84,6 +88,10 @@ string Cliente::GetApellido() const {
  */
 string Cliente::GetNombre() const {
     return nombre;
+}
+
+string Cliente::GetNombreCompleto() const {
+    return nombreCompleto;
 }
 
 /**

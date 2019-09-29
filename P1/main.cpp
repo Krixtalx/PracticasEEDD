@@ -13,7 +13,6 @@
 
 using namespace std;
 
-
 /**
  * @brief Muestra el tamaño del vector Dinamico
  * @param vD: Vector dinamico del que mostrar el tamaño
@@ -29,20 +28,20 @@ void mostrarVDinCliente(VDinamico<Cliente> &vD) {
  * @param pos2: Donde se almacenará la posicion del segundo cliente
  * @param distancia: Donde se almacenará la distancia entre los 2
  */
-void CalcularMayorDistancia(VDinamico<Cliente>& vD, int& pos1, int& pos2, float& distancia){
-    float max=-1;
+void CalcularMayorDistancia(VDinamico<Cliente>& vD, int& pos1, int& pos2, float& distancia) {
+    float max = -1;
 
     for (int i = 0; i < vD.getTamL(); i++) {
         for (int j = i; j < vD.getTamL(); j++) {
-            distancia=vD[i].DistanciaCliente(vD[j]);
-            if(distancia>max){
-                max=distancia;
-                pos1=i;
-                pos2=j;
+            distancia = vD[i].DistanciaCliente(vD[j]);
+            if (distancia > max) {
+                max = distancia;
+                pos1 = i;
+                pos2 = j;
             }
         }
     }
-    distancia=max;
+    distancia = max;
 }
 
 void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector) {
@@ -95,10 +94,10 @@ void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector) {
 
                 //con todos los atributos leídos, se crea el cliente
                 Cliente client(dni, pass, nombre, apellido, direccion, dlat, dlon);
-                try{
-                  vector->insertarDato(client);
-                }catch (const std::bad_alloc& e) {
-                  std::cout << "bad_alloc: " << e.what() << '\n';
+                try {
+                    vector->insertarDato(client);
+                } catch (const std::bad_alloc& e) {
+                    std::cout << "bad_alloc: " << e.what() << '\n';
                 }
                 //cout << "leido e insertado cliente " << total << "  ";
             }
@@ -133,9 +132,18 @@ int main(int argc, char** argv) {
     int pos1, pos2;
     float distancia;
     CalcularMayorDistancia(vClientesOrdenado, pos1, pos2, distancia);
-    cout <<"Pos1: " << pos1 << endl;
-    cout <<"Pos2: " << pos2 << endl;
-    cout << "Distancia: " <<distancia<< endl;
+    //    cout << "Pos1: " << pos1 << endl;
+    //    cout << "Pos2: " << pos2 << endl;
+    if (distancia != -1) {
+        cout << "Los clientes cuya distancia mutua es menor son: " << endl <<
+                vClientesOrdenado[pos1].GetNombreCompleto() << " y " <<
+                vClientesOrdenado[pos2].GetNombreCompleto() << endl <<
+                "La distancia entre ambos es: " << distancia << endl;
+    } else {
+        cout << "No se pudo encontrar ningun cliente" << endl;
+    }
+
+    //    cout << "Distancia: " << distancia << endl;
 
     delete vClientes;
 
