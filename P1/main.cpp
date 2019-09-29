@@ -28,11 +28,11 @@ void mostrarVDinCliente(VDinamico<Cliente> &vD) {
  * @param pos2: Donde se almacenará la posicion del segundo cliente
  * @param distancia: Donde se almacenará la distancia entre los 2
  */
-void CalcularMayorDistancia(VDinamico<Cliente>& vD, int& pos1, int& pos2, float& distancia) {
-    float max = -1;
+void CalcularMayorDistancia(VDinamico<Cliente>& vD, int& pos1, int& pos2, double& distancia) {
+    double max = -1;
 
     for (int i = 0; i < vD.getTamL(); i++) {
-        for (int j = i; j < vD.getTamL(); j++) {
+        for (int j = i+1; j < vD.getTamL(); j++) {
             distancia = vD[i].DistanciaCliente(vD[j]);
             if (distancia > max) {
                 max = distancia;
@@ -121,7 +121,7 @@ int main(int argc, char** argv) {
     vClientesOrdenado.ordenar();
 
     mostrarVDinCliente(vClientesOrdenado);
-    Cliente Francesco("Maria");
+    Cliente Francesco("Meggy");
     int posicion = vClientesOrdenado.busca(Francesco);
     while (posicion != -1) {
         vClientesOrdenado.eliminarDato(posicion);
@@ -130,14 +130,13 @@ int main(int argc, char** argv) {
     mostrarVDinCliente(vClientesOrdenado);
 
     int pos1, pos2;
-    float distancia;
+    double distancia;
     CalcularMayorDistancia(vClientesOrdenado, pos1, pos2, distancia);
-    //    cout << "Pos1: " << pos1 << endl;
-    //    cout << "Pos2: " << pos2 << endl;
+  
     if (distancia != -1) {
         cout << "Los clientes cuya distancia mutua es menor son: " << endl <<
-                vClientesOrdenado[pos1].GetNombreCompleto() << " y " <<
-                vClientesOrdenado[pos2].GetNombreCompleto() << endl <<
+                vClientesOrdenado[pos1].GetNombreCompleto() << "("<< pos1 <<")" << " y " <<
+                vClientesOrdenado[pos2].GetNombreCompleto() << "("<< pos2 <<")" << endl <<
                 "La distancia entre ambos es: " << distancia << endl;
     } else {
         cout << "No se pudo encontrar ningun cliente" << endl;

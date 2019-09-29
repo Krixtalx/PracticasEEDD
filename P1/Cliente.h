@@ -39,7 +39,9 @@ public:
     string GetApellido() const;
     string GetNombre() const;
     string GetNombreCompleto() const;
-    float DistanciaCliente(Cliente& otro);
+    double DistanciaCliente(Cliente& otro);
+    UTM getPosicion() const;
+
 
 };
 

@@ -9,6 +9,7 @@ UTM::UTM() : latitud(0), longitud(0) {
 UTM::UTM(double _lat, double _long) : latitud(_lat), longitud(_long) {
 }
 
+
 Cliente::Cliente() : dni(""), pass(""), nombre(""), apellido(""), direccion(""), nombreCompleto("") {
 }
 
@@ -29,6 +30,10 @@ Cliente::Cliente(const Cliente& orig): dni(orig.dni), pass(orig.pass), nombre(or
 }
 
 Cliente::~Cliente() {
+}
+
+UTM Cliente::getPosicion() const {
+    return posicion;
 }
 
 /**
@@ -99,6 +104,6 @@ string Cliente::GetNombreCompleto() const {
  * @param otro: Cliente con el que se calcula la distancia
  * @return La distancia entre los 2 clientes
  */
-float Cliente::DistanciaCliente(Cliente& otro) {
-    return sqrt(pow((this->posicion.latitud-otro.posicion.latitud),2)+pow((this->posicion.latitud-otro.posicion.latitud),2));
+double Cliente::DistanciaCliente(Cliente& otro) {
+    return sqrt(pow(this->posicion.latitud - otro.getPosicion().latitud, 2) + pow(this->posicion.longitud - otro.getPosicion().longitud,2));
 }
