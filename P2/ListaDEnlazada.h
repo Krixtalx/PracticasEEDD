@@ -7,14 +7,15 @@
 template <class T>
 class ListaDEnlazada {
 private:
-    VDinamico<Nodo> vNodos;
+    VDinamico<Nodo<T>> vNodos;
+    Nodo<T> cabecera;
+    Nodo<T> cola;
 public:
     ListaDEnlazada();
     ListaDEnlazada(const ListaDEnlazada& orig);
+    ListaDEnlazada<T>& operator=(const ListaDEnlazada<T>& right);
     virtual ~ListaDEnlazada();
-private:
-
 };
 
-#endif /* LISTADENLAZADA_H */
 
+#endif /* LISTADENLAZADA_H */
