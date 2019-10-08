@@ -21,6 +21,10 @@ int main()
 	{
 		cout << ola[j] << endl;
 	}
+
+
+	cout << "I N C O M I N G OWOWOWOWOWOOWOWOWOWOOWOWOWOWO" << endl << endl;
+	cout << "owo xd" << endl;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
