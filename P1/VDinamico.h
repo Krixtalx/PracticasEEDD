@@ -73,7 +73,6 @@ VDinamico<T>::VDinamico(VDinamico<T>& orig) : tamF(orig.tamF), tamL(orig.tamL) {
  */
 template<class T>
 VDinamico<T>::VDinamico(const VDinamico& orig, unsigned int inicio, unsigned int num) : tamL(num), tamF(orig.tamF) {
-    //TODO: Excep. si el fragmento a copiar esta fuera de los limites del vector
     buffer = new T[tamF];
     for (int i = 0; i < num; i++) {
         buffer[i] = orig[inicio++];

@@ -11,6 +11,7 @@ private:
 	T dato;
 public:
 	Nodo();
+	Nodo(T& _dato);
 	Nodo(const Nodo& orig);
 	virtual ~Nodo();
 
@@ -18,12 +19,16 @@ public:
 	Nodo<T>* SetAnterior(Nodo<T>* anterior);
 	Nodo<T>* GetSiguiente() const;
 	Nodo<T>* SetSiguiente(Nodo<T>* siguiente);
-	T GetDato() const;
+	T& GetDato() const;
 	Nodo<T>* SetDato(T dato);
-
 };
+
+
 template<class T>
-Nodo<T>::Nodo() {}
+Nodo<T>::Nodo(): anterior(0), siguiente(0) {}
+
+template<class T>
+Nodo<T>::Nodo(T& _dato): dato(_dato), anterior(0), siguiente(0) {}
 
 template<class T>
 Nodo<T>::Nodo(const Nodo& orig) {}
@@ -54,7 +59,7 @@ Nodo<T>* Nodo<T>::SetSiguiente(Nodo* siguiente) {
 }
 
 template <class T>
-T Nodo<T>::GetDato() const {
+T& Nodo<T>::GetDato() const {
 	return dato;
 }
 

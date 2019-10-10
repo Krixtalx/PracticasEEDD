@@ -20,13 +20,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\P2\VDinamico.h">
+    <ClInclude Include="ListaDEnlazada.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\P2\Nodo.h">
+    <ClInclude Include="Nodo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\P2\ListaDEnlazada.h">
+    <ClInclude Include="VDinamico.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
