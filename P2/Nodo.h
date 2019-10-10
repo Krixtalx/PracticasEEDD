@@ -15,13 +15,22 @@ public:
     virtual ~Nodo();
     
     Nodo<T>* GetAnterior() const;
-    Nodo<T>* SetAnterior(Nodo<T> anterior);
+    Nodo<T>* SetAnterior(Nodo<T>* anterior);
     Nodo<T>* GetSiguiente() const;
-    Nodo<T>* SetSiguiente(Nodo<T> siguiente);
+    Nodo<T>* SetSiguiente(Nodo<T>* siguiente);
     T GetDato() const;
     Nodo<T>* SetDato(T dato);
     
 };
+	template<class T>
+	Nodo<T>::Nodo() {}
+
+	template<class T>
+	Nodo<T>::Nodo(const Nodo& orig) {}
+
+	template<class T>
+	Nodo<T>::~Nodo() {}
+
     template <class T>
     Nodo<T>* Nodo<T>::GetAnterior() const {
         return anterior;
