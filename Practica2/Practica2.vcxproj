@@ -156,7 +156,11 @@
   <ItemGroup>
     <ClInclude Include="ListaDEnlazada.h" />
     <ClInclude Include="Nodo.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="VDinamico.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Practica2.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
