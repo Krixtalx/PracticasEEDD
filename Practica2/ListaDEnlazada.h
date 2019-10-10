@@ -8,7 +8,7 @@ class ListaDEnlazada {
 private:
 	Nodo<T>* cabecera;
 	Nodo<T>* cola;
-	bool estaVacia;
+	int tam;
 	friend class Nodo<T>;
 public:
 	ListaDEnlazada();
@@ -26,7 +26,7 @@ public:
 	@brief Constructor por defecto
 */
 template <class T>
-ListaDEnlazada<T>::ListaDEnlazada() : cabezera(0), cola(0), estaVacia(true) {
+ListaDEnlazada<T>::ListaDEnlazada() : cabezera(0), cola(0), tam(0) {
 }
 
 /**
@@ -37,37 +37,35 @@ template <class T>
 ListaDEnlazada<T>::ListaDEnlazada(const ListaDEnlazada& orig) {
 	//TODO: implementar copia (this->insertarFinal())
 
+
 }
 
 template <class T>
 ListaDEnlazada<T>& ListaDEnlazada<T>::insertaInicio(T& dato) {
 	Nodo<T>* nuevo = new Nodo<T>(dato);
-	if (this->estaVacia) {
-		this->cabecera = nuevo;
-		this->cola = nuevo;
+	if (tam == 0) {
+		cabecera = nuevo;
+		cola = nuevo;
 	}
 	else {
-		nuevo.siguiente = this->cabecera;
-		this->cabecera->anterior = nuevo;
-		this->cabecera = nuevo;
-
+		nuevo.siguiente = cabecera;
+		cabecera->anterior = nuevo;
+		cabecera = nuevo;
 	}
 }
 
 template<class T>
 ListaDEnlazada<T>& ListaDEnlazada<T>::insertaFinal(T& dato) {
 	Nodo<T>* nuevo = new nodo <T>;
-	if (this->estaVacia) {
-		this->cabecera = nuevo;
-		this->cola = nuevo;
-	}
-	else {
-		nuevo.siguiente = 0;
-		cola->siguiente = nuevo;
+	if (tam == 0) {
+		cabecera = nuevo;
 		cola = nuevo;
 	}
-
-
+	else {
+		cola->siguiente = nuevo;
+		nuevo->anterior = cola;
+		cola = nuevo;
+	}
 }
 
 #endif /* LISTADENLAZADA_H */

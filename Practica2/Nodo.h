@@ -31,7 +31,11 @@ template<class T>
 Nodo<T>::Nodo(T& _dato) : dato(_dato), anterior(0), siguiente(0) {}
 
 template<class T>
-Nodo<T>::Nodo(const Nodo& orig) {}
+Nodo<T>::Nodo(const Nodo& orig) {
+	this->anterior = 0;
+	this->siguiente = 0;
+	this->dato = orig.dato;
+}
 
 template<class T>
 Nodo<T>::~Nodo() {}
