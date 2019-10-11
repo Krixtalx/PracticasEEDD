@@ -30,8 +30,8 @@ ListaDEnlazada<T>::ListaDEnlazada() : cabezera(0), cola(0), tam(0) {
 }
 
 /**
-	@brief Constructor de copia
-	@param orig Lista a copiar
+*	@brief Constructor de copia
+*	@param orig Lista a copiar
 */
 template <class T>
 ListaDEnlazada<T>::ListaDEnlazada(const ListaDEnlazada& orig) {
@@ -40,6 +40,24 @@ ListaDEnlazada<T>::ListaDEnlazada(const ListaDEnlazada& orig) {
 
 }
 
+/**
+*@Brief Destructor de ListaDEnlazada
+*/
+template<class T>
+inline ListaDEnlazada<T>::~ListaDEnlazada(){
+	Nodo<T>* aux;
+	while (tam > 0) {
+		aux = cola->siguiente;
+		delete cola;
+		cola = aux;
+		tam--;
+	}
+}
+
+/**
+*@Brief Inserta un dato en el inicio de la Lista
+*@param Dato que debe de llevar el nodo a insertar
+*/
 template <class T>
 ListaDEnlazada<T>& ListaDEnlazada<T>::insertaInicio(T& dato) {
 	Nodo<T>* nuevo = new Nodo<T>(dato);
@@ -54,6 +72,10 @@ ListaDEnlazada<T>& ListaDEnlazada<T>::insertaInicio(T& dato) {
 	}
 }
 
+/**
+*@Brief Inserta un dato en el final de la Lista
+*@param Dato que debe de llevar el nodo a insertar
+*/
 template<class T>
 ListaDEnlazada<T>& ListaDEnlazada<T>::insertaFinal(T& dato) {
 	Nodo<T>* nuevo = new nodo <T>;
