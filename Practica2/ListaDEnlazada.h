@@ -193,11 +193,11 @@ ListaDEnlazada<T>& ListaDEnlazada<T>::borrarFinal()
 template<class T>
 ListaDEnlazada<T>& ListaDEnlazada<T>::concatena(const ListaDEnlazada<T>& otraLista)
 {
-	while(otraLista.tam)
-	{
-		this->insertaFinal(otraLista.cola->dato);
-		otraLista.borrarFinal();
-	}
+	this->cola->siguiente = otraLista.cabecera;
+	otraLista.cabecera->anterior = this->cola->siguiente;
+	this->cola = otraLista.cola;
+	otraLista.cola = 0;
+	otraLista.cabecera = 0;
 }
 
 #endif /* LISTADENLAZADA_H */
