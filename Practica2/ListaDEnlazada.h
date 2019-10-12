@@ -19,7 +19,8 @@ public:
 	ListaDEnlazada<T>& insertaFinal(T& dato);
 	ListaDEnlazada<T>& borraInicio();
 	ListaDEnlazada<T>& borrarFinal();
-	ListaDEnlazada<T>& concatena(const ListaEnlazada<T>& otraLista);
+	ListaDEnlazada<T>& concatena(const ListaDEnlazada<T>& otraLista);
+	Iterador<T> iteradorInicio();
 };
 
 /**
@@ -102,7 +103,7 @@ ListaDEnlazada<T>::ListaDEnlazada(const ListaDEnlazada& orig) {
 	@param right Lista a copiar
 */
 template<class T>
-inline ListaDEnlazada<T>& ListaDEnlazada<T>::operator=(const ListaDEnlazada<T>& right)
+ListaDEnlazada<T>& ListaDEnlazada<T>::operator=(const ListaDEnlazada<T>& right)
 {
 	// TODO: Implementar asignacion
 }
@@ -111,7 +112,7 @@ inline ListaDEnlazada<T>& ListaDEnlazada<T>::operator=(const ListaDEnlazada<T>& 
 *@Brief Destructor de ListaDEnlazada
 */
 template<class T>
-inline ListaDEnlazada<T>::~ListaDEnlazada(){
+ListaDEnlazada<T>::~ListaDEnlazada(){
 	Nodo<T>* aux;
 	while (tam > 0) {
 		aux = cola->anterior;
@@ -137,6 +138,7 @@ ListaDEnlazada<T>& ListaDEnlazada<T>::insertaInicio(T& dato) {
 		cabecera->anterior = nuevo;
 		cabecera = nuevo;
 	}
+	tam++
 }
 
 /**
@@ -154,6 +156,47 @@ ListaDEnlazada<T>& ListaDEnlazada<T>::insertaFinal(T& dato) {
 		cola->siguiente = nuevo;
 		nuevo->anterior = cola;
 		cola = nuevo;
+	}
+	tam++;
+}
+
+/**
+	@brief Elimina el primer nodo de la lista
+*/
+template<class T>
+ListaDEnlazada<T>& ListaDEnlazada<T>::borraInicio()
+{
+	cabecera = cabecera.siguiente;
+	delete cabecera->anterior;
+	cabecera->anterior = 0;
+	tam--;
+	
+}
+
+/**
+	@brief Elimina el ultimo nodo de la lista
+*/
+template<class T>
+ListaDEnlazada<T>& ListaDEnlazada<T>::borrarFinal()
+{
+	cola = cola->anterior;
+	delete cola->siguiente;
+	cola->siguiente = 0;
+	tam--;
+}
+
+/**
+	@brief Concatena una lista a *this
+	@param otraLista Lista a concatenar
+	@pro Los nodos de otraLista se añaden al final de *this
+*/
+template<class T>
+ListaDEnlazada<T>& ListaDEnlazada<T>::concatena(const ListaDEnlazada<T>& otraLista)
+{
+	while(otraLista.tam)
+	{
+		this->insertaFinal(otraLista.cola->dato);
+		otraLista.borrarFinal();
 	}
 }
 
