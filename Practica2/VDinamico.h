@@ -8,7 +8,7 @@
 template<class T>
 class VDinamico {
 private:
-	int tamL, tamF; //Tamaño lógico y tamaño fisico
+	unsigned int tamL, tamF; //Tamaño lógico y tamaño fisico
 	T* buffer;
 	bool sorted = false;
 	void aumentarTamF();
@@ -23,7 +23,7 @@ public:
 	int getTamF();
 	int getTamL();
 	VDinamico<T>& operator=(VDinamico<T>& asig);
-	T& operator[](int pos);
+	T& operator[](unsigned int pos);
 	VDinamico<T>& insertarDato(T& dato, unsigned int pos = UINT_MAX);
 	VDinamico<T>& eliminarDato(unsigned int pos = UINT_MAX);
 	void ordenar();
@@ -135,8 +135,8 @@ VDinamico<T>& VDinamico<T>::operator=(VDinamico<T>& asig) {
  * @return Valor almacenado en la posicion indicada
  */
 template<class T>
-T& VDinamico<T>::operator[](int pos) {
-	if (pos < 0 || pos >= tamF) {
+T& VDinamico<T>::operator[](unsigned int pos) {
+	if (pos >= tamF) {
 		throw std::out_of_range("Posicion no valida");
 	}
 	else
@@ -163,7 +163,7 @@ VDinamico<T>& VDinamico<T>::insertarDato(T& dato, unsigned int pos) {
 		}
 		else {
 			tamL++;
-			for (int i = tamL; i > pos; i--) {
+			for (unsigned int i = tamL; i > pos; i--) {
 				buffer[i] = buffer[i - 1];
 			}
 			buffer[pos] = dato;
@@ -209,7 +209,7 @@ VDinamico<T>& VDinamico<T>::eliminarDato(unsigned int pos) {
 template <class T>
 void VDinamico<T>::aumentarTamF() {
 	T* NuevoBuffer = new T[tamF *= 2];
-	for (int i = 0; i < tamL; i++) {
+	for (unsigned int i = 0; i < tamL; i++) {
 		NuevoBuffer[i] = buffer[i];
 	}
 	delete[] buffer;

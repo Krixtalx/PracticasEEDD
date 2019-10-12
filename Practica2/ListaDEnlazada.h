@@ -3,32 +3,13 @@
 
 #include "Nodo.h"
 
-template <class T>
-class ListaDEnlazada {
-private:
-	Nodo<T>* cabecera;
-	Nodo<T>* cola;
-	int tam;
-	friend class Nodo<T>;
-public:
-	ListaDEnlazada();
-	ListaDEnlazada(const ListaDEnlazada& orig);
-	ListaDEnlazada<T>& operator=(const ListaDEnlazada<T>& right);
-	virtual ~ListaDEnlazada();
-	ListaDEnlazada<T>& insertaInicio(T& dato);
-	ListaDEnlazada<T>& insertaFinal(T& dato);
-	ListaDEnlazada<T>& borraInicio();
-	ListaDEnlazada<T>& borrarFinal();
-	ListaDEnlazada<T>& concatena(const ListaEnlazada<T>& otraLista);
-};
-
 /**
-	@brief Clase iterador para ListaDEnlazada
+*@brief Clase iterador para ListaDEnlazada
 */
 template <class T>
 class Iterador {
 	Nodo<T>* nodoApuntado;
-	friend class ListaDEnlazada<T>;
+	friend class ListaDEnlazada;
 public:
 	Iterador(Nodo<T>* nodo);
 	~Iterador();
@@ -37,25 +18,54 @@ public:
 	void anteriorNodo();
 };
 
+// ============================================================================
+
+template <class T>
+class ListaDEnlazada {
+private:
+	Nodo<T>* cabecera;
+	Nodo<T>* cola;
+	Iterador<T> IteradorLista;
+	int tam;
+	friend class Nodo;
+
+public:
+	ListaDEnlazada();
+	ListaDEnlazada(const ListaDEnlazada& orig);
+	ListaDEnlazada<T>& operator=(const ListaDEnlazada<T>& right);
+	virtual ~ListaDEnlazada();
+	T& Inicio();
+	T& Final();
+	int getTam();
+	ListaDEnlazada<T>& insertaInicio(T& dato);
+	ListaDEnlazada<T>& insertaFinal(T& dato);
+	ListaDEnlazada<T>& inserta(Iterador<T>& iterador, T& dato);
+	ListaDEnlazada<T>& borraInicio();
+	ListaDEnlazada<T>& borrarFinal();
+	ListaDEnlazada<T>& concatena(const ListaDEnlazada<T>& otraLista);
+};
+
+//=======================================================================================================
+
 /**
-	@brief Constructor parametrizado
-	@param nodo Cabecera de la lista
-	@post Crea un iterador apuntando a la cabecera de una lista
+*	@brief Constructor parametrizado
+*	@param nodo Cabecera de la lista
+*	@post Crea un iterador apuntando a la cabecera de una lista
 */
 template <class T>
 Iterador<T>::Iterador(Nodo<T>* nodo) : nodoApuntado(nodo) {
 }
 
 /**
-	@brief Destructor
+*	@brief Destructor
 */
 template <class T>
 Iterador<T>::~Iterador() {
 }
 
 /**
-	@brief Comprueba si se ha llegado al final de la lista
-	@return True si no quedan elementos por los que iterar. False en otro caso
+*	@brief Comprueba si se ha llegado al final de la lista
+*	@return True si no quedan elementos por los que iterar. False en otro caso
 */
 template <class T>
 bool Iterador<T>::final() {
@@ -63,7 +73,7 @@ bool Iterador<T>::final() {
 }
 
 /**
-	@brief Itera al siguiente nodo de la lista
+*	@brief Itera al siguiente nodo de la lista
 */
 template <class T>
 void Iterador<T>::siguienteNodo() {
@@ -71,14 +81,18 @@ void Iterador<T>::siguienteNodo() {
 }
 
 /**
-	@brief Itera al nodo anterior de la lista
+*	@brief Itera al nodo anterior de la lista
 */
 template <class T>
 void Iterador<T>::anteriorNodo() {
 	nodoApuntado = nodoApuntado->anterior;
 }
 
+
+
 // ========== INICIO IMPLEMENTACION ListaDEnlazada ==========
+
+
 
 /**
 	@brief Constructor por defecto
@@ -102,8 +116,7 @@ ListaDEnlazada<T>::ListaDEnlazada(const ListaDEnlazada& orig) {
 	@param right Lista a copiar
 */
 template<class T>
-inline ListaDEnlazada<T>& ListaDEnlazada<T>::operator=(const ListaDEnlazada<T>& right)
-{
+ListaDEnlazada<T>& ListaDEnlazada<T>::operator=(const ListaDEnlazada<T>& right){
 	// TODO: Implementar asignacion
 }
 
@@ -111,7 +124,7 @@ inline ListaDEnlazada<T>& ListaDEnlazada<T>::operator=(const ListaDEnlazada<T>& 
 *@Brief Destructor de ListaDEnlazada
 */
 template<class T>
-inline ListaDEnlazada<T>::~ListaDEnlazada(){
+ListaDEnlazada<T>::~ListaDEnlazada(){
 	Nodo<T>* aux;
 	while (tam > 0) {
 		aux = cola->anterior;
@@ -119,6 +132,21 @@ inline ListaDEnlazada<T>::~ListaDEnlazada(){
 		cola = aux;
 		tam--;
 	}
+}
+
+template<class T>
+T& ListaDEnlazada<T>::Inicio(){
+	return cabecera->dato;
+}
+
+template<class T>
+T& ListaDEnlazada<T>::Final(){
+	return cola->dato;
+}
+
+template<class T>
+int ListaDEnlazada<T>::getTam(){
+	return tam;
 }
 
 /**
@@ -137,6 +165,8 @@ ListaDEnlazada<T>& ListaDEnlazada<T>::insertaInicio(T& dato) {
 		cabecera->anterior = nuevo;
 		cabecera = nuevo;
 	}
+	tam++;
+	return *this;
 }
 
 /**
@@ -155,6 +185,55 @@ ListaDEnlazada<T>& ListaDEnlazada<T>::insertaFinal(T& dato) {
 		nuevo->anterior = cola;
 		cola = nuevo;
 	}
+	tam++;
+	return *this;
+}
+
+/**
+*@Brief Sustituye el dato del nodo apuntado por el Iterador
+*@param Iterador que apunta al nodo
+*@param Dato con el que se va a sustituir
+*/
+template<class T>
+ListaDEnlazada<T>& ListaDEnlazada<T>::inserta(Iterador<T>& Iterador, T& dato){
+	Iterador.nodoApuntado->SetDato(dato);
+	return *this;
+}
+
+/**
+*@Brief Borra el dato que se encuentra al principio de la lista
+*/
+template<class T>
+ListaDEnlazada<T>& ListaDEnlazada<T>::borraInicio(){
+	cabecera = cabecera->siguiente;
+	delete cabecera->anterior;
+	cabecera->anterior = 0;
+	tam--;
+	return *this;
+}
+
+/**
+*@Brief Borra el dato que se encuentra al final de la lista
+*/
+template<class T>
+ListaDEnlazada<T>& ListaDEnlazada<T>::borrarFinal(){
+	cola = cola->anterior;
+	delete cola->siguiente;
+	cola->siguiente = 0;
+	tam--;
+	return *this;
+}
+
+/**
+*@Brief Enlaza el final de la lista que ejecuta el método con el principio de la lista que se pasa como parametro
+*@param Lista con la que concatenar
+*/
+template<class T>
+ListaDEnlazada<T>& ListaDEnlazada<T>::concatena(const ListaDEnlazada<T>& otraLista){
+	this->cola->siguiente = otraLista.cabecera;
+	this->cola->siguiente->anterior = cola;
+	this->cola = otraLista.cola;
+	return *this;
 }
 
 #endif /* LISTADENLAZADA_H */
