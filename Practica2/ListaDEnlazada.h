@@ -205,7 +205,7 @@ ListaDEnlazada<T>& ListaDEnlazada<T>::insertaInicio(T& dato) {
 */
 template<class T>
 ListaDEnlazada<T>& ListaDEnlazada<T>::insertaFinal(T& dato) {
-	Nodo<T>* nuevo = new nodo<T>(dato);
+	Nodo<T>* nuevo = new Nodo<T>(dato);
 	if (tam == 0) {
 		cabecera = nuevo;
 		cola = nuevo;
