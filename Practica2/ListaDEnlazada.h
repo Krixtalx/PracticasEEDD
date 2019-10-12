@@ -176,7 +176,7 @@ T& ListaDEnlazada<T>::Final(){
 }
 
 template<class T>
-int ListaDEnlazada<T>::getTam(){
+unsigned int ListaDEnlazada<T>::getTam(){
 	return tam;
 }
 
