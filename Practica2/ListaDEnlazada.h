@@ -26,7 +26,7 @@ private:
 	Nodo<T>* cabecera;
 	Nodo<T>* cola;
 	Iterador<T> IteradorLista;
-	int tam;
+	unsigned int tam;
 	friend class Nodo;
 
 public:
@@ -36,7 +36,7 @@ public:
 	virtual ~ListaDEnlazada();
 	T& Inicio();
 	T& Final();
-	int getTam();
+	unsigned int getTam();
 	ListaDEnlazada<T>& insertaInicio(T& dato);
 	ListaDEnlazada<T>& insertaFinal(T& dato);
 	ListaDEnlazada<T>& inserta(Iterador<T>& iterador, T& dato);
@@ -107,8 +107,19 @@ ListaDEnlazada<T>::ListaDEnlazada() : cabezera(0), cola(0), tam(0) {
 */
 template <class T>
 ListaDEnlazada<T>::ListaDEnlazada(const ListaDEnlazada& orig) {
-	//TODO: implementar copia (this->insertarFinal())
-
+	unsigned int tamAux = orig.tam;
+	Nodo<T>* auxOrig = orig.cabecera;
+	Nodo<T>* auxCop;
+	this->cabecera = new Nodo<T>(auxOrig);
+	auxCop = this->cabecera;
+	while (tamAux > 0) {
+		aux = aux->siguiente;
+		auxCop->siguiente = new Nodo<T>(aux);
+		auxCop->siguiente->anterior = auxCop;
+		auxCop = auxCop->siguiente;
+		tam--;
+	}
+	this->cola = auxCop;
 }
 
 /**
@@ -117,7 +128,27 @@ ListaDEnlazada<T>::ListaDEnlazada(const ListaDEnlazada& orig) {
 */
 template<class T>
 ListaDEnlazada<T>& ListaDEnlazada<T>::operator=(const ListaDEnlazada<T>& right){
-	// TODO: Implementar asignacion
+	Nodo<T>* aux;
+	while (tam > 0) {
+		aux = cola->anterior;
+		delete cola;
+		cola = aux;
+		tam--;
+	}
+
+	unsigned int tamAux = right.tam;
+	Nodo<T>* auxOrig = right.cabecera;
+	Nodo<T>* auxCop;
+	this->cabecera = new Nodo<T>(auxOrig);
+	auxCop = this->cabecera;
+	while (tamAux > 0) {
+		aux = aux->siguiente;
+		auxCop->siguiente = new Nodo<T>(aux);
+		auxCop->siguiente->anterior = auxCop;
+		auxCop = auxCop->siguiente;
+		tam--;
+	}
+	this->cola = auxCop;
 }
 
 /**
