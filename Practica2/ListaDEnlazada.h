@@ -9,7 +9,6 @@
 template <class T>
 class Iterador {
 	Nodo<T>* nodoApuntado;
-	friend class ListaDEnlazada;
 public:
 	Iterador(Nodo<T>* nodo);
 	~Iterador();
@@ -27,7 +26,7 @@ private:
 	Nodo<T>* cola;
 	Iterador<T> IteradorLista;
 	unsigned int tam;
-	friend class Nodo;
+	friend class Nodo<T>;
 
 public:
 	ListaDEnlazada();
@@ -98,7 +97,7 @@ void Iterador<T>::anteriorNodo() {
 	@brief Constructor por defecto
 */
 template <class T>
-ListaDEnlazada<T>::ListaDEnlazada() : cabezera(0), cola(0), tam(0) {
+ListaDEnlazada<T>::ListaDEnlazada() : cabecera(0), cola(0), tam(0) {
 }
 
 /**
@@ -113,8 +112,8 @@ ListaDEnlazada<T>::ListaDEnlazada(const ListaDEnlazada& orig) {
 	this->cabecera = new Nodo<T>(auxOrig);
 	auxCop = this->cabecera;
 	while (tamAux > 0) {
-		aux = aux->siguiente;
-		auxCop->siguiente = new Nodo<T>(aux);
+		auxOrig = auxOrig->siguiente;
+		auxCop->siguiente = new Nodo<T>(auxOrig);
 		auxCop->siguiente->anterior = auxCop;
 		auxCop = auxCop->siguiente;
 		tam--;
@@ -206,7 +205,7 @@ ListaDEnlazada<T>& ListaDEnlazada<T>::insertaInicio(T& dato) {
 */
 template<class T>
 ListaDEnlazada<T>& ListaDEnlazada<T>::insertaFinal(T& dato) {
-	Nodo<T>* nuevo = new nodo <T>;
+	Nodo<T>* nuevo = new nodo<T>(dato);
 	if (tam == 0) {
 		cabecera = nuevo;
 		cola = nuevo;

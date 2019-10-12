@@ -151,9 +151,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Cliente.cpp" />
     <ClCompile Include="Practica2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Cliente.h" />
     <ClInclude Include="ListaDEnlazada.h" />
     <ClInclude Include="Nodo.h" />
     <ClInclude Include="resource.h" />

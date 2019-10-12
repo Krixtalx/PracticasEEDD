@@ -18,6 +18,9 @@
     <ClCompile Include="Practica2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Cliente.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -30,6 +33,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ListaDEnlazada.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Cliente.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
