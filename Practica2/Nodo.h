@@ -3,12 +3,16 @@
 
 #include <iostream>
 
+
+
 template <class T>
 class Nodo {
 private:
 	Nodo<T>* anterior;
 	Nodo<T>* siguiente;
 	T dato;
+	template<class T>
+	friend class ListaDEnlazada;
 public:
 	Nodo();
 	Nodo(T& _dato);

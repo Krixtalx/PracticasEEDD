@@ -112,13 +112,19 @@ void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector) {
 }
 
 int main(int argc, char** argv) {
-
+/*
 	VDinamico<Cliente>* vClientes = new VDinamico<Cliente>;
 
 	cout << "Comienzo de lectura de un fichero " << endl;
 	leeClientes("clientes_v2.csv", vClientes);
 
 	delete vClientes;
+	*/
+
+	ListaDEnlazada<string> test;
+	string a = "HE", b = "FUNCIONADO";
+	test.insertaInicio(a).insertaFinal(b);
+	cout << test.Inicio() << " " << test.Final();
 
 	return 0;
 }

@@ -10,9 +10,12 @@ template <class T>
 class Iterador {
 	Nodo<T>* nodoApuntado;
 public:
+	Iterador();
 	Iterador(Nodo<T>* nodo);
 	~Iterador();
 	bool final();
+	bool haySiguiente();
+	bool hayAnterior();
 	void siguienteNodo();
 	void anteriorNodo();
 };
@@ -26,7 +29,6 @@ private:
 	Nodo<T>* cola;
 	Iterador<T> IteradorLista;
 	unsigned int tam;
-	friend class Nodo<T>;
 
 public:
 	ListaDEnlazada();
@@ -41,10 +43,16 @@ public:
 	ListaDEnlazada<T>& inserta(Iterador<T>& iterador, T& dato);
 	ListaDEnlazada<T>& borraInicio();
 	ListaDEnlazada<T>& borrarFinal();
+	ListaDEnlazada<T>& borra(Iterador<T>& iterador);
 	ListaDEnlazada<T>& concatena(const ListaDEnlazada<T>& otraLista);
+	Iterador<T> iterador();
 };
 
 //=======================================================================================================
+
+template<class T>
+inline Iterador<T>::Iterador() : nodoApuntado(0) {
+}
 
 /**
 *	@brief Constructor parametrizado
@@ -68,7 +76,29 @@ Iterador<T>::~Iterador() {
 */
 template <class T>
 bool Iterador<T>::final() {
-	return (nodoApuntado == 0);
+	return (!haySiguiente() || !hayAnterior());
+}
+
+/**
+	@brief Comprueba si existe nodo siguiente
+*/
+template<class T>
+bool Iterador<T>::haySiguiente()
+{
+	if (nodoApuntado->siguiente == 0)
+		return false;
+	return true;
+}
+
+/**
+	@brief Comprueba si existe nodo anterior
+*/
+template<class T>
+bool Iterador<T>::hayAnterior()
+{
+	if (nodoApuntado->anterior == 0)
+		return false;
+	return true;
 }
 
 /**
@@ -76,7 +106,8 @@ bool Iterador<T>::final() {
 */
 template <class T>
 void Iterador<T>::siguienteNodo() {
-	nodoApuntado = nodoApuntado->siguiente;
+	if (haySiguiente())
+		nodoApuntado = nodoApuntado->siguiente;
 }
 
 /**
@@ -84,7 +115,8 @@ void Iterador<T>::siguienteNodo() {
 */
 template <class T>
 void Iterador<T>::anteriorNodo() {
-	nodoApuntado = nodoApuntado->anterior;
+	if (hayAnterior())
+		nodoApuntado = nodoApuntado->anterior;
 }
 
 
@@ -105,18 +137,18 @@ ListaDEnlazada<T>::ListaDEnlazada() : cabecera(0), cola(0), tam(0) {
 *	@param orig Lista a copiar
 */
 template <class T>
-ListaDEnlazada<T>::ListaDEnlazada(const ListaDEnlazada& orig) {
+ListaDEnlazada<T>::ListaDEnlazada(const ListaDEnlazada& orig) : tam(orig.tam) {
 	unsigned int tamAux = orig.tam;
 	Nodo<T>* auxOrig = orig.cabecera;
 	Nodo<T>* auxCop;
 	this->cabecera = new Nodo<T>(auxOrig);
 	auxCop = this->cabecera;
-	while (tamAux > 0) {
+	while (tamAux > 1) {
 		auxOrig = auxOrig->siguiente;
 		auxCop->siguiente = new Nodo<T>(auxOrig);
 		auxCop->siguiente->anterior = auxCop;
 		auxCop = auxCop->siguiente;
-		tam--;
+		tamAux--;
 	}
 	this->cola = auxCop;
 }
@@ -126,7 +158,7 @@ ListaDEnlazada<T>::ListaDEnlazada(const ListaDEnlazada& orig) {
 	@param right Lista a copiar
 */
 template<class T>
-ListaDEnlazada<T>& ListaDEnlazada<T>::operator=(const ListaDEnlazada<T>& right){
+ListaDEnlazada<T>& ListaDEnlazada<T>::operator=(const ListaDEnlazada<T>& right) {
 	Nodo<T>* aux;
 	while (tam > 0) {
 		aux = cola->anterior;
@@ -136,25 +168,26 @@ ListaDEnlazada<T>& ListaDEnlazada<T>::operator=(const ListaDEnlazada<T>& right){
 	}
 
 	unsigned int tamAux = right.tam;
-	Nodo<T>* auxOrig = right.cabecera;
+	aux = right.cabecera;
 	Nodo<T>* auxCop;
-	this->cabecera = new Nodo<T>(auxOrig);
+	this->cabecera = new Nodo<T>(aux);
 	auxCop = this->cabecera;
-	while (tamAux > 0) {
+	while (tamAux > 1) {
 		aux = aux->siguiente;
 		auxCop->siguiente = new Nodo<T>(aux);
 		auxCop->siguiente->anterior = auxCop;
 		auxCop = auxCop->siguiente;
-		tam--;
+		tamAux--;
 	}
 	this->cola = auxCop;
+	this.tam = tamAux;
 }
 
 /**
 *@Brief Destructor de ListaDEnlazada
 */
 template<class T>
-ListaDEnlazada<T>::~ListaDEnlazada(){
+ListaDEnlazada<T>::~ListaDEnlazada() {
 	Nodo<T>* aux;
 	while (tam > 0) {
 		aux = cola->anterior;
@@ -165,17 +198,17 @@ ListaDEnlazada<T>::~ListaDEnlazada(){
 }
 
 template<class T>
-T& ListaDEnlazada<T>::Inicio(){
+T& ListaDEnlazada<T>::Inicio() {
 	return cabecera->dato;
 }
 
 template<class T>
-T& ListaDEnlazada<T>::Final(){
+T& ListaDEnlazada<T>::Final() {
 	return cola->dato;
 }
 
 template<class T>
-unsigned int ListaDEnlazada<T>::getTam(){
+unsigned int ListaDEnlazada<T>::getTam() {
 	return tam;
 }
 
@@ -191,7 +224,7 @@ ListaDEnlazada<T>& ListaDEnlazada<T>::insertaInicio(T& dato) {
 		cola = nuevo;
 	}
 	else {
-		nuevo.siguiente = cabecera;
+		nuevo->siguiente = cabecera;
 		cabecera->anterior = nuevo;
 		cabecera = nuevo;
 	}
@@ -220,21 +253,30 @@ ListaDEnlazada<T>& ListaDEnlazada<T>::insertaFinal(T& dato) {
 }
 
 /**
-*@Brief Sustituye el dato del nodo apuntado por el Iterador
-*@param Iterador que apunta al nodo
-*@param Dato con el que se va a sustituir
+*@Brief Inserta un nuevo nodo entre dos nodos de la lista
+*@param Iterador que apunta al nodo siguiente
+*@param Dato del nodo que se va a insertar
 */
 template<class T>
-ListaDEnlazada<T>& ListaDEnlazada<T>::inserta(Iterador<T>& Iterador, T& dato){
-	Iterador.nodoApuntado->SetDato(dato);
+ListaDEnlazada<T>& ListaDEnlazada<T>::inserta(Iterador<T>& iterador, T& dato) {
+	if (iterador.nodoApuntado == cola->siguiente) {
+		this->insertaFinal(dato);
+		return *this;
+	}
+	Nodo<T>* nuevoNodo = new Nodo<T>(dato);
+	nuevoNodo->siguiente = iterador.nodoApuntado;
+	nuevoNodo->anterior = iterador.nodoApuntado->anterior;
+	iterador.nodoApuntado->anterior->siguiente = nuevoNodo;
+	iterador.nodoApuntado->anterior = nuevoNodo;
+	tam++;
 	return *this;
 }
 
 /**
-*@Brief Borra el dato que se encuentra al principio de la lista
+*@Brief Borra el nodo que se encuentra al principio de la lista
 */
 template<class T>
-ListaDEnlazada<T>& ListaDEnlazada<T>::borraInicio(){
+ListaDEnlazada<T>& ListaDEnlazada<T>::borraInicio() {
 	cabecera = cabecera->siguiente;
 	delete cabecera->anterior;
 	cabecera->anterior = 0;
@@ -243,10 +285,10 @@ ListaDEnlazada<T>& ListaDEnlazada<T>::borraInicio(){
 }
 
 /**
-*@Brief Borra el dato que se encuentra al final de la lista
+*@Brief Borra el nodo que se encuentra al final de la lista
 */
 template<class T>
-ListaDEnlazada<T>& ListaDEnlazada<T>::borrarFinal(){
+ListaDEnlazada<T>& ListaDEnlazada<T>::borrarFinal() {
 	cola = cola->anterior;
 	delete cola->siguiente;
 	cola->siguiente = 0;
@@ -255,15 +297,45 @@ ListaDEnlazada<T>& ListaDEnlazada<T>::borrarFinal(){
 }
 
 /**
+	@brief Borra un nodo cualquiera de la lista
+	@param Iterador que apunta al nodo a borrar
+*/
+template<class T>
+ListaDEnlazada<T>& ListaDEnlazada<T>::borra(Iterador<T>& iterador)
+{
+	if (iterador.nodoApuntado == cabecera) {
+		this->borraInicio;
+		return *this;
+	}
+	else if (iterador.nodoApuntado == cola) {
+		this->borrarFinal;
+		return *this;
+	}
+	iterador.nodoApuntado->anterior->siguiente = iterador.nodoApuntado->siguiente;
+	iterador.nodoApuntado->siguiente->anterior = iterador.nodoApuntado->anterior;
+	delete iterador.nodoApuntado;
+	tam--;
+}
+
+/**
 *@Brief Enlaza el final de la lista que ejecuta el método con el principio de la lista que se pasa como parametro
 *@param Lista con la que concatenar
 */
 template<class T>
-ListaDEnlazada<T>& ListaDEnlazada<T>::concatena(const ListaDEnlazada<T>& otraLista){
+ListaDEnlazada<T>& ListaDEnlazada<T>::concatena(const ListaDEnlazada<T>& otraLista) {
 	this->cola->siguiente = otraLista.cabecera;
 	this->cola->siguiente->anterior = cola;
 	this->cola = otraLista.cola;
 	return *this;
+}
+
+/**
+	@brief Crea un iterador apuntando a la cabecera de la lista
+*/
+template<class T>
+Iterador<T> ListaDEnlazada<T>::iterador()
+{
+	return Iterador<T>(cabecera);
 }
 
 #endif /* LISTADENLAZADA_H */
