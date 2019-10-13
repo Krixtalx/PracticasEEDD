@@ -303,6 +303,7 @@ ListaDEnlazada<T>& ListaDEnlazada<T>::borra(Iterador<T>& iterador)
 	iterador.nodoApuntado->siguiente->anterior = iterador.nodoApuntado->anterior;
 	delete iterador.nodoApuntado;
 	tam--;
+	return *this;
 }
 
 /**
