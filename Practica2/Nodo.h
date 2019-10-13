@@ -13,17 +13,19 @@ private:
 	T dato;
 	template<class T>
 	friend class ListaDEnlazada;
+	template<class T>
+	friend class Iterador;
 public:
 	Nodo();
 	Nodo(T& _dato);
 	Nodo(const Nodo& orig);
 	virtual ~Nodo();
-
+	Nodo<T>& operator=(const Nodo<T>* right);
 	Nodo<T>* GetAnterior() const;
 	Nodo<T>* SetAnterior(Nodo<T>* anterior);
 	Nodo<T>* GetSiguiente() const;
 	Nodo<T>* SetSiguiente(Nodo<T>* siguiente);
-	T& GetDato() const;
+	T& GetDato();
 	Nodo<T>* SetDato(T dato);
 };
 
@@ -55,6 +57,18 @@ Nodo<T>::Nodo(const Nodo& orig) {
 */
 template<class T>
 Nodo<T>::~Nodo() {}
+
+/**
+	@brief Operador de asignacion
+*/
+template<class T>
+Nodo<T>& Nodo<T>::operator=(const Nodo<T>* right)
+{
+	this->anterior = right->anterior;
+	this->siguiente = right->siguiente;
+	this->dato = right->dato;
+	return *this;
+}
 
 /**
 *@Brief Getter del nodo anterior
@@ -96,7 +110,7 @@ Nodo<T>* Nodo<T>::SetSiguiente(Nodo* siguiente) {
 *@Brief Getter del dato
 */
 template <class T>
-T& Nodo<T>::GetDato() const {
+T& Nodo<T>::GetDato(){
 	return dato;
 }
 

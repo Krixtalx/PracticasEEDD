@@ -9,15 +9,17 @@
 template <class T>
 class Iterador {
 	Nodo<T>* nodoApuntado;
+	template <class T>
+	friend class ListaDEnlazada;
 public:
 	Iterador();
 	Iterador(Nodo<T>* nodo);
 	~Iterador();
+	Iterador<T>& operator=(const Iterador<T>& right);
+	Iterador<T>& operator++(int);
+	Iterador<T>& operator--(int);
 	bool final();
-	bool haySiguiente();
-	bool hayAnterior();
-	void siguienteNodo();
-	void anteriorNodo();
+	Nodo<T>* getNodo();
 };
 
 // ============================================================================
@@ -27,7 +29,6 @@ class ListaDEnlazada {
 private:
 	Nodo<T>* cabecera;
 	Nodo<T>* cola;
-	Iterador<T> IteradorLista;
 	unsigned int tam;
 
 public:
@@ -44,8 +45,8 @@ public:
 	ListaDEnlazada<T>& borraInicio();
 	ListaDEnlazada<T>& borrarFinal();
 	ListaDEnlazada<T>& borra(Iterador<T>& iterador);
-	ListaDEnlazada<T>& concatena(const ListaDEnlazada<T>& otraLista);
-	Iterador<T> iterador();
+	ListaDEnlazada<T> concatena(const ListaDEnlazada<T>& otraLista);
+	Iterador<T> iterador() const;
 };
 
 //=======================================================================================================
@@ -70,53 +71,40 @@ template <class T>
 Iterador<T>::~Iterador() {
 }
 
+template<class T>
+Iterador<T>& Iterador<T>::operator=(const Iterador<T>& right)
+{
+	this->nodoApuntado = right.nodoApuntado;
+	return *this;
+}
+
+template<class T>
+Iterador<T>& Iterador<T>::operator++(int)
+{
+	nodoApuntado = nodoApuntado->siguiente;
+	return *this;
+}
+
+template<class T>
+Iterador<T>& Iterador<T>::operator--(int)
+{
+	nodoApuntado = nodoApuntado->anterior;
+	return *this;
+}
+
 /**
 *	@brief Comprueba si se ha llegado al final de la lista
 *	@return True si no quedan elementos por los que iterar. False en otro caso
 */
 template <class T>
 bool Iterador<T>::final() {
-	return (!haySiguiente() || !hayAnterior());
+	return (nodoApuntado == 0);
 }
 
-/**
-	@brief Comprueba si existe nodo siguiente
-*/
 template<class T>
-bool Iterador<T>::haySiguiente()
+inline Nodo<T>* Iterador<T>::getNodo()
 {
-	if (nodoApuntado->siguiente == 0)
-		return false;
-	return true;
-}
-
-/**
-	@brief Comprueba si existe nodo anterior
-*/
-template<class T>
-bool Iterador<T>::hayAnterior()
-{
-	if (nodoApuntado->anterior == 0)
-		return false;
-	return true;
-}
-
-/**
-*	@brief Itera al siguiente nodo de la lista
-*/
-template <class T>
-void Iterador<T>::siguienteNodo() {
-	if (haySiguiente())
-		nodoApuntado = nodoApuntado->siguiente;
-}
-
-/**
-*	@brief Itera al nodo anterior de la lista
-*/
-template <class T>
-void Iterador<T>::anteriorNodo() {
-	if (hayAnterior())
-		nodoApuntado = nodoApuntado->anterior;
+	return this->nodoApuntado;
 }
 
 
@@ -141,11 +129,11 @@ ListaDEnlazada<T>::ListaDEnlazada(const ListaDEnlazada& orig) : tam(orig.tam) {
 	unsigned int tamAux = orig.tam;
 	Nodo<T>* auxOrig = orig.cabecera;
 	Nodo<T>* auxCop;
-	this->cabecera = new Nodo<T>(auxOrig);
+	this->cabecera = new Nodo<T>(*auxOrig);
 	auxCop = this->cabecera;
 	while (tamAux > 1) {
 		auxOrig = auxOrig->siguiente;
-		auxCop->siguiente = new Nodo<T>(auxOrig);
+		auxCop->siguiente = new Nodo<T>(*auxOrig);
 		auxCop->siguiente->anterior = auxCop;
 		auxCop = auxCop->siguiente;
 		tamAux--;
@@ -318,24 +306,27 @@ ListaDEnlazada<T>& ListaDEnlazada<T>::borra(Iterador<T>& iterador)
 }
 
 /**
-*@Brief Enlaza el final de la lista que ejecuta el método con el principio de la lista que se pasa como parametro
+*@Brief Crea una nueva lista resultante de concatenar *this con otraLista
 *@param Lista con la que concatenar
 */
 template<class T>
-ListaDEnlazada<T>& ListaDEnlazada<T>::concatena(const ListaDEnlazada<T>& otraLista) {
-	this->cola->siguiente = otraLista.cabecera;
-	this->cola->siguiente->anterior = cola;
-	this->cola = otraLista.cola;
-	return *this;
+ListaDEnlazada<T> ListaDEnlazada<T>::concatena(const ListaDEnlazada<T>& otraLista) {
+	ListaDEnlazada<T> temp(*this);
+	Iterador<T> iteraOtra = otraLista.iterador();
+	while(!iteraOtra.final()) {
+		temp.insertaFinal(iteraOtra.nodoApuntado->dato);
+		iteraOtra++;
+	}
+	return temp;
 }
 
 /**
 	@brief Crea un iterador apuntando a la cabecera de la lista
 */
 template<class T>
-Iterador<T> ListaDEnlazada<T>::iterador()
+Iterador<T> ListaDEnlazada<T>::iterador() const
 {
-	return Iterador<T>(cabecera);
+	return Iterador<T>(this->cabecera);
 }
 
 #endif /* LISTADENLAZADA_H */

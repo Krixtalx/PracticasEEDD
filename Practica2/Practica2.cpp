@@ -124,8 +124,15 @@ int main(int argc, char** argv) {
 	ListaDEnlazada<string> test;
 	string a = "HE", b = "FUNCIONADO";
 	test.insertaInicio(a).insertaFinal(b);
-	cout << test.Inicio() << " " << test.Final();
-
+	ListaDEnlazada<string> test2;
+	string c = "MUY", d = "BIEN xd";
+	test2.insertaInicio(c).insertaFinal(d);
+	ListaDEnlazada<string> testConcatena = test.concatena(test2);
+	Iterador<string> ite = testConcatena.iterador();
+	while(!ite.final()) {
+		cout << ite.getNodo()->GetDato() << " ";
+		ite++;
+	}
 	return 0;
 }
 
