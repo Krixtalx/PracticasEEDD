@@ -25,6 +25,7 @@
  */
 
 #include <string>
+#include <sstream>
 using namespace std;
 
 /** @brief Excepción que representa fechas incorrectas */

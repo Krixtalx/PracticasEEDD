@@ -20,6 +20,7 @@
 #include <ctime>
 #include <cstdio>
 #include "fecha.h"
+#pragma warning(disable : 4996)
 
 const unsigned Fecha::diasMes[12] = { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 

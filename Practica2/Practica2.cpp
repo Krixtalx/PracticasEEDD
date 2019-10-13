@@ -9,6 +9,7 @@
 #include "VDinamico.h"
 #include "Cliente.h"
 #include "ListaDEnlazada.h"
+#include "Fecha.h"
 
 using namespace std;
 
