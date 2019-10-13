@@ -152,10 +152,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Cliente.cpp" />
+    <ClCompile Include="Fecha.cpp" />
     <ClCompile Include="Practica2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cliente.h" />
+    <ClInclude Include="Fecha.h" />
     <ClInclude Include="ListaDEnlazada.h" />
     <ClInclude Include="Nodo.h" />
     <ClInclude Include="resource.h" />
