@@ -292,11 +292,11 @@ template<class T>
 ListaDEnlazada<T>& ListaDEnlazada<T>::borra(Iterador<T>& iterador)
 {
 	if (iterador.nodoApuntado == cabecera) {
-		this->borraInicio;
+		this->borraInicio();
 		return *this;
 	}
 	else if (iterador.nodoApuntado == cola) {
-		this->borrarFinal;
+		this->borrarFinal();
 		return *this;
 	}
 	iterador.nodoApuntado->anterior->siguiente = iterador.nodoApuntado->siguiente;

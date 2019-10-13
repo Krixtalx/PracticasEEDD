@@ -121,16 +121,16 @@ int main(int argc, char** argv) {
 	delete vClientes;
 	*/
 
-	ListaDEnlazada<string> test;
-	string a = "HE", b = "FUNCIONADO";
-	test.insertaInicio(a).insertaFinal(b);
-	ListaDEnlazada<string> test2;
-	string c = "MUY", d = "BIEN xd";
-	test2.insertaInicio(c).insertaFinal(d);
-	ListaDEnlazada<string> testConcatena = test.concatena(test2);
-	Iterador<string> ite = testConcatena.iterador();
+	ListaDEnlazada<int> test;
+	int a = 6, b = 2, c = 10, d = 4;
+	test.insertaFinal(a).insertaFinal(b).insertaFinal(c);
+	Iterador<int> ite = test.iterador();
+	ite++;
+	test.inserta(ite, d);
+	test.borra(ite);
+	ite = test.iterador();
 	while(!ite.final()) {
-		cout << ite.getNodo()->GetDato() << " ";
+		cout << ite.getNodo()->GetDato() << endl;
 		ite++;
 	}
 	return 0;
