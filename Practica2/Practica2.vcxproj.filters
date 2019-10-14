@@ -24,6 +24,12 @@
     <ClCompile Include="Fecha.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Itinerario.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UTM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -42,6 +48,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Fecha.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Itinerario.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UTM.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

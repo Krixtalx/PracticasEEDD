@@ -10,6 +10,7 @@
 #include "Cliente.h"
 #include "ListaDEnlazada.h"
 #include "Fecha.h"
+#include "Itinerario.h"
 
 using namespace std;
 
@@ -122,18 +123,8 @@ int main(int argc, char** argv) {
 	delete vClientes;
 	*/
 
-	ListaDEnlazada<int> test;
-	int a = 6, b = 2, c = 10, d = 4;
-	test.insertaFinal(a).insertaFinal(b).insertaFinal(c);
-	Iterador<int> ite = test.iterador();
-	ite++;
-	test.inserta(ite, d);
-	test.borra(ite);
-	ite = test.iterador();
-	while(!ite.final()) {
-		cout << ite.getNodo()->GetDato() << endl;
-		ite++;
-	}
+	Itinerario a, b, c;
+	cout << a.getID() << "-" << b.getID() << "-" << c.getID();
 	return 0;
 }
 

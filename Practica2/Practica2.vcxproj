@@ -153,14 +153,18 @@
   <ItemGroup>
     <ClCompile Include="Cliente.cpp" />
     <ClCompile Include="Fecha.cpp" />
+    <ClCompile Include="Itinerario.cpp" />
     <ClCompile Include="Practica2.cpp" />
+    <ClCompile Include="UTM.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cliente.h" />
     <ClInclude Include="Fecha.h" />
+    <ClInclude Include="Itinerario.h" />
     <ClInclude Include="ListaDEnlazada.h" />
     <ClInclude Include="Nodo.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="UTM.h" />
     <ClInclude Include="VDinamico.h" />
   </ItemGroup>
   <ItemGroup>

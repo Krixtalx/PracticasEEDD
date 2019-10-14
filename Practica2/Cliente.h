@@ -2,21 +2,11 @@
 #define CLIENTE_H
 
 #include<string>
-
+#include "UTM.h"
 
 using namespace std;
 
-/*
- coordenadas UTM formadas por latitud y longitud
- */
 
-struct UTM {
-	double latitud;
-	double longitud;
-
-	UTM();
-	UTM(double _lat, double _long);
-};
 
 class Cliente {
 	string dni = "";
