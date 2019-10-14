@@ -1,12 +1,12 @@
 #ifndef ITINERARIO_H
 #define ITINERARIO_H
 
-#include "Cliente.h"
 #include "Fecha.h"
+#include "UTM.h"
 
-class Itinerario
-{
-	int id = 0, minutos = 0;
+class Itinerario{
+	static int id;
+	int minutos = 0;
 	UTM inicio, fin;
 	Fecha fecha;
 	//TODO: idGlobal compartida entre todos los objetos

@@ -1,14 +1,15 @@
 #ifndef CLIENTE_H
 #define CLIENTE_H
 
-#include<string>
+#include <string>
 #include "UTM.h"
+#include "ListaDEnlazada.h"
+#include "Itinerario.h"
 
 using namespace std;
 
-
-
 class Cliente {
+private:
 	string dni = "";
 	string pass = "";
 	string nombre = "";
@@ -16,6 +17,7 @@ class Cliente {
 	string direccion = "";
 	string nombreCompleto = "";
 	UTM posicion;
+	ListaDEnlazada<Itinerario> listaItinerarios;
 
 public:
 	Cliente();
