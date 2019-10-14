@@ -29,6 +29,20 @@ UTM Cliente::getPosicion() const {
 }
 
 /**
+*@Brief crea "num" itinerarios y los añade a la lista
+*@param num Numero de itinerarios a crear
+*@param idUltimo ID del ultimo de los itinerarios
+*/
+void Cliente::crearItinerarios(int num, int idUltimo){
+	idUltimo -= num;
+	for (int i = 0; i < num; i++){
+		Itinerario* aux = new Itinerario(idUltimo);
+		listaItinerarios.insertaFinal(*aux);
+		idUltimo++;
+	}
+}
+
+/**
  * @brief Compara dos clientes por su nombre
  * @param otro Cliente a comparar
  * @return True si el nombre del cliente *this es menor alfabeticamente que el de otro

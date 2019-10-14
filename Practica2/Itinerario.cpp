@@ -3,8 +3,6 @@
 #include <time.h>
 
 
-int Itinerario::id = 0;
-
 Itinerario::Itinerario() {
 	srand(time(0));
 	this->minutos = rand() % 120;
@@ -15,11 +13,12 @@ Itinerario::Itinerario() {
 	inicio.longitud = -9.5 + ((double)rand() / (double)RAND_MAX) * 13;
 	fin.longitud = -9.5 + ((double)rand() / (double)RAND_MAX) * 13;
 	this->fecha.asignarDia((rand() % 30) + 1, (rand() % 12) + 1, 2019);
-	this->id++;
+}
+
+Itinerario::Itinerario(int num): id(num){
 }
 
 Itinerario::~Itinerario(){
-	this->id--;
 }
 
 int Itinerario::getID()

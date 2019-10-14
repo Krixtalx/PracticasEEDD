@@ -122,9 +122,8 @@ int main(int argc, char** argv) {
 
 	delete vClientes;
 	*/
-
-	Itinerario a, b, c;
-	cout << a.getID() << "-" << b.getID() << "-" << c.getID();
+	Cliente test;
+	test.crearItinerarios(5, 5);
 	return 0;
 }
 

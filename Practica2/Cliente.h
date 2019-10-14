@@ -33,6 +33,7 @@ public:
 	string GetNombreCompleto() const;
 	double DistanciaCliente(Cliente& otro);
 	UTM getPosicion() const;
+	void crearItinerarios(int num, int idUltimo);
 };
 
 #endif /* CLIENTE_H */
