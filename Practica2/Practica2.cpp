@@ -152,22 +152,27 @@ void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector, UTM &minim
 }
 
 int main(int argc, char** argv) {
-	VDinamico<Cliente>* vClientes = new VDinamico<Cliente>;
-	UTM minimo, maximo;
+	try {
+		VDinamico<Cliente>* vClientes = new VDinamico<Cliente>;
+		UTM minimo, maximo;
 
-	cout << "Comienzo de lectura de un fichero " << endl;
-	leeClientes("clientes_v2.csv", vClientes, minimo, maximo);
+		cout << "Comienzo de lectura de un fichero " << endl;
+		leeClientes("clientes_v2.csv", vClientes, minimo, maximo);
 
-	int inicioItinerarios = 0; //Valor inicial para la id de los itinerarios
-	for (int i = 0; i < vClientes->getTamL(); i++)
-		inicioItinerarios = (*vClientes)[i].crearItinerarios(rand() % 5 + 1, inicioItinerarios, minimo, maximo);
+		int inicioItinerarios = 0; //Valor inicial para la id de los itinerarios
+		for (int i = 0; i < vClientes->getTamL(); i++)
+			inicioItinerarios = (*vClientes)[i].crearItinerarios(rand() % 5 + 1, inicioItinerarios, minimo, maximo);
 
-	cout << "MINIMO: " << minimo.latitud << ", " << minimo.longitud << endl;
-	cout << "MAXIMO: " << maximo.latitud << ", " << maximo.longitud << endl;
+		cout << "MINIMO: " << minimo.latitud << ", " << minimo.longitud << endl;
+		cout << "MAXIMO: " << maximo.latitud << ", " << maximo.longitud << endl;
 
-	listaItinerariosToCSV((*vClientes)[rand()%10001]);
-
-	delete vClientes;
+		listaItinerariosToCSV((*vClientes)[rand() % 10001]);
+		delete vClientes;
+	}
+	catch (std::exception & e) {
+		std::cerr<<e.what();
+	}
+	
 	return 0;
 }
 

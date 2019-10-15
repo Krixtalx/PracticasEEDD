@@ -340,7 +340,7 @@ ListaDEnlazada<T> ListaDEnlazada<T>::concatena(const ListaDEnlazada<T>& otraList
 }
 
 /**
-	@brief Crea un iterador apuntando a la cabecera de la lista
+	@brief Devuelve un iterador apuntando a la cabecera de la lista
 */
 template<class T>
 Iterador<T> ListaDEnlazada<T>::iterador() const{

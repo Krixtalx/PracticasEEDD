@@ -6,6 +6,11 @@
 Itinerario::Itinerario() {
 }
 
+/**
+*@Brief Constructor parametrizado
+*@param num, id que tomará el itinerario
+*@param min, max UTMs que indican las coordenadas UTM minimas y maximas que se generaran
+*/
 Itinerario::Itinerario(int num, const UTM& min, const UTM& max): id(num){
 	generaUTM(min, max);
 	srand(time(0)+rand());
@@ -31,6 +36,9 @@ Itinerario::Itinerario(int num, const UTM& min, const UTM& max): id(num){
 Itinerario::~Itinerario(){
 }
 
+/**
+*@Brief Generador pseudoaleatorio de coordenadas UTM de inicio y fin
+*/
 void Itinerario::generaUTM(const UTM& min, const UTM& max)
 {
 	srand(time(0)+rand());
@@ -40,10 +48,16 @@ void Itinerario::generaUTM(const UTM& min, const UTM& max)
 	this->fin.longitud = ((double)rand() / (double)RAND_MAX) * (max.longitud - min.longitud) + min.longitud;
 }
 
+/**
+*@Brief Getter del atributo ID
+*/
 int Itinerario::getID(){
 	return id;
 }
 
+/**
+*@Brief Devuelve un string en formato CSV con los atributos del objeto
+*/
 std::string Itinerario::toCSV(){
 	std::string idString = to_string(id);
 	std::string minutosString = to_string(minutos);

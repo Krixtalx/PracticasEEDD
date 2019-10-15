@@ -125,6 +125,10 @@ Nodo<T>* Nodo<T>::SetDato(T dato) {
 	return this;
 }
 
+/**
+*@Brief Pasa el dato a CSV
+*@Prev La clase del dato debe tener implementado un metodo toCSV()
+*/
 template<class T>
 std::string Nodo<T>::toCSV()
 {
