@@ -33,13 +33,24 @@ UTM Cliente::getPosicion() const {
 *@param num Numero de itinerarios a crear
 *@param idUltimo ID del ultimo de los itinerarios
 */
-void Cliente::crearItinerarios(int num, int idUltimo){
-	idUltimo -= num;
-	for (int i = 0; i < num; i++){
-		Itinerario* aux = new Itinerario(idUltimo);
+int Cliente::crearItinerarios(int num, int idUltimo, UTM &minimo, UTM &maximo){
+	//idUltimo -= num;
+	//for (int i = 0; i < num; i++){
+	//	Itinerario* aux = new Itinerario(idUltimo);
+	//	listaItinerarios.insertaFinal(*aux);
+	//	idUltimo++;
+	//}
+	for (int i = 0; i < num; i++) {
+		Itinerario* aux = new Itinerario(idUltimo, minimo, maximo);
 		listaItinerarios.insertaFinal(*aux);
 		idUltimo++;
 	}
+	return idUltimo;
+}
+
+ListaDEnlazada<Itinerario>& Cliente::getItinerarios()
+{
+	return this->listaItinerarios;
 }
 
 /**

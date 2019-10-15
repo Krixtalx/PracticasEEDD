@@ -5,6 +5,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <exception>
+#include <time.h>
 
 #include "VDinamico.h"
 #include "Cliente.h"
@@ -45,7 +46,7 @@ void CalcularMayorDistancia(VDinamico<Cliente>& vD, int& pos1, int& pos2, double
 	distancia = max;
 }
 
-void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector) {
+void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector, UTM &minimo, UTM &maximo) {
 	ifstream fe; //Flujo de entrada
 	string linea; //Cada línea tiene un clienete
 	int total = 0; //Contador de líneas o clientes
@@ -93,6 +94,27 @@ void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector) {
 				dlat = stod(latitud);
 				dlon = stod(longitud);
 
+				if (total == 2) {
+					minimo.latitud = dlat;
+					minimo.longitud = dlon;
+					maximo.latitud = dlat;
+					maximo.longitud = dlon;
+				}
+				else {
+					if (dlat < minimo.latitud) {
+						minimo.latitud = dlat;
+					}
+					else if (dlon < minimo.longitud) {
+						minimo.longitud = dlon;
+					}
+					else if (dlat > maximo.latitud) {
+						maximo.latitud = dlat;
+					}
+					else if (dlon > maximo.longitud) {
+						maximo.longitud = dlon;
+					}
+				}
+
 				//con todos los atributos leídos, se crea el cliente
 				Cliente client(dni, pass, nombre, apellido, direccion, dlat, dlon);
 				try {
@@ -101,6 +123,8 @@ void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector) {
 				catch (const std::bad_alloc & e) {
 					std::cout << "bad_alloc: " << e.what() << '\n';
 				}
+				
+				
 				//cout << "leido e insertado cliente " << total << "  ";
 			}
 		}
@@ -114,16 +138,19 @@ void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector) {
 }
 
 int main(int argc, char** argv) {
-/*
 	VDinamico<Cliente>* vClientes = new VDinamico<Cliente>;
-
+	UTM minimo, maximo;
 	cout << "Comienzo de lectura de un fichero " << endl;
-	leeClientes("clientes_v2.csv", vClientes);
-
+	leeClientes("clientes_v2.csv", vClientes, minimo, maximo);
+	int inicioItinerarios = 0; //Valor inicial para la id de los itinerarios
+	for (int i = 0; i < vClientes->getTamL(); i++)
+		inicioItinerarios = (*vClientes)[i].crearItinerarios(rand() % 5 + 1, inicioItinerarios, minimo, maximo);
+	cout << "MINIMO: " << minimo.latitud << ", " << minimo.longitud << endl;
+	cout << "MAXIMO: " << maximo.latitud << ", " << maximo.longitud << endl;
+	srand(time(0));
+	ListaDEnlazada<Itinerario> test = (*vClientes)[rand() % 1000].getItinerarios();
+	cout << test.Inicio().getID() << endl;
 	delete vClientes;
-	*/
-	Cliente test;
-	test.crearItinerarios(5, 5);
 	return 0;
 }
 

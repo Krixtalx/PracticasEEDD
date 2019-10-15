@@ -4,21 +4,24 @@
 
 
 Itinerario::Itinerario() {
-	srand(time(0));
-	this->minutos = rand() % 120;
-	//35 - 44 latitud
-	inicio.latitud = ((double)rand() / (double)RAND_MAX) * 9 + 35.;
-	fin.latitud = ((double)rand() / (double)RAND_MAX) * 9 + 35.;
-	//-9.5 - 3.5 longitud
-	inicio.longitud = -9.5 + ((double)rand() / (double)RAND_MAX) * 13;
-	fin.longitud = -9.5 + ((double)rand() / (double)RAND_MAX) * 13;
-	this->fecha.asignarDia((rand() % 30) + 1, (rand() % 12) + 1, 2019);
 }
 
-Itinerario::Itinerario(int num): id(num){
+Itinerario::Itinerario(int num, const UTM& min, const UTM& max): id(num){
+	generaUTM(min, max);
+	this->fecha.asignarDia((rand() % 20) + 1, (rand() % 12) + 1, 2019);
+	this->minutos = rand() % 300;
 }
 
 Itinerario::~Itinerario(){
+}
+
+void Itinerario::generaUTM(const UTM& min, const UTM& max)
+{
+	srand(time(0));
+	this->inicio.latitud = ((double)rand() / (double)RAND_MAX) * (max.latitud - min.latitud) + min.latitud;
+	this->inicio.longitud = ((double)rand() / (double)RAND_MAX) * (max.longitud - min.longitud) + min.longitud;
+	this->fin.latitud = ((double)rand() / (double)RAND_MAX) * (max.latitud - min.latitud) + min.latitud;
+	this->fin.longitud = ((double)rand() / (double)RAND_MAX) * (max.longitud - min.longitud) + min.longitud;
 }
 
 int Itinerario::getID()
