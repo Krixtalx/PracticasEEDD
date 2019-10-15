@@ -2,6 +2,7 @@
 #ifndef UTM_H
 #define UTM_H
 
+#include <string>
 using namespace std;
 
 /*
@@ -14,6 +15,7 @@ struct UTM {
 
 	UTM();
 	UTM(double _lat, double _long);
+	std::string toCSV();
 };
 
 

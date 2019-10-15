@@ -46,6 +46,24 @@ void CalcularMayorDistancia(VDinamico<Cliente>& vD, int& pos1, int& pos2, double
 	distancia = max;
 }
 
+void listaItinerariosToCSV(Cliente& cliente) {
+	ofstream file;
+	file.open(cliente.GetNombreCompleto() + ".txt");
+	ListaDEnlazada<Itinerario> lista = cliente.getItinerarios();
+	Iterador<Itinerario> iterator = lista.iterador();
+	for (unsigned int i = 1; i < lista.getTam(); i++){
+		try {
+			file << (iterator.getNodo()->toCSV() + "\n");
+			iterator++;
+		}
+		catch (std::exception & e) {
+			std::cerr << e.what();
+		}
+	}
+
+	file.close();
+}
+
 void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector, UTM &minimo, UTM &maximo) {
 	ifstream fe; //Flujo de entrada
 	string linea; //Cada línea tiene un clienete
@@ -114,7 +132,6 @@ void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector, UTM &minim
 						maximo.longitud = dlon;
 					}
 				}
-
 				//con todos los atributos leídos, se crea el cliente
 				Cliente client(dni, pass, nombre, apellido, direccion, dlat, dlon);
 				try {
@@ -123,9 +140,6 @@ void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector, UTM &minim
 				catch (const std::bad_alloc & e) {
 					std::cout << "bad_alloc: " << e.what() << '\n';
 				}
-				
-				
-				//cout << "leido e insertado cliente " << total << "  ";
 			}
 		}
 
@@ -140,16 +154,19 @@ void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector, UTM &minim
 int main(int argc, char** argv) {
 	VDinamico<Cliente>* vClientes = new VDinamico<Cliente>;
 	UTM minimo, maximo;
+
 	cout << "Comienzo de lectura de un fichero " << endl;
 	leeClientes("clientes_v2.csv", vClientes, minimo, maximo);
+
 	int inicioItinerarios = 0; //Valor inicial para la id de los itinerarios
 	for (int i = 0; i < vClientes->getTamL(); i++)
 		inicioItinerarios = (*vClientes)[i].crearItinerarios(rand() % 5 + 1, inicioItinerarios, minimo, maximo);
+
 	cout << "MINIMO: " << minimo.latitud << ", " << minimo.longitud << endl;
 	cout << "MAXIMO: " << maximo.latitud << ", " << maximo.longitud << endl;
-	srand(time(0));
-	ListaDEnlazada<Itinerario> test = (*vClientes)[rand() % 1000].getItinerarios();
-	cout << test.Inicio().getID() << endl;
+
+	listaItinerariosToCSV((*vClientes)[rand()%10001]);
+
 	delete vClientes;
 	return 0;
 }

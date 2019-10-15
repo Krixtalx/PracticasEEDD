@@ -19,6 +19,7 @@
  ***************************************************************************/
 #include <ctime>
 #include <cstdio>
+#include <iostream>
 #include "fecha.h"
 #pragma warning(disable : 4996)
 
@@ -44,6 +45,8 @@ Fecha::Fecha(unsigned aDia, unsigned aMes, unsigned aAnio, unsigned aHora, unsig
 
 void Fecha::asignarDia(unsigned aDia, unsigned aMes, unsigned aAnio)
 {
+	unsigned int hora = 3;
+	unsigned int min = 4;
 	comprobarFecha(aDia, aMes, aAnio, hora, min);
 	dia = aDia; mes = aMes; anio = aAnio;
 }
@@ -156,11 +159,10 @@ Fecha::~Fecha()
 {
 }
 
-void Fecha::comprobarFecha(unsigned aDia, unsigned aMes, unsigned aAnio, unsigned aHora, unsigned aMin) const
-{
+void Fecha::comprobarFecha(unsigned aDia, unsigned aMes, unsigned aAnio, unsigned aHora, unsigned aMin) const{
 	if (aMin > 59 || aHora > 23) throw ErrorFechaIncorrecta();
 	if (aMes < 1 || aMes > 12) throw ErrorFechaIncorrecta();
-	if (aDia < 1 || aDia > diasMes[aMes - 1]) throw ErrorFechaIncorrecta();
+	if (aDia < 1 || aDia > diasMes[aMes-1]) throw ErrorFechaIncorrecta();
 	if (aDia == 29 && aMes == 2 && (aAnio % 4 != 0 || (aAnio % 100 == 0 && aAnio % 400 != 0))) throw ErrorFechaIncorrecta();
 }
 

@@ -8,8 +8,24 @@ Itinerario::Itinerario() {
 
 Itinerario::Itinerario(int num, const UTM& min, const UTM& max): id(num){
 	generaUTM(min, max);
-	this->fecha.asignarDia((rand() % 20) + 1, (rand() % 12) + 1, 2019);
-	this->minutos = rand() % 300;
+	srand(time(0)+rand());
+	const unsigned int diasMes[12] = { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+	unsigned int ano = (rand() % 40)+2019;
+	unsigned int mes = (rand() % 12)+1;
+	unsigned int dia;
+	if (mes==2){
+		if (ano%4==0){
+			dia = (rand() % 29)+1;
+		}
+		else {
+			dia = (rand() % 28)+1;
+		}
+	}
+	else {
+		dia = (rand() % diasMes[mes - 1])+1;
+	}
+	this->fecha.asignarDia(dia, mes, ano);
+	this->minutos = (rand() % 500) +1;
 }
 
 Itinerario::~Itinerario(){
@@ -17,14 +33,22 @@ Itinerario::~Itinerario(){
 
 void Itinerario::generaUTM(const UTM& min, const UTM& max)
 {
-	srand(time(0));
+	srand(time(0)+rand());
 	this->inicio.latitud = ((double)rand() / (double)RAND_MAX) * (max.latitud - min.latitud) + min.latitud;
 	this->inicio.longitud = ((double)rand() / (double)RAND_MAX) * (max.longitud - min.longitud) + min.longitud;
 	this->fin.latitud = ((double)rand() / (double)RAND_MAX) * (max.latitud - min.latitud) + min.latitud;
 	this->fin.longitud = ((double)rand() / (double)RAND_MAX) * (max.longitud - min.longitud) + min.longitud;
 }
 
-int Itinerario::getID()
-{
+int Itinerario::getID(){
 	return id;
+}
+
+std::string Itinerario::toCSV(){
+	std::string idString = to_string(id);
+	std::string minutosString = to_string(minutos);
+	std::string inicioString = inicio.toCSV();
+	std::string finString = fin.toCSV();
+	std::string fechaString = fecha.cadena();
+	return idString + ";" + minutosString + ";" + inicioString + ";" + finString + ";" + fechaString;
 }

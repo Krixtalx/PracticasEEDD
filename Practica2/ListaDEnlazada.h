@@ -71,25 +71,44 @@ template <class T>
 Iterador<T>::~Iterador() {
 }
 
+/**
+*@Brief Operador de asignacion
+*/
 template<class T>
-Iterador<T>& Iterador<T>::operator=(const Iterador<T>& right)
-{
+Iterador<T>& Iterador<T>::operator=(const Iterador<T>& right){
 	this->nodoApuntado = right.nodoApuntado;
 	return *this;
 }
 
+/**
+*@Brief Pasa al nodo siguiente del apuntado
+*@Throw std::overflow_error si el nodo apuntado no tiene siguiente y no es la cola de la lista
+*/
 template<class T>
-Iterador<T>& Iterador<T>::operator++(int)
-{
-	nodoApuntado = nodoApuntado->siguiente;
-	return *this;
+Iterador<T>& Iterador<T>::operator++(int){
+	if (nodoApuntado->siguiente!=0){
+		nodoApuntado = nodoApuntado->siguiente;
+		return *this;
+	}
+	else {
+		throw std::overflow_error("El nodo apuntado no tiene ningún otro como siguiente");
+	}
+
 }
 
+/**
+*@Brief Pasa al nodo anterior del apuntado
+*@Throw std::overflow_error si el nodo apuntado no tiene anterior y no es la cabecera de la lista
+*/
 template<class T>
-Iterador<T>& Iterador<T>::operator--(int)
-{
-	nodoApuntado = nodoApuntado->anterior;
-	return *this;
+Iterador<T>& Iterador<T>::operator--(int){
+	if (nodoApuntado->anterior != 0) {
+		nodoApuntado = nodoApuntado->anterior;
+		return *this;
+	}
+	else {
+		throw std::overflow_error("El nodo apuntado no tiene ningún otro como anterior");
+	}
 }
 
 /**
@@ -102,8 +121,7 @@ bool Iterador<T>::final() {
 }
 
 template<class T>
-inline Nodo<T>* Iterador<T>::getNodo()
-{
+Nodo<T>* Iterador<T>::getNodo(){
 	return this->nodoApuntado;
 }
 
@@ -114,7 +132,7 @@ inline Nodo<T>* Iterador<T>::getNodo()
 
 
 /**
-	@brief Constructor por defecto
+*	@brief Constructor por defecto
 */
 template <class T>
 ListaDEnlazada<T>::ListaDEnlazada() : cabecera(0), cola(0), tam(0) {
@@ -325,8 +343,7 @@ ListaDEnlazada<T> ListaDEnlazada<T>::concatena(const ListaDEnlazada<T>& otraList
 	@brief Crea un iterador apuntando a la cabecera de la lista
 */
 template<class T>
-Iterador<T> ListaDEnlazada<T>::iterador() const
-{
+Iterador<T> ListaDEnlazada<T>::iterador() const{
 	return Iterador<T>(this->cabecera);
 }
 

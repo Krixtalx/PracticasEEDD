@@ -27,6 +27,7 @@ public:
 	Nodo<T>* SetSiguiente(Nodo<T>* siguiente);
 	T& GetDato();
 	Nodo<T>* SetDato(T dato);
+	std::string toCSV();
 };
 
 /**
@@ -122,6 +123,12 @@ template <class T>
 Nodo<T>* Nodo<T>::SetDato(T dato) {
 	this->dato = dato;
 	return this;
+}
+
+template<class T>
+std::string Nodo<T>::toCSV()
+{
+	return dato.toCSV();
 }
 
 #endif /* NODO_H */

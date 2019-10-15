@@ -112,6 +112,10 @@ string Cliente::GetNombre() const {
 	return nombre;
 }
 
+/**
+*@Brief Gette del atributo nombre completo
+*@return string el Nombre completo
+*/
 string Cliente::GetNombreCompleto() const {
 	return nombreCompleto;
 }
