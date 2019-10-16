@@ -76,13 +76,15 @@ Iterador<T>::~Iterador() {
 */
 template<class T>
 Iterador<T>& Iterador<T>::operator=(const Iterador<T>& right){
+	if (this = &right)
+		return *this;
 	this->nodoApuntado = right.nodoApuntado;
 	return *this;
 }
 
 /**
 *@Brief Pasa al nodo siguiente del apuntado
-*@Throw std::overflow_error si el nodo apuntado no tiene siguiente y no es la cola de la lista
+*@throws std::overflow_error si el nodo apuntado no tiene siguiente y no es la cola de la lista
 */
 template<class T>
 Iterador<T>& Iterador<T>::operator++(int){
@@ -91,14 +93,14 @@ Iterador<T>& Iterador<T>::operator++(int){
 		return *this;
 	}
 	else {
-		throw std::overflow_error("El nodo apuntado no tiene ningún otro como siguiente");
+		throw std::overflow_error("[Iterador<T>::operator++]El nodo apuntado no tiene ningún otro como siguiente");
 	}
 
 }
 
 /**
 *@Brief Pasa al nodo anterior del apuntado
-*@Throw std::overflow_error si el nodo apuntado no tiene anterior y no es la cabecera de la lista
+*@throws std::overflow_error si el nodo apuntado no tiene anterior y no es la cabecera de la lista
 */
 template<class T>
 Iterador<T>& Iterador<T>::operator--(int){
@@ -107,7 +109,7 @@ Iterador<T>& Iterador<T>::operator--(int){
 		return *this;
 	}
 	else {
-		throw std::overflow_error("El nodo apuntado no tiene ningún otro como anterior");
+		throw std::overflow_error("[Iterador<T>::operator--]El nodo apuntado no tiene ningún otro como anterior");
 	}
 }
 
@@ -165,6 +167,8 @@ ListaDEnlazada<T>::ListaDEnlazada(const ListaDEnlazada& orig) : tam(orig.tam) {
 */
 template<class T>
 ListaDEnlazada<T>& ListaDEnlazada<T>::operator=(const ListaDEnlazada<T>& right) {
+	if (this = *right)
+		return *this;
 	Nodo<T>* aux;
 	while (tam > 0) {
 		aux = cola->anterior;
@@ -187,6 +191,7 @@ ListaDEnlazada<T>& ListaDEnlazada<T>::operator=(const ListaDEnlazada<T>& right) 
 	}
 	this->cola = auxCop;
 	this.tam = tamAux;
+	return *this;
 }
 
 /**
@@ -203,13 +208,25 @@ ListaDEnlazada<T>::~ListaDEnlazada() {
 	}
 }
 
+/**
+	@brief Devuelve una referencia al dato que almacena el primer nodo de la lista
+	@throws runtime_error Si no hay primer nodo
+*/
 template<class T>
 T& ListaDEnlazada<T>::Inicio() {
+	if (cabecera == 0)
+		throw std::runtime_error("[ListaDEnlaza<T>Inicio()] No hay nodo en el inicio");
 	return cabecera->dato;
 }
 
+/**
+	@brief Devuelve una referencia al dato que almacena el ultimo nodo de la lista
+	@throws runtime_error Si no hay ultimo nodo
+*/
 template<class T>
 T& ListaDEnlazada<T>::Final() {
+	if (cabecera == 0)
+		throw std::runtime_error("[ListaDEnlaza<T>Inicio()] No hay nodo en el final");
 	return cola->dato;
 }
 
@@ -265,7 +282,7 @@ ListaDEnlazada<T>& ListaDEnlazada<T>::insertaFinal(T& dato) {
 */
 template<class T>
 ListaDEnlazada<T>& ListaDEnlazada<T>::inserta(Iterador<T>& iterador, T& dato) {
-	if (iterador.nodoApuntado == cola->siguiente) {
+	if (iterador.nodoApuntado) {
 		this->insertaFinal(dato);
 		return *this;
 	}
@@ -305,10 +322,13 @@ ListaDEnlazada<T>& ListaDEnlazada<T>::borrarFinal() {
 /**
 	@brief Borra un nodo cualquiera de la lista
 	@param Iterador que apunta al nodo a borrar
+	@throws logic_error Si el iterador no apunta a un nodo
 */
 template<class T>
 ListaDEnlazada<T>& ListaDEnlazada<T>::borra(Iterador<T>& iterador)
 {
+	if (iterador.nodoApuntado)
+		throw std::logic_error("[ListaDEnlazada<T>::borra()] El iterador no apunta a ningun nodo");
 	if (iterador.nodoApuntado == cabecera) {
 		this->borraInicio();
 		return *this;

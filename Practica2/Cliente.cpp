@@ -42,8 +42,14 @@ int Cliente::crearItinerarios(int num, int idUltimo, UTM &minimo, UTM &maximo){
 	return idUltimo;
 }
 
+/**
+	@brief Devuelve una referencia a la lista que almacena los itinerarios
+	@throws std::logic_error Si no se han creado itinerarios para el cliente
+*/
 ListaDEnlazada<Itinerario>& Cliente::getItinerarios()
 {
+	if (listaItinerarios.getTam() == 0)
+		throw std::logic_error("[Cliente.cpp] El cliente no tiene itinerarios");
 	return this->listaItinerarios;
 }
 

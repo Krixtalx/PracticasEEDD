@@ -65,6 +65,8 @@ Nodo<T>::~Nodo() {}
 template<class T>
 Nodo<T>& Nodo<T>::operator=(const Nodo<T>* right)
 {
+	if (this = right)
+		return *this;
 	this->anterior = right->anterior;
 	this->siguiente = right->siguiente;
 	this->dato = right->dato;

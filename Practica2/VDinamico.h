@@ -70,10 +70,12 @@ VDinamico<T>::VDinamico(VDinamico<T>& orig) : tamF(orig.tamF), tamL(orig.tamL) {
  * @param inicio Comienzo del fragmento a copiar
  * @param num Numero de elementos a copiar
  * @post Crea un nuevo vector dinamico cuyo contenido es el fragmento indicado del vector dado
+ * @throws out_of_range Si el rango indicado sale del limmite del vector
  */
 template<class T>
 VDinamico<T>::VDinamico(const VDinamico& orig, unsigned int inicio, unsigned int num) : tamL(num), tamF(orig.tamF) {
-	//TODO: Excep. si el fragmento a copiar esta fuera de los limites del vector
+	if (inicio < 0 || inicio + num > tamL)
+		throw std::out_of_range("[VDinamico<T> Constructor parcial] El rango especificado esta fuera de los limites");
 	buffer = new T[tamF];
 	for (int i = 0; i < num; i++) {
 		buffer[i] = orig[inicio++];
@@ -137,7 +139,7 @@ VDinamico<T>& VDinamico<T>::operator=(VDinamico<T>& asig) {
 template<class T>
 T& VDinamico<T>::operator[](unsigned int pos) {
 	if (pos >= tamF) {
-		throw std::out_of_range("Posicion no valida");
+		throw std::out_of_range("[VDinamico<T>::operator[]]Posicion no valida");
 	}
 	else
 		return buffer[pos];
@@ -152,7 +154,7 @@ T& VDinamico<T>::operator[](unsigned int pos) {
 template<class T>
 VDinamico<T>& VDinamico<T>::insertarDato(T& dato, unsigned int pos) {
 	if ((pos < 0 || pos >= tamF) && pos != UINT_MAX) {
-		throw std::out_of_range("Posicion no valida");
+		throw std::out_of_range("VDinamico<T>::insertarDato()]Posicion no valida");
 	}
 	else {
 		if (tamL == tamF) {
@@ -184,7 +186,7 @@ VDinamico<T>& VDinamico<T>::eliminarDato(unsigned int pos) {
 		throw(std::out_of_range("[VDinamico<T>::eliminarDato] No hay datos en el vector"));
 	}
 	if ((pos < 0 || pos >= tamF) && pos != UINT_MAX) {
-		throw std::out_of_range("Posicion no valida");
+		throw std::out_of_range("[VDinamico<T>::eliminarDato]Posicion no valida");
 	}
 	else {
 		if (pos != UINT_MAX) {

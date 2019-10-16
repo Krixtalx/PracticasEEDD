@@ -151,7 +151,9 @@ void leeClientes(string fileNameClientes, VDinamico<Cliente>* vector, UTM &minim
 	}
 }
 
+
 int main(int argc, char** argv) {
+	
 	try {
 		VDinamico<Cliente>* vClientes = new VDinamico<Cliente>;
 		UTM minimo, maximo;
@@ -166,13 +168,18 @@ int main(int argc, char** argv) {
 		cout << "MINIMO: " << minimo.latitud << ", " << minimo.longitud << endl;
 		cout << "MAXIMO: " << maximo.latitud << ", " << maximo.longitud << endl;
 
-		listaItinerariosToCSV((*vClientes)[rand() % 10001]);
+		try {
+			listaItinerariosToCSV((*vClientes)[rand() % 10001]);
+		}
+		catch (std::logic_error & e) {
+			e.what();
+		}
 		delete vClientes;
 	}
 	catch (std::exception & e) {
 		std::cerr<<e.what();
 	}
-	
+
 	return 0;
 }
 
