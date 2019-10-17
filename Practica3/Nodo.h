@@ -18,7 +18,7 @@ private:
 public:
 	Nodo();
 	Nodo(T& _dato);
-	Nodo(const Nodo& orig);
+	Nodo(const Nodo<T>& orig);
 	virtual ~Nodo();
 	Nodo<T>& operator=(const Nodo<T>* right);
 	Nodo<T>* GetAnterior() const;
@@ -47,7 +47,7 @@ Nodo<T>::Nodo(T& _dato) : dato(_dato), anterior(0), siguiente(0) {}
 *@Brief Constructor de copia
 */
 template<class T>
-Nodo<T>::Nodo(const Nodo& orig) {
+Nodo<T>::Nodo(const Nodo<T>& orig) {
 	this->anterior = 0;
 	this->siguiente = 0;
 	this->dato = orig.dato;
@@ -100,8 +100,8 @@ Nodo<T>* Nodo<T>::GetSiguiente() const {
 }
 
 /**
-*@Brief Setter del nodo anterior
-*@param Nodo que se desea poner como anterior
+*@Brief Setter del nodo siguiente
+*@param Nodo que se desea poner como siguiente
 */
 template <class T>
 Nodo<T>* Nodo<T>::SetSiguiente(Nodo* siguiente) {

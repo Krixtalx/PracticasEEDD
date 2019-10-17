@@ -158,11 +158,13 @@
     <ClCompile Include="UTM.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AVL.h" />
     <ClInclude Include="Cliente.h" />
     <ClInclude Include="Fecha.h" />
     <ClInclude Include="Itinerario.h" />
     <ClInclude Include="ListaDEnlazada.h" />
     <ClInclude Include="Nodo.h" />
+    <ClInclude Include="NodoAVL.h" />
     <ClInclude Include="UTM.h" />
     <ClInclude Include="VDinamico.h" />
   </ItemGroup>
