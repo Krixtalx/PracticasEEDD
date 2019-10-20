@@ -12,20 +12,21 @@ private:
 	NodoAVL<T>* raiz;
 	unsigned int alt;
 	unsigned int tam;
+	void rotarIzquierda(NodoAVL<T>*& nodo);
+	void rotarDerecha(NodoAVL<T>*& nodo);
 
 public:
 	AVL();
 	AVL(const AVL<T>& orig);
 	~AVL();
 	AVL<T>& operator=(const AVL<T>& right);
-	void recorreInorden(NodoAVL<T>* n = raiz);
+	void recorreInorden(NodoAVL<T>* n);
 	unsigned int numElementos();
 	unsigned int altura();
-	void rotarIzquierda(NodoAVL<T>* &nodo);
-	void rotarDerecha(NodoAVL<T>*  &nodo);
+	NodoAVL<T>* getRaiz();
 	bool busca(T& dato, T& resultado);
 	bool buscaIt(T& dato, T& resultado);
-	bool inserta(T& dato, NodoAVL<T>* &n = raiz);
+	bool inserta(T& dato, NodoAVL<T>* &n);
 	//TODO: Implementa ahora todo eso, fiera
 };
 
@@ -64,7 +65,7 @@ AVL<T>& AVL<T>::operator=(const AVL<T>& right)
 
 /**
 	@brief Muestra el contenido del arbol recorriendolo mediante inorden
-	@param n Nodo incial del arbol, por defecto la raiz
+	@param n Nodo incial del arbol
 	@pre La clase T debe tener sobrecargado el operador <<
 */
 template<class T>
@@ -90,6 +91,12 @@ template<class T>
 unsigned int AVL<T>::altura()
 {
 	return alt;
+}
+
+template<class T>
+NodoAVL<T>* AVL<T>::getRaiz()
+{
+	return this->raiz;
 }
 
 /**

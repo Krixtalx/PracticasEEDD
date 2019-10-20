@@ -10,7 +10,7 @@ private:
 	NodoAVL<T>* der;
 	T dato;
 	char bal=0;
-	template<T>
+	template<class T>
 	friend class AVL;
 public:
 	NodoAVL();
