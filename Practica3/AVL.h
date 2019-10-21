@@ -150,7 +150,7 @@ void AVL<T>::rotarDerecha(NodoAVL<T>*& nodo)
 template<class T>
 bool AVL<T>::inserta(T& dato, NodoAVL<T>*& n)
 {
-	if (!n) {                                         //Si no hay nodo, insera el dato
+	if (!n) {                                         //Si no hay nodo, inserta el dato
 		n = new NodoAVL<T>(dato);
 		n->bal = 0;
 		return true;
@@ -179,7 +179,4 @@ bool AVL<T>::inserta(T& dato, NodoAVL<T>*& n)
 	}
 	return false;
 }
-
-
-
 #endif // !AVL_H
