@@ -14,8 +14,11 @@ private:
 	unsigned int tam;
 	void rotarIzquierda(NodoAVL<T>*& nodo);
 	void rotarDerecha(NodoAVL<T>*& nodo);
+	bool insertaPriv(T& dato, NodoAVL<T>*& n);
 	void recorreInorden(NodoAVL<T>* n);
 	void borrarRama(NodoAVL<T>* n);
+	int alturaNodo(NodoAVL<T>* n);
+	int maximo(int a, int b);
 
 public:
 	AVL();
@@ -25,10 +28,9 @@ public:
 	void recorreInorden();
 	unsigned int numElementos();
 	unsigned int altura();
-	NodoAVL<T>* getRaiz();
+	bool inserta(T& dato);
 	bool busca(T& dato, T& resultado);
 	bool buscaIt(T& dato, T& resultado);
-	bool inserta(T& dato, NodoAVL<T>* &n);
 	//TODO: Implementa ahora todo eso, fiera
 };
 
@@ -82,7 +84,7 @@ void AVL<T>::recorreInorden()
 template<class T>
 void AVL<T>::recorreInorden(NodoAVL<T>* n)
 {
-	if (n = 0)
+	if (n == 0)
 		throw std::invalid_argument("[AVL<T>::recorreInorden]: el parametro pasado es igual a 0");
 	if (n->izq)
 		recorreInorden(n->izq);
@@ -109,22 +111,57 @@ void AVL<T>::borrarRama(NodoAVL<T>* n)
 	delete n;
 }
 
+/**
+	@brief Devuelve la altura del nodo indicado
+*/
+template<class T>
+int AVL<T>::alturaNodo(NodoAVL<T>* n)
+{
+	if (n)
+		return n->altura;
+	return 0;
+}
+
+/**
+	@brief Devuelve el maximo de los numeros indicados
+*/
+template<class T>
+int AVL<T>::maximo(int a, int b)
+{
+	return (a < b) ? b : a;
+}
+
+/**
+	@brief Devuelve el numero de nodos en el arbol
+*/
 template<class T>
 unsigned int AVL<T>::numElementos()
 {
 	return tam;
 }
 
+/**
+	@brief Devuelve la altura del arbol
+*/
 template<class T>
 unsigned int AVL<T>::altura()
 {
 	return alt;
 }
 
+/**
+	@brief Inserta un dato en el arbol de forma recursiva
+	@param dato Dato a insertar
+	@return True si se ha podido insertar, False en otro caso
+*/
 template<class T>
-NodoAVL<T>* AVL<T>::getRaiz()
+bool AVL<T>::inserta(T& dato)
 {
-	return this->raiz;
+	if (raiz)
+		alt = raiz->altura;
+	if (insertaPriv(dato, raiz))
+		return true;
+	return false;
 }
 
 /**
@@ -176,7 +213,7 @@ void AVL<T>::rotarDerecha(NodoAVL<T>*& nodo)
 	@return true Si se ha podido insertar el dato
 */
 template<class T>
-bool AVL<T>::inserta(T& dato, NodoAVL<T>*& n)
+bool AVL<T>::insertaPriv(T& dato, NodoAVL<T>*& n)
 {
 	//TODO: Se tiene que ir actualizando la altura o si no, actualizar el método altura()
 	if (!n) {                                         //Si no hay nodo, inserta el dato
@@ -185,24 +222,26 @@ bool AVL<T>::inserta(T& dato, NodoAVL<T>*& n)
 		return true;
 	}
 	else if (dato < n->dato) {                        //Si el dato es menor,
-		if (inserta(dato, n->izq)){                     //si ha podido insertarlo en el nodo izquierdo
+		if (insertaPriv(dato, n->izq)){                     //si ha podido insertarlo en el nodo izquierdo
 			n->bal++;                                     //ajusta el balance del nodo,
 			if (n->bal == 2) {                            //si el balance es incorrecto
 				if (n->izq->bal == -1)                      //comprueba el caso de balance
 					rotarIzquierda(n->izq);                   //rota primero a la izquierda (caso 2 = caso 4 + caso 1)
 				rotarDerecha(n);                            //rota a la derecha (caso 1)
 			}
+			n->altura = 1 + maximo(alturaNodo(n->izq), alturaNodo(n->der));//Establece la altura del nodo a uno mas que la maxima altura de sus hijos
 			return true;
 		}
 	}
 	else if (n->dato < dato) {                        //Si el dato es mayor,
-		if (inserta(dato, n->der)) {                    //si ha podido insertarlo en el nodo derecho
+		if (insertaPriv(dato, n->der)) {                    //si ha podido insertarlo en el nodo derecho
 			n->bal--;                                     //ajusta el balance del nodo
 			if (n->bal == -2) {                           //si el balance es incorrecto
 				if (n->der->bal == 1)                       //comprueba el caso de balance
 					rotarDerecha(n->der);                     //rota primero a la derecha (caso 3 = caso 1 + caso 4)
 				rotarIzquierda(n);                          //rota a la izquierda(caso 4)
 			}
+			n->altura = 1 + maximo(alturaNodo(n->izq), alturaNodo(n->der));//Establece la altura del nodo a uno mas que la maxima altura de sus hijos
 			return true;
 		}
 	}

@@ -9,7 +9,8 @@ private:
 	NodoAVL<T>* izq;
 	NodoAVL<T>* der;
 	T dato;
-	char bal=0;
+	char bal = 0;
+	int altura = 0;
 	template<class T>
 	friend class AVL;
 public:
