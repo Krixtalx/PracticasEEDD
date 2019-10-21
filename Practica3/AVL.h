@@ -15,6 +15,7 @@ private:
 	void rotarIzquierda(NodoAVL<T>*& nodo);
 	void rotarDerecha(NodoAVL<T>*& nodo);
 	void recorreInorden(NodoAVL<T>* n);
+	void borrarRama(NodoAVL<T>* n);
 
 public:
 	AVL();
@@ -55,7 +56,7 @@ AVL<T>::AVL(const AVL<T>& orig): raiz(orig.raiz), alt(orig.alt), tam(orig.tam)
 template<class T>
 AVL<T>::~AVL()
 {
-	//TODO: destruir nodos
+	borrarRama(raiz);
 }
 
 template<class T>
@@ -90,6 +91,22 @@ void AVL<T>::recorreInorden(NodoAVL<T>* n)
 
 	std::cout << n->dato << std::endl;
 
+}
+
+/**
+*@Brief Borra todos los nodos que hayan por debajo del nodo pasado como parametro
+
+*/
+template<class T>
+void AVL<T>::borrarRama(NodoAVL<T>* n)
+{
+	if (n->izq != 0) {
+		borrarRama(n->izq);
+	}
+	if (n->der != 0) {
+		borrarRama(n->der);
+	}
+	delete n;
 }
 
 template<class T>
@@ -161,6 +178,7 @@ void AVL<T>::rotarDerecha(NodoAVL<T>*& nodo)
 template<class T>
 bool AVL<T>::inserta(T& dato, NodoAVL<T>*& n)
 {
+	//TODO: Se tiene que ir actualizando la altura o si no, actualizar el método altura()
 	if (!n) {                                         //Si no hay nodo, inserta el dato
 		n = new NodoAVL<T>(dato);
 		n->bal = 0;
