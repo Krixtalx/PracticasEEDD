@@ -14,13 +14,14 @@ private:
 	unsigned int tam;
 	void rotarIzquierda(NodoAVL<T>*& nodo);
 	void rotarDerecha(NodoAVL<T>*& nodo);
+	void recorreInorden(NodoAVL<T>* n);
 
 public:
 	AVL();
 	AVL(const AVL<T>& orig);
 	~AVL();
 	AVL<T>& operator=(const AVL<T>& right);
-	void recorreInorden(NodoAVL<T>* n);
+	void recorreInorden();
 	unsigned int numElementos();
 	unsigned int altura();
 	NodoAVL<T>* getRaiz();
@@ -64,6 +65,15 @@ AVL<T>& AVL<T>::operator=(const AVL<T>& right)
 }
 
 /**
+*@Brief Método público del método recorreInorden()
+*/
+template<class T>
+void AVL<T>::recorreInorden()
+{
+	AVL<T>::recorreInorden(raiz);
+}
+
+/**
 	@brief Muestra el contenido del arbol recorriendolo mediante inorden
 	@param n Nodo incial del arbol
 	@pre La clase T debe tener sobrecargado el operador <<
@@ -71,7 +81,8 @@ AVL<T>& AVL<T>::operator=(const AVL<T>& right)
 template<class T>
 void AVL<T>::recorreInorden(NodoAVL<T>* n)
 {
-	//TODO: exceción si n = 0
+	if (n = 0)
+		throw std::invalid_argument("[AVL<T>::recorreInorden]: el parametro pasado es igual a 0");
 	if (n->izq)
 		recorreInorden(n->izq);
 	if (n->der)
