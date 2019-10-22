@@ -8,11 +8,13 @@ int main()
 {
 	AVL<int> arbolico;
 	int t[10] = {11,0,9,12,4,1,7,5,3,6};
-	for (int i = 9;  i >= 0; i--)
-	{
+	for (int i = 9;  i >= 0; i--){
 		arbolico.inserta(t[i]);
 	}
 	arbolico.verArbol();
+	int resultado;
+	if (arbolico.busca(t[7], resultado))
+		std::cout << "Encontrao";
 	//TODO: comprobar rotaciones correctas
 	return 0;
 }

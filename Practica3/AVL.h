@@ -19,6 +19,7 @@ private:
 	void borrarRama(NodoAVL<T>* n);
 	int alturaNodo(NodoAVL<T>* n);
 	int maximo(int a, int b);
+	bool busca(T& dato, T& resultado, NodoAVL<T>* inicio);
 	void verArbol(NodoAVL<T>* nodo, int n);
 
 public:
@@ -106,7 +107,6 @@ void AVL<T>::recorreInorden(NodoAVL<T>* n)
 
 /**
 *@Brief Borra todos los nodos que hayan por debajo del nodo pasado como parametro
-
 */
 template<class T>
 void AVL<T>::borrarRama(NodoAVL<T>* n)
@@ -138,6 +138,28 @@ template<class T>
 int AVL<T>::maximo(int a, int b)
 {
 	return (a < b) ? b : a;
+}
+
+template<class T>
+bool AVL<T>::busca(T& dato, T& resultado, NodoAVL<T>* inicio)
+{
+	if (inicio==0){
+		return false;
+	}
+	if (dato<inicio->dato){
+		if (busca(dato, resultado, inicio->izq))
+			return true;
+	}
+	else if (dato > inicio->dato) {
+		if (busca(dato, resultado, inicio->der)) {
+			return true;
+		}
+	}
+	else {
+		resultado = inicio->dato;
+		return true;
+	}
+	return false;
 }
 
 template<class T>
@@ -184,6 +206,11 @@ bool AVL<T>::inserta(T& dato)
 	if (insertaPriv(dato, raiz))
 		return true;
 	return false;
+}
+
+template<class T>
+bool AVL<T>::busca(T& dato, T& resultado){
+	 return busca(dato, resultado, raiz);
 }
 
 template<class T>
