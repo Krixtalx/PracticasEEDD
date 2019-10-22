@@ -140,6 +140,12 @@ int AVL<T>::maximo(int a, int b)
 	return (a < b) ? b : a;
 }
 
+/**
+*@Brief Método privado de busqueda. Se usa para la busqueda recursiva
+*@Param dato: Dato a buscar
+*@param resultado: Se almacena el resultado si se encuentra
+*@param nodo : Nodo en el cual se empezará esa busqueda
+*/
 template<class T>
 bool AVL<T>::busca(T& dato, T& resultado, NodoAVL<T>* inicio)
 {
@@ -162,17 +168,22 @@ bool AVL<T>::busca(T& dato, T& resultado, NodoAVL<T>* inicio)
 	return false;
 }
 
+/**
+*@Brief Método privado para la visualización por consola del Arbol. Se encarga de la recursividad.
+*@Param nodo: Nodo en el que se iniciará la visualización
+*@Param nivel: Nivel de profundidad del nodo
+*/
 template<class T>
- void AVL<T>::verArbol(NodoAVL<T>* nodo, int n){
+ void AVL<T>::verArbol(NodoAVL<T>* nodo, int nivel){
 	 if (nodo == 0) {
 		 return;
 	 }
-	 verArbol(nodo->der, n + 1);
-	 for (int i = 0; i < n; i++){
+	 verArbol(nodo->der, nivel + 1);
+	 for (int i = 0; i < nivel; i++){
 		 std::cout << "          ";
 	 }
 	 std::cout << nodo->dato<<std::endl<<std::endl;
-	 verArbol(nodo->izq, n + 1);
+	 verArbol(nodo->izq, nivel + 1);
 }
 
 /**
@@ -207,7 +218,11 @@ bool AVL<T>::inserta(T& dato)
 		return true;
 	return false;
 }
-
+/**
+*@Brief Método público para la busqueda recursiva
+*@param dato: Dato a buscar
+*@param resultado: Dato encontrado como resultado
+*/
 template<class T>
 bool AVL<T>::busca(T& dato, T& resultado){
 	 return busca(dato, resultado, raiz);
@@ -215,6 +230,7 @@ bool AVL<T>::busca(T& dato, T& resultado){
 
 template<class T>
 void AVL<T>::verArbol(){
+	std::cout << std::endl << std::endl << std::endl << std::endl << std::endl;
 	verArbol(raiz, 0);
 }
 
