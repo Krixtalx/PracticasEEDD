@@ -19,18 +19,21 @@ private:
 	void borrarRama(NodoAVL<T>* n);
 	int alturaNodo(NodoAVL<T>* n);
 	int maximo(int a, int b);
+	void verArbol(NodoAVL<T>* nodo, int n);
 
 public:
 	AVL();
 	AVL(const AVL<T>& orig);
 	~AVL();
 	AVL<T>& operator=(const AVL<T>& right);
+	NodoAVL<T>& getRaiz();
 	void recorreInorden();
 	unsigned int numElementos();
 	unsigned int altura();
 	bool inserta(T& dato);
 	bool busca(T& dato, T& resultado);
 	bool buscaIt(T& dato, T& resultado);
+	void verArbol();
 	//TODO: Implementa ahora todo eso, fiera
 };
 
@@ -65,6 +68,12 @@ template<class T>
 AVL<T>& AVL<T>::operator=(const AVL<T>& right) 
 {
 	//TODO: asignar
+}
+
+template<class T>
+NodoAVL<T>& AVL<T>::getRaiz()
+{
+	return *raiz;
 }
 
 /**
@@ -131,6 +140,19 @@ int AVL<T>::maximo(int a, int b)
 	return (a < b) ? b : a;
 }
 
+template<class T>
+ void AVL<T>::verArbol(NodoAVL<T>* nodo, int n){
+	 if (nodo == 0) {
+		 return;
+	 }
+	 verArbol(nodo->der, n + 1);
+	 for (int i = 0; i < n; i++){
+		 std::cout << "          ";
+	 }
+	 std::cout << nodo->dato<<std::endl<<std::endl;
+	 verArbol(nodo->izq, n + 1);
+}
+
 /**
 	@brief Devuelve el numero de nodos en el arbol
 */
@@ -162,6 +184,11 @@ bool AVL<T>::inserta(T& dato)
 	if (insertaPriv(dato, raiz))
 		return true;
 	return false;
+}
+
+template<class T>
+void AVL<T>::verArbol(){
+	verArbol(raiz, 0);
 }
 
 /**
