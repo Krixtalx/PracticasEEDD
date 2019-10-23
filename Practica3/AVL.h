@@ -27,7 +27,6 @@ public:
 	AVL(const AVL<T>& orig);
 	~AVL();
 	AVL<T>& operator=(const AVL<T>& right);
-	NodoAVL<T>& getRaiz();
 	void recorreInorden();
 	unsigned int numElementos();
 	unsigned int altura();
@@ -71,12 +70,6 @@ AVL<T>& AVL<T>::operator=(const AVL<T>& right)
 	//TODO: asignar
 }
 
-template<class T>
-NodoAVL<T>& AVL<T>::getRaiz()
-{
-	return *raiz;
-}
-
 /**
 *@Brief Método público del método recorreInorden()
 */
@@ -94,11 +87,11 @@ void AVL<T>::recorreInorden()
 template<class T>
 void AVL<T>::recorreInorden(NodoAVL<T>* n)
 {
-	if (n == 0)
+	if (n == 0)	//Si el nodo es un puntero nulo, lanza excepcion
 		throw std::invalid_argument("[AVL<T>::recorreInorden]: el parametro pasado es igual a 0");
-	if (n->izq)
+	if (n->izq)	//Si el nodo tiene hijo izquierdo, lo recorre
 		recorreInorden(n->izq);
-	if (n->der)
+	if (n->der)	//Si el nodo tiene hijo derecho, lo recorre
 		recorreInorden(n->der);
 
 	std::cout << n->dato << std::endl;
@@ -111,28 +104,29 @@ void AVL<T>::recorreInorden(NodoAVL<T>* n)
 template<class T>
 void AVL<T>::borrarRama(NodoAVL<T>* n)
 {
-	if (n->izq != 0) {
-		borrarRama(n->izq);
+	if (n->izq != 0) {		//Si el nodo tiene hijo izquierdo
+		borrarRama(n->izq);		//elimina el subarbol
 	}
-	if (n->der != 0) {
-		borrarRama(n->der);
+	if (n->der != 0) {		//Si el nodo tiene hijo derecho
+		borrarRama(n->der);		//elimina el subarbol
 	}
 	delete n;
 }
 
 /**
 	@brief Devuelve la altura del nodo indicado
+	@return -1 Si n es un puntero nulo
 */
 template<class T>
 int AVL<T>::alturaNodo(NodoAVL<T>* n)
 {
-	if (n)
-		return n->altura;
-	return 0;
+	if (n)					//Si el puntero es un nodo valido
+		return n->altura;		//devuelve su altura	
+	return -1;				//si no, devuelve -1 para poder realizar comparaciones
 }
 
 /**
-	@brief Devuelve el maximo de los numeros indicados
+	@brief Devuelve el maximo de dos enteros
 */
 template<class T>
 int AVL<T>::maximo(int a, int b)
@@ -149,19 +143,19 @@ int AVL<T>::maximo(int a, int b)
 template<class T>
 bool AVL<T>::busca(T& dato, T& resultado, NodoAVL<T>* inicio)
 {
-	if (inicio==0){
-		return false;
+	if (inicio==0){										//Si el nodo es un puntero nulo
+		return false;										//no es el dato buscado
 	}
-	if (dato<inicio->dato){
-		if (busca(dato, resultado, inicio->izq))
+	if (dato<inicio->dato){								//Si el dato es menor que el valor del nodo
+		if (busca(dato, resultado, inicio->izq))			//busca en el subarbol izquierdo
 			return true;
 	}
-	else if (dato > inicio->dato) {
-		if (busca(dato, resultado, inicio->der)) {
+	else if (dato > inicio->dato) {						//Si el dato es mayor que el valor del nodo
+		if (busca(dato, resultado, inicio->der)) {			//busca en el subarbol derecho
 			return true;
 		}
 	}
-	else {
+	else {												//En otro caso, el nodo actual contiene el dato buscado
 		resultado = inicio->dato;
 		return true;
 	}
@@ -180,7 +174,7 @@ template<class T>
 	 }
 	 verArbol(nodo->der, nivel + 1);
 	 for (int i = 0; i < nivel; i++){
-		 std::cout << "     ";
+		 std::cout << "      ";
 		 //std::cout << "          ";
 	 }
 	 std::cout << nodo->dato << std::endl << std::endl;
@@ -213,10 +207,12 @@ unsigned int AVL<T>::altura()
 template<class T>
 bool AVL<T>::inserta(T& dato)
 {
-	if (raiz)
-		alt = raiz->altura;
-	if (insertaPriv(dato, raiz))
-		return true;
+
+	if (insertaPriv(dato, raiz)) {	//Si se ha podido insertar recursivamente el dato
+		if (raiz)						//Si el arbol tiene raiz
+			alt = raiz->altura;				//iguala la altura del arbol a la del nodo raiz
+		return true;					//devuelve true para confirmar la insercion
+	}
 	return false;
 }
 /**
@@ -244,16 +240,19 @@ void AVL<T>::verArbol(){
 template<class T>
 void AVL<T>::rotarIzquierda(NodoAVL<T>* &nodo)
 {
-	NodoAVL<T>* temp = nodo, *temp2;
-	nodo = temp2 = nodo->der;          //Asigna a nodo su subarbol derecho
-	temp->der = temp2->izq;     //Asigna a la derecha del nodo original el subarbol izquierdo de nodo
-	temp2->izq = temp;          //Asgina el nodo original actualizado a la izquierda de nodo
-	temp->bal++;
-	if (temp2->bal < 0)         //Si nodo tenia mayor altura por la derecha
-		temp->bal += -temp2->bal;  //entonces la descuenta del nodo original
-	temp2->bal++;
-	if (temp->bal > 0)         //Si el nodo original tenia mayor altura por la izquierda
-		temp2->bal += temp->bal;  //entonces se le asigna a nodo
+	NodoAVL<T>* temp = nodo;	//Crea un puntero al nodo que se va a modificar para evitar perderlo
+	nodo = nodo->der;			//Asigna a nodo todo su subarbol derecho
+	temp->der = nodo->izq;		//El subarbol izquierdo de nodo se asigna como hijo derecho del original
+	nodo->izq = temp;			//El nodo original se coloca como hijo izquierdo del nodo actualizado
+
+	temp->bal = alturaNodo(temp->izq) - alturaNodo(temp->der);
+	nodo->bal = alturaNodo(nodo->izq) - alturaNodo(nodo->der);
+	//temp->bal++;
+	//if (temp2->bal < 0)
+	//	temp->bal += -temp2->bal;
+	//temp2->bal++;
+	//if (temp->bal > 0)
+	//	temp2->bal += temp->bal;
 }
 
 /**
@@ -264,16 +263,19 @@ void AVL<T>::rotarIzquierda(NodoAVL<T>* &nodo)
 template<class T>
 void AVL<T>::rotarDerecha(NodoAVL<T>*& nodo)
 {
-	NodoAVL<T>* temp = nodo, *temp2;
-	nodo = temp2 = nodo->izq;          //Asigna a nodo su subarbol izquierdo
-	temp->izq = temp2->der;     //Asigna a la izquierda del nodo original el subarbol derecho de nodo
-	temp2->der = temp;          //Asigna el nodo original actualizado a la derecha de nodo
-	temp->bal--;
-	if (temp2->bal > 0)         //Si nodo tenia mayor altura por la izquierda
-		temp->bal -= temp2->bal;  //entonces la descuenta del nodo original
-	temp2->bal--;
-	if (temp->bal < 0)         //Si el nodo original tenia mayor altura por la derecha
-		temp2->bal -= -temp->bal;  //entonces se le asigna a nodo
+	NodoAVL<T>* temp = nodo;	//Crea un puntero al nodo que se va a modificar para evitar perderlo
+	nodo = nodo->izq;			//Asigna a nodo todo su subarbol izquierdo
+	temp->izq = nodo->der;		//El subarbol derecho de nodo se asigna como hijo izquierdo del original
+	nodo->der = temp;			//El nodo original se coloca como hijo derecho del nodo actualizado
+								//Ajusta el balance de los nodos a partir de la altura de los hijos
+	temp->bal = alturaNodo(temp->izq) - alturaNodo(temp->der);
+	nodo->bal = alturaNodo(nodo->izq) - alturaNodo(nodo->der);
+	//temp->bal--;
+	//if (temp2->bal > 0)
+	//	temp->bal -= temp2->bal;
+	//temp2->bal--;
+	//if (temp->bal < 0)
+	//	temp2->bal -= -temp->bal;
 }
 
 /**
@@ -287,33 +289,34 @@ void AVL<T>::rotarDerecha(NodoAVL<T>*& nodo)
 template<class T>
 bool AVL<T>::insertaPriv(T& dato, NodoAVL<T>*& n)
 {
-	//TODO: Nodo*& vs Nodo*
-	if (!n) {                                         //Si no hay nodo, inserta el dato
+	if (!n) {										//Si no hay nodo, crea uno nuevo
 		n = new NodoAVL<T>(dato);
 		n->bal = 0;
 		return true;
 	}
-	else if (dato < n->dato) {                        //Si el dato es menor,
-		if (insertaPriv(dato, n->izq)){                     //si ha podido insertarlo en el nodo izquierdo
-			n->bal++;                                     //ajusta el balance del nodo,
-			if (n->bal == 2) {                            //si el balance es incorrecto
-				if (n->izq->bal == -1)                      //comprueba el caso de balance
-					rotarIzquierda(n->izq);                   //rota primero a la izquierda (caso 2 = caso 4 + caso 1)
-				rotarDerecha(n);                            //rota a la derecha (caso 1)
+	else if (dato < n->dato) {								//Si el dato a introducir es menor que el dato del nodo actual
+		if (insertaPriv(dato, n->izq)){							//Si se ha podido insertar a la izquierda
+			n->bal = alturaNodo(n->izq) - alturaNodo(n->der);		//Ajusta el balance a partir de las alturas de los hijos del nodo actual
+			if (n->bal == 2) {										//Si esta desbalanceado
+				if (n->izq->bal == -1)									//Comprueba que caso de rotacion es
+					rotarIzquierda(n->izq);									//CASO 2 = CASO 4 (rotacion a la izquierda) + CASO 1 (rotacion a la derecha)
+				rotarDerecha(n);										//CASO 1 (rotacion a la derecha)
 			}
-			n->altura = 1 + maximo(alturaNodo(n->izq), alturaNodo(n->der));//Establece la altura del nodo a uno mas que la maxima altura de sus hijos
+																	//Ajusta la altura a partir de las alturas de los hijos del nodo actual
+			n->altura = 1 + maximo(alturaNodo(n->izq), alturaNodo(n->der));
 			return true;
 		}
 	}
-	else if (n->dato < dato) {                        //Si el dato es mayor,
-		if (insertaPriv(dato, n->der)) {                    //si ha podido insertarlo en el nodo derecho
-			n->bal--;                                     //ajusta el balance del nodo
-			if (n->bal == -2) {                           //si el balance es incorrecto
-				if (n->der->bal == 1)                       //comprueba el caso de balance
-					rotarDerecha(n->der);                     //rota primero a la derecha (caso 3 = caso 1 + caso 4)
-				rotarIzquierda(n);                          //rota a la izquierda(caso 4)
+	else if (n->dato < dato) {								//Si el dato a introducir es mayor que el dato del nodo actual
+		if (insertaPriv(dato, n->der)) {						//Si se ha podido insertar a la derecha
+			n->bal = alturaNodo(n->izq) - alturaNodo(n->der);		//Ajusta el balance a partir de las alturas de los hijos del nodo actual
+			if (n->bal == -2) {										//Si esta desbalanceado
+				if (n->der->bal == 1)									//Comprueba que caso de rotacion es
+					rotarDerecha(n->der);									//CASO 3 = CASO 1 (rotacion a la derecha) + CASO 4 (rotacion a la izquierda)
+				rotarIzquierda(n);										//CASO 4 (rotacion a la izquierda)
 			}
-			n->altura = 1 + maximo(alturaNodo(n->izq), alturaNodo(n->der));//Establece la altura del nodo a uno mas que la maxima altura de sus hijos
+																	//Ajusta la altura a partir de las alturas de los hijos del nodo actual
+			n->altura = 1 + maximo(alturaNodo(n->izq), alturaNodo(n->der));
 			return true;
 		}
 	}

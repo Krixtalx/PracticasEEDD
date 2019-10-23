@@ -23,6 +23,5 @@ int main()
 	int resultado;
 	if (arbolico.busca(t[7], resultado))
 		std::cout << "Encontrao";
-	//TODO: comprobar rotaciones correctas
 	return 0;
 }
