@@ -230,7 +230,8 @@ bool AVL<T>::busca(T& dato, T& resultado){
 
 template<class T>
 void AVL<T>::verArbol(){
-	std::cout << std::endl << std::endl << std::endl << std::endl << std::endl;
+	std::cout << std::endl << std::endl << std::endl << std::endl ;
+	std::cout << "--------------------------------------------------------------------------------------------------------------"<<std::endl<<std::endl;
 	verArbol(raiz, 0);
 }
 
