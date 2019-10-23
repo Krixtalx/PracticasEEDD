@@ -7,11 +7,12 @@
 int main()
 {
 	AVL<int> arbolico;
-	int t[11] = {11,0,9,12,4,1,7,5,3,6,2};
+	int t[11] = {10,9,8,7,6,5,4,3,2,1,0};
 	for (int i = 10;  i >= 0; i--){
 		arbolico.inserta(t[i]);
+		arbolico.verArbol();
 	}
-	for (int i = 0; i < 10; i++)
+	for (int i = 10; i < 10; i++)
 	{
 		int algo;
 		arbolico.verArbol();

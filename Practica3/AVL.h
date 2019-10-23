@@ -180,9 +180,10 @@ template<class T>
 	 }
 	 verArbol(nodo->der, nivel + 1);
 	 for (int i = 0; i < nivel; i++){
-		 std::cout << "          ";
+		 std::cout << "     ";
+		 //std::cout << "          ";
 	 }
-	 std::cout << nodo->dato<<std::endl<<std::endl;
+	 std::cout << nodo->dato << std::endl << std::endl;
 	 verArbol(nodo->izq, nivel + 1);
 }
 
@@ -243,16 +244,16 @@ void AVL<T>::verArbol(){
 template<class T>
 void AVL<T>::rotarIzquierda(NodoAVL<T>* &nodo)
 {
-	NodoAVL<T>* temp = nodo;
-	nodo = nodo->der;          //Asigna a nodo su subarbol derecho
-	temp->der = nodo->izq;     //Asigna a la derecha del nodo original el subarbol izquierdo de nodo
-	nodo->izq = temp;          //Asgina el nodo original actualizado a la izquierda de nodo
+	NodoAVL<T>* temp = nodo, *temp2;
+	nodo = temp2 = nodo->der;          //Asigna a nodo su subarbol derecho
+	temp->der = temp2->izq;     //Asigna a la derecha del nodo original el subarbol izquierdo de nodo
+	temp2->izq = temp;          //Asgina el nodo original actualizado a la izquierda de nodo
 	temp->bal++;
-	if (nodo->bal < 0)         //Si nodo tenia mayor altura por la derecha
-		temp->bal -= nodo->bal;  //entonces la descuenta del nodo original
-	nodo->bal++;
+	if (temp2->bal < 0)         //Si nodo tenia mayor altura por la derecha
+		temp->bal += -temp2->bal;  //entonces la descuenta del nodo original
+	temp2->bal++;
 	if (temp->bal > 0)         //Si el nodo original tenia mayor altura por la izquierda
-		nodo->bal += temp->bal;  //entonces se le asigna a nodo
+		temp2->bal += temp->bal;  //entonces se le asigna a nodo
 }
 
 /**
@@ -263,16 +264,16 @@ void AVL<T>::rotarIzquierda(NodoAVL<T>* &nodo)
 template<class T>
 void AVL<T>::rotarDerecha(NodoAVL<T>*& nodo)
 {
-	NodoAVL<T>* temp = nodo;
-	nodo = nodo->izq;          //Asigna a nodo su subarbol izquierdo
-	temp->izq = nodo->der;     //Asigna a la izquierda del nodo original el subarbol derecho de nodo
-	nodo->der = temp;          //Asigna el nodo original actualizado a la derecha de nodo
+	NodoAVL<T>* temp = nodo, *temp2;
+	nodo = temp2 = nodo->izq;          //Asigna a nodo su subarbol izquierdo
+	temp->izq = temp2->der;     //Asigna a la izquierda del nodo original el subarbol derecho de nodo
+	temp2->der = temp;          //Asigna el nodo original actualizado a la derecha de nodo
 	temp->bal--;
-	if (nodo->bal > 0)         //Si nodo tenia mayor altura por la izquierda
-		temp->bal -= nodo->bal;  //entonces la descuenta del nodo original
-	nodo->bal--;
+	if (temp2->bal > 0)         //Si nodo tenia mayor altura por la izquierda
+		temp->bal -= temp2->bal;  //entonces la descuenta del nodo original
+	temp2->bal--;
 	if (temp->bal < 0)         //Si el nodo original tenia mayor altura por la derecha
-		nodo->bal += temp->bal;  //entonces se le asigna a nodo
+		temp2->bal -= -temp->bal;  //entonces se le asigna a nodo
 }
 
 /**
@@ -286,7 +287,7 @@ void AVL<T>::rotarDerecha(NodoAVL<T>*& nodo)
 template<class T>
 bool AVL<T>::insertaPriv(T& dato, NodoAVL<T>*& n)
 {
-	//TODO: Se tiene que ir actualizando la altura o si no, actualizar el método altura()
+	//TODO: Nodo*& vs Nodo*
 	if (!n) {                                         //Si no hay nodo, inserta el dato
 		n = new NodoAVL<T>(dato);
 		n->bal = 0;
