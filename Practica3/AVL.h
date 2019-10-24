@@ -12,6 +12,7 @@ private:
 	NodoAVL<T>* raiz;
 	unsigned int alt;
 	unsigned int tam;
+	NodoAVL<T>* copiaRama(NodoAVL<T>* nodoacopiar);
 	void rotarIzquierda(NodoAVL<T>*& nodo);
 	void rotarDerecha(NodoAVL<T>*& nodo);
 	bool insertaPriv(T& dato, NodoAVL<T>*& n);
@@ -50,9 +51,8 @@ AVL<T>::AVL(): raiz(0), alt(0), tam(0){
 	@param orig Objeto del que se copian los nodos
 */
 template<class T>
-AVL<T>::AVL(const AVL<T>& orig): raiz(orig.raiz), alt(orig.alt), tam(orig.tam)
-{
-	//TODO: copiar nodos
+AVL<T>::AVL(const AVL<T>& orig): alt(orig.alt), tam(orig.tam){
+	raiz = copiaRama(orig.raiz);
 }
 
 /**
@@ -64,10 +64,15 @@ AVL<T>::~AVL()
 	borrarRama(raiz);
 }
 
+/**
+	@brief Operador de asignacion
+	@return *this para operaciones en cascada
+*/
 template<class T>
 AVL<T>& AVL<T>::operator=(const AVL<T>& right) 
 {
-	//TODO: asignar
+	raiz = copiaRama(right.raiz);
+	return *this;
 }
 
 /**
@@ -174,8 +179,7 @@ template<class T>
 	 }
 	 verArbol(nodo->der, nivel + 1);
 	 for (int i = 0; i < nivel; i++){
-		 std::cout << "      ";
-		 //std::cout << "          ";
+		 std::cout << "       ";
 	 }
 	 std::cout << nodo->dato << std::endl << std::endl;
 	 verArbol(nodo->izq, nivel + 1);
@@ -191,7 +195,7 @@ unsigned int AVL<T>::numElementos()
 }
 
 /**
-	@brief Devuelve la altura del arbol
+*@Brief Devuelve la altura del arbol
 */
 template<class T>
 unsigned int AVL<T>::altura()
@@ -225,11 +229,57 @@ bool AVL<T>::busca(T& dato, T& resultado){
 	 return busca(dato, resultado, raiz);
 }
 
+//TODO: comentar esto
+template<class T>
+bool AVL<T>::buscaIt(T& dato, T& resultado)
+{
+	NodoAVL<T>* i;
+	//for (i = raiz; i->dato != dato;){
+	//	if(i->dato==0)
+	//		return false;
+	//	if (dato < i->dato)
+	//		i = i->izq;
+	//	else if (i->dato < dato)
+	//		i = i->der;
+	//}
+	//resultado = i->dato;
+	//return true;
+	for (i = raiz; i != 0;)
+	{
+		if (i->dato == dato) {
+			resultado = i->dato;
+			return true;
+		}
+		else if (i->dato < dato)
+			i = i->der;
+		else if (dato < i->dato)
+			i = i->izq;
+	}
+	return false;
+}
+
+/**
+*@Brief Método público de visualizar por consola un arbol. Hace uso del método privado verArbol()
+*/
 template<class T>
 void AVL<T>::verArbol(){
 	std::cout << std::endl << std::endl << std::endl << std::endl ;
 	std::cout << "--------------------------------------------------------------------------------------------------------------"<<std::endl<<std::endl;
 	verArbol(raiz, 0);
+}
+
+/**
+*@Brief Método privado recursivo que se encarga de copiar los diferentes nodos de la rama
+*@param nodoacopiar: Nodo del cual se realizará la copia
+*/
+template<class T>
+NodoAVL<T>* AVL<T>::copiaRama(NodoAVL<T>* nodoacopiar){
+	if (nodoacopiar == 0)
+		return 0;
+	NodoAVL<T>* nodoNuevo = new NodoAVL<T>(*nodoacopiar);
+	nodoNuevo->der = copiaRama(nodoacopiar->der);
+	nodoNuevo->izq = copiaRama(nodoacopiar->izq);
+	return nodoNuevo;
 }
 
 /**
@@ -244,7 +294,7 @@ void AVL<T>::rotarIzquierda(NodoAVL<T>* &nodo)
 	nodo = nodo->der;			//Asigna a nodo todo su subarbol derecho
 	temp->der = nodo->izq;		//El subarbol izquierdo de nodo se asigna como hijo derecho del original
 	nodo->izq = temp;			//El nodo original se coloca como hijo izquierdo del nodo actualizado
-
+								//Ajusta el balance de los nodos a partir de la altura de los hijos
 	temp->bal = alturaNodo(temp->izq) - alturaNodo(temp->der);
 	nodo->bal = alturaNodo(nodo->izq) - alturaNodo(nodo->der);
 	//temp->bal++;

@@ -1,6 +1,3 @@
-// Practica3.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
 #include "AVL.h"
 
@@ -20,8 +17,9 @@ int main()
 		arbolico.inserta(algo);
 	}
 	arbolico.verArbol();
-	int resultado;
-	if (arbolico.busca(t[7], resultado))
-		std::cout << "Encontrao";
+	std::cout << "INICIO DEL ARBOLICO 2" << std::endl;
+	AVL<int> arbolico2;
+	arbolico2 = arbolico;
+	arbolico2.verArbol();
 	return 0;
 }
