@@ -9,8 +9,7 @@ int main()
 		arbolico.inserta(t[i]);
 		arbolico.verArbol();
 	}
-	for (int i = 10; i < 10; i++)
-	{
+	for (int i = 0; i < 10; i++){
 		int algo;
 		arbolico.verArbol();
 		std::cin >> algo;

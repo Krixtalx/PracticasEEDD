@@ -244,8 +244,7 @@ bool AVL<T>::buscaIt(T& dato, T& resultado)
 	//}
 	//resultado = i->dato;
 	//return true;
-	for (i = raiz; i != 0;)
-	{
+	for (i = raiz; i != 0;){
 		if (i->dato == dato) {
 			resultado = i->dato;
 			return true;

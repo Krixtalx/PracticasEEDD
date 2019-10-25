@@ -154,6 +154,7 @@
     <ClCompile Include="Cliente.cpp" />
     <ClCompile Include="Fecha.cpp" />
     <ClCompile Include="Itinerario.cpp" />
+    <ClCompile Include="Moto.cpp" />
     <ClCompile Include="Practica3.cpp" />
     <ClCompile Include="UTM.cpp" />
   </ItemGroup>
@@ -163,6 +164,7 @@
     <ClInclude Include="Fecha.h" />
     <ClInclude Include="Itinerario.h" />
     <ClInclude Include="ListaDEnlazada.h" />
+    <ClInclude Include="Moto.h" />
     <ClInclude Include="Nodo.h" />
     <ClInclude Include="NodoAVL.h" />
     <ClInclude Include="UTM.h" />

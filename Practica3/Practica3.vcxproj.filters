@@ -30,6 +30,9 @@
     <ClCompile Include="UTM.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Moto.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="VDinamico.h">
@@ -57,6 +60,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="NodoAVL.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Moto.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
