@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Cliente.cpp" />
+    <ClCompile Include="EcoCityMoto.cpp" />
     <ClCompile Include="Fecha.cpp" />
     <ClCompile Include="Itinerario.cpp" />
     <ClCompile Include="Moto.cpp" />
@@ -161,6 +162,7 @@
   <ItemGroup>
     <ClInclude Include="AVL.h" />
     <ClInclude Include="Cliente.h" />
+    <ClInclude Include="EcoCityMoto.h" />
     <ClInclude Include="Fecha.h" />
     <ClInclude Include="Itinerario.h" />
     <ClInclude Include="ListaDEnlazada.h" />
