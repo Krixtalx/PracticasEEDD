@@ -10,3 +10,10 @@ UTM::UTM(double _lat, double _long) : latitud(_lat), longitud(_long) {
 std::string UTM::toCSV(){
 	return std::to_string(latitud)+", "+std::to_string(longitud) ;
 }
+
+bool UTM::operator<(UTM& right)
+{
+	if (latitud < right.latitud && longitud < right.longitud)
+		return true;
+	return false;
+}

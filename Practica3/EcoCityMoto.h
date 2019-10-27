@@ -7,6 +7,8 @@
 #include "Cliente.h"
 #include "Moto.h"
 
+#include <cmath>
+
 class EcoCityMoto
 {
 	unsigned idUltimo = 0;

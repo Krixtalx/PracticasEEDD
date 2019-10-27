@@ -16,6 +16,15 @@ Moto::Moto(const Moto& orig){
 Moto::~Moto(){
 }
 
+Moto& Moto::operator=(Moto& right)
+{
+	id = right.id;
+	posicion.latitud = right.posicion.latitud;
+	posicion.longitud = right.posicion.longitud;
+	estatus = right.estatus;
+	usadoPor = right.usadoPor;
+}
+
 /**
 *@Brief Método encargado de activar la moto
 *@Param Cliente: usuario que activa la moto
@@ -57,4 +66,8 @@ void Moto::setRoto(){
 double Moto::distanciaMoto(Moto& otro)
 {
 	return sqrt(pow(this->posicion.latitud - otro.posicion.latitud, 2) + pow(this->posicion.longitud - otro.posicion.longitud, 2));
+}
+
+Moto::Moto()
+{
 }
