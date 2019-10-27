@@ -55,3 +55,7 @@ double Moto::distanciaMoto(Moto& otro)
 {
 	return sqrt(pow(this->posicion.latitud - otro.posicion.latitud, 2) + pow(this->posicion.longitud - otro.posicion.longitud, 2));
 }
+
+Moto::Moto()
+{
+}

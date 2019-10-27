@@ -28,6 +28,7 @@ public:
 	void setSinbateria();
 	void setRoto();
 	double distanciaMoto(Moto& otro);
+	//TODO: operator<
 };
 
 #endif // !MOTO_H

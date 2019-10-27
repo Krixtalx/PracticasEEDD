@@ -49,3 +49,13 @@ EcoCityMoto& EcoCityMoto::operator=(EcoCityMoto& right)
 	clientes = right.clientes;
 	return *this;
 }
+
+Moto EcoCityMoto::localizaMotoCercana(UTM posicion)
+{
+	return Moto();
+}
+
+void EcoCityMoto::desbloqueaMoto(Moto m, Cliente cli)
+{
+	m.seActiva(cli);
+}
