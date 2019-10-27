@@ -164,13 +164,18 @@
     <ClInclude Include="Cliente.h" />
     <ClInclude Include="EcoCityMoto.h" />
     <ClInclude Include="Fecha.h" />
+    <ClInclude Include="InterfazUsuario.h" />
     <ClInclude Include="Itinerario.h" />
     <ClInclude Include="ListaDEnlazada.h" />
     <ClInclude Include="Moto.h" />
     <ClInclude Include="Nodo.h" />
     <ClInclude Include="NodoAVL.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="UTM.h" />
     <ClInclude Include="VDinamico.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Practica3.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

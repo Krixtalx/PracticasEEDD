@@ -1,8 +1,9 @@
 #include <iostream>
 #include "AVL.h"
+#include "InterfazUsuario.h"
+#include <locale>
 
-int main()
-{
+int main(){
 	//AVL<int> arbolico;
 	//int t[11] = {10,9,8,7,6,5,4,3,2,1,0};
 	//for (int i = 10;  i >= 0; i--){
@@ -21,4 +22,8 @@ int main()
 	//arbolico2 = arbolico;
 	//arbolico2.verArbol();
 	//return 0;
+	setlocale(LC_ALL, "spanish");
+	EcoCityMoto test;
+	menuPrincipal(test);
+
 }

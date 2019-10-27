@@ -59,7 +59,7 @@ VDinamico<T>::VDinamico(unsigned int atamL) : tamL(atamL), tamF(1) {
 template<class T>
 VDinamico<T>::VDinamico(VDinamico<T>& orig) : tamF(orig.tamF), tamL(orig.tamL) {
 	buffer = new T[tamF];
-	for (int i = 0; i < tamL; i++) {
+	for (unsigned int i = 0; i < tamL; i++) {
 		buffer[i] = orig[i];
 	}
 }

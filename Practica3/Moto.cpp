@@ -64,7 +64,6 @@ void Moto::setRoto(){
 /**
 *@Brief Calcula la distancia entre 2 motos
 */
-double Moto::distanciaMoto(Moto& otro)
-{
+double Moto::distanciaMoto(Moto& otro){
 	return sqrt(pow(this->posicion.latitud - otro.posicion.latitud, 2) + pow(this->posicion.longitud - otro.posicion.longitud, 2));
 }
