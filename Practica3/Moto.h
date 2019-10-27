@@ -21,6 +21,7 @@ private:
 	Cliente usadoPor;
 public:
 	Moto();
+	Moto(std::string id, UTM posicion, Estado estatus, Cliente usadoPor);
 	Moto(const Moto& orig);
 	~Moto();
 	void seActiva(Cliente usuario);

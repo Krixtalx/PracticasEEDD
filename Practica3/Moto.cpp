@@ -3,6 +3,9 @@
 Moto::Moto() : id("0") {
 }
 
+Moto::Moto(std::string id, UTM posicion, Estado estatus, Cliente usadoPor): id(id), posicion(posicion), estatus(estatus), usadoPor(usadoPor){
+}
+
 Moto::Moto(const Moto& orig){
 	id = orig.id;
 	posicion = orig.posicion;
