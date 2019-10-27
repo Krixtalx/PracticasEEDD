@@ -19,16 +19,17 @@ private:
 	UTM posicion;
 	Estado estatus;
 	Cliente usadoPor;
+	friend class EcoCityMoto;
 public:
 	Moto();
 	Moto(const Moto& orig);
 	~Moto();
+	Moto& operator=(Moto& right);
 	void seActiva(Cliente usuario);
 	void seDesactiva();
 	void setSinbateria();
 	void setRoto();
 	double distanciaMoto(Moto& otro);
-	//TODO: operator<
 };
 
 #endif // !MOTO_H
