@@ -27,6 +27,7 @@ public:
 	void seDesactiva();
 	void setSinbateria();
 	void setRoto();
+	double distanciaMoto(Moto& otro);
 };
 
 #endif // !MOTO_H
