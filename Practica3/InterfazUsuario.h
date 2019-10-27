@@ -10,7 +10,10 @@
 #include "EcoCityMoto.h"
 
 using namespace std;
-bool windows = true;
+
+bool windows = false;
+
+void menuPrincipal(EcoCityMoto& ecocity);
 
 void clearScreen() {
 	if (windows) {
@@ -35,6 +38,22 @@ void configuracion() {
 		configuracion;
 }
 
+void insertarCliente(EcoCityMoto& ecocity) {
+
+}
+
+void buscarCliente(EcoCityMoto& ecocity) {
+
+}
+
+void borrarCliente(EcoCityMoto& ecocity) {
+
+}
+
+void clientetoCSV(EcoCityMoto& ecocity) {
+
+}
+
 void menuClientes(EcoCityMoto& ecocity) {
 	int opcion;
 	cout << endl << endl << "Submenu de Clientes" << endl << endl;
@@ -44,6 +63,49 @@ void menuClientes(EcoCityMoto& ecocity) {
 	cout << "4 - Cliente a CSV" << endl;
 	cout << "5 - Salir" << endl;
 	cout << "¿Que desea hacer?: ";
+	cin >> opcion;
+	switch (opcion) {
+	case 1:
+		clearScreen();
+		insertarCliente(ecocity);
+		break;
+
+	case 2:
+		clearScreen();
+		buscarCliente(ecocity);
+		break;
+
+	case 3:
+		clearScreen();
+		borrarCliente(ecocity);
+		break;
+
+	case 4:
+		clearScreen();
+		clientetoCSV(ecocity);
+		break;
+
+	case 5:
+		clearScreen();
+		menuPrincipal(ecocity);
+		break;
+	}
+}
+
+void insertarItinerario(EcoCityMoto& ecocity) {
+
+}
+
+void buscarItinerario(EcoCityMoto& ecocity) {
+
+}
+
+void borrarItinerario(EcoCityMoto& ecocity) {
+
+}
+
+void itinerariotoCSV(EcoCityMoto& ecocity) {
+
 }
 
 void menuItinerarios(EcoCityMoto& ecocity) {
@@ -55,6 +117,45 @@ void menuItinerarios(EcoCityMoto& ecocity) {
 	cout << "4 - Itinerario a CSV" << endl;
 	cout << "5 - Salir" << endl;
 	cout << "¿Que desea hacer?: ";
+	cin >> opcion;
+	switch (opcion) {
+	case 1:
+		clearScreen();
+		insertarCliente(ecocity);
+		break;
+
+	case 2:
+		clearScreen();
+		buscarCliente(ecocity);
+		break;
+
+	case 3:
+		clearScreen();
+		borrarCliente(ecocity);
+		break;
+
+	case 4:
+		clearScreen();
+		clientetoCSV(ecocity);
+		break;
+
+	case 5:
+		clearScreen();
+		menuPrincipal(ecocity);
+		break;
+	}
+}
+
+void insertarMoto(EcoCityMoto& ecocity) {
+
+}
+
+void buscarMoto(EcoCityMoto& ecocity) {
+
+}
+
+void borrarMoto(EcoCityMoto& ecocity) {
+
 }
 
 void menuMotos(EcoCityMoto& ecocity) {
@@ -65,6 +166,28 @@ void menuMotos(EcoCityMoto& ecocity) {
 	cout << "3 - Borrar moto" << endl;
 	cout << "4 - Salir" << endl;
 	cout << "¿Que desea hacer?: ";
+	cin >> opcion;
+	switch (opcion) {
+	case 1:
+		clearScreen();
+		insertarCliente(ecocity);
+		break;
+
+	case 2:
+		clearScreen();
+		buscarCliente(ecocity);
+		break;
+
+	case 3:
+		clearScreen();
+		borrarCliente(ecocity);
+		break;
+
+	case 4:
+		clearScreen();
+		menuPrincipal(ecocity);
+		break;
+	}
 }
 
 void carga() {
