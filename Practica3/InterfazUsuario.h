@@ -76,13 +76,18 @@ void clientetoCSV(EcoCityMoto& ecocity) {
 
 }
 
+void menuArbol(EcoCityMoto& ecocity) {
+
+}
+
 void menuClientes(EcoCityMoto& ecocity) {
 	int opcion;
 	cout << endl << endl << "Submenu de Clientes" << endl << endl;
 	cout << "1 - Insertar cliente" << endl;
 	cout << "2 - Buscar cliente" << endl;
 	cout << "3 - Cliente a CSV" << endl;
-	cout << "4- Salir" << endl;
+	cout << "4 - Ajustes del arbol" << endl;
+	cout << "5- Salir" << endl;
 	cout << "¿Que desea hacer?: ";
 	cin >> opcion;
 	switch (opcion) {
@@ -102,6 +107,11 @@ void menuClientes(EcoCityMoto& ecocity) {
 		break;
 
 	case 4:
+		clearScreen();
+		menuArbol(ecocity);
+		break;
+
+	case 5:
 		clearScreen();
 		return;
 		break;

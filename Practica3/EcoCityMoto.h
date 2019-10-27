@@ -26,10 +26,12 @@ public:
 	EcoCityMoto& insertaMoto(Moto& moto);
 	EcoCityMoto& insertaCliente(Cliente& cliente);
 	EcoCityMoto& insertaItinerario(Itinerario& itinerario);
-	EcoCityMoto& buscaMoto(std::string id);
-	EcoCityMoto& buscaCliente(std::string dni);
+	Moto& buscaMoto(std::string id);
+	Cliente& buscaCliente(std::string dni);
 	EcoCityMoto& borraMoto(int pos);
 	EcoCityMoto& borraItinerario(int pos);
+	unsigned int getAlturaAVL();
+	EcoCityMoto& recorreAVLInorden();
 
 };
 
