@@ -50,6 +50,7 @@ EcoCityMoto& EcoCityMoto::operator=(EcoCityMoto& right)
 	return *this;
 }
 
+
 Moto EcoCityMoto::localizaMotoCercana(UTM posicion)
 {
 	Moto masCercana;

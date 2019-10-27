@@ -23,6 +23,7 @@ Moto& Moto::operator=(Moto& right)
 	posicion.longitud = right.posicion.longitud;
 	estatus = right.estatus;
 	usadoPor = right.usadoPor;
+	return *this;
 }
 
 /**
@@ -66,8 +67,4 @@ void Moto::setRoto(){
 double Moto::distanciaMoto(Moto& otro)
 {
 	return sqrt(pow(this->posicion.latitud - otro.posicion.latitud, 2) + pow(this->posicion.longitud - otro.posicion.longitud, 2));
-}
-
-Moto::Moto()
-{
 }
