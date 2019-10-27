@@ -59,7 +59,7 @@ ListaDEnlazada<Itinerario>& Cliente::getItinerarios()
  * @return True si el nombre del cliente *this es menor alfabeticamente que el de otro
  */
 bool Cliente::operator<(Cliente& otro) {
-	if (this->nombre < otro.nombre)
+	if (this->dni < otro.dni)
 		return true;
 	return false;
 }

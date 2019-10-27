@@ -4,6 +4,7 @@
 
 #include <string>
 #include "UTM.h"
+#include "Cliente.h"
 
 struct Estado {
 	bool bloqueada=false;
@@ -17,6 +18,15 @@ private:
 	std::string id;
 	UTM posicion;
 	Estado estatus;
+	Cliente usadoPor;
+public:
+	Moto();
+	Moto(const Moto& orig);
+	~Moto();
+	void seActiva(Cliente usuario);
+	void seDesactiva();
+	void setSinbateria();
+	void setRoto();
 };
 
 #endif // !MOTO_H
