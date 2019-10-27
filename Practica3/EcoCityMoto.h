@@ -23,6 +23,14 @@ public:
 	EcoCityMoto& operator=(EcoCityMoto& right);
 	Moto localizaMotoCercana(UTM posicion);
 	void desbloqueaMoto(Moto m, Cliente cli);
+	EcoCityMoto& insertaMoto(Moto& moto);
+	EcoCityMoto& insertaCliente(Cliente& cliente);
+	EcoCityMoto& insertaItinerario(Itinerario& itinerario);
+	EcoCityMoto& buscaMoto(std::string id);
+	EcoCityMoto& buscaCliente(std::string dni);
+	EcoCityMoto& borraMoto(int pos);
+	EcoCityMoto& borraItinerario(int pos);
+
 };
 
 

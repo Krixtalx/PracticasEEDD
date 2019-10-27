@@ -22,7 +22,7 @@ private:
 	friend class EcoCityMoto;
 public:
 	Moto();
-	Moto(std::string id, UTM posicion, Estado estatus, Cliente usadoPor);
+	Moto(std::string id, UTM posicion, Estado estatus);
 	Moto(const Moto& orig);
 	~Moto();
 	Moto& operator=(Moto& right);

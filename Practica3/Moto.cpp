@@ -3,7 +3,7 @@
 Moto::Moto() : id("0") {
 }
 
-Moto::Moto(std::string id, UTM posicion, Estado estatus, Cliente usadoPor): id(id), posicion(posicion), estatus(estatus), usadoPor(usadoPor){
+Moto::Moto(std::string id, UTM posicion, Estado estatus): id(id), posicion(posicion), estatus(estatus){
 }
 
 Moto::Moto(const Moto& orig){
