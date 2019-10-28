@@ -190,7 +190,7 @@ VDinamico<T>& VDinamico<T>::eliminarDato(unsigned int pos) {
 	}
 	else {
 		if (pos != UINT_MAX) {
-			for (int i = pos; i + 1 < tamL; i++) {
+			for (unsigned int i = pos; i + 1 < tamL; i++) {
 				buffer[i] = buffer[i + 1];
 			}
 		}
@@ -225,7 +225,7 @@ void VDinamico<T>::aumentarTamF() {
 template <class T>
 void VDinamico<T>::disminuirTamF() {
 	T* NuevoBuffer = new T[tamF /= 2];
-	for (int i = 0; i < tamF; i++) {
+	for (unsigned int i = 0; i < tamF; i++) {
 		NuevoBuffer[i] = buffer[i];
 	}
 	delete[] buffer;

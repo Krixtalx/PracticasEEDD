@@ -15,7 +15,7 @@ public:
 	Iterador();
 	Iterador(Nodo<T>* nodo);
 	~Iterador();
-	Iterador<T>& operator=(const Iterador<T>& right);
+	Iterador<T>& operator=(Iterador<T>& right);
 	Iterador<T>& operator++(int);
 	Iterador<T>& operator--(int);
 	bool final();
@@ -52,7 +52,7 @@ public:
 //=======================================================================================================
 
 template<class T>
-inline Iterador<T>::Iterador() : nodoApuntado(0) {
+Iterador<T>::Iterador() : nodoApuntado(0) {
 }
 
 /**
@@ -75,7 +75,7 @@ Iterador<T>::~Iterador() {
 *@Brief Operador de asignacion
 */
 template<class T>
-Iterador<T>& Iterador<T>::operator=(const Iterador<T>& right){
+Iterador<T>& Iterador<T>::operator=(Iterador<T>& right){
 	if (this = &right)
 		return *this;
 	this->nodoApuntado = right.nodoApuntado;

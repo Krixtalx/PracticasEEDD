@@ -26,11 +26,11 @@ public:
 	//Basicamente solo hay que utilizar el metodo de cada clase, pero es para tenerlo en la interfaz de usuario todo con EcoCityMoto, que si no te puedes pegar un tiro
 	EcoCityMoto& insertaMoto(Moto& moto);
 	EcoCityMoto& insertaCliente(Cliente& cliente);
-	EcoCityMoto& insertaItinerario(Itinerario& itinerario);
+	EcoCityMoto& insertaItinerario(Itinerario& itinerario, std::string dni);
 	Moto& buscaMoto(std::string id);
 	Cliente& buscaCliente(std::string dni);
 	EcoCityMoto& borraMoto(int pos);
-	EcoCityMoto& borraItinerario(int pos);
+	EcoCityMoto& borraItinerario(int pos, std::string dni);
 	unsigned int getAlturaAVL();
 	EcoCityMoto& recorreAVLInorden();
 	EcoCityMoto& verArbolCliente();

@@ -76,7 +76,7 @@ void insertarCliente(EcoCityMoto& ecocity) {
 
 }
 
-void buscarCliente(EcoCityMoto& ecocity) {
+Cliente& buscarCliente(EcoCityMoto& ecocity) {
 
 }
 
@@ -128,53 +128,6 @@ void menuArbol(EcoCityMoto& ecocity) {
 	}
 }
 
-void asignarMoto(EcoCityMoto& ecocity) {
-
-}
-
-void menuClientes(EcoCityMoto& ecocity) {
-	int opcion;
-	cout << endl << endl << "Submenu de Clientes" << endl << endl;
-	cout << "1 - Insertar cliente" << endl;
-	cout << "2 - Buscar cliente" << endl;
-	cout << "3 - Cliente a CSV" << endl;
-	cout << "4 - Ajustes del árbol" << endl;
-	cout << "5 - Asignar moto más cercana" << endl;
-	cout << "6 - Salir" << endl;
-	cout << "¿Que desea hacer?: ";
-	cin >> opcion;
-	switch (opcion) {
-	case 1:
-		clearScreen();
-		insertarCliente(ecocity);
-		break;
-
-	case 2:
-		clearScreen();
-		buscarCliente(ecocity);
-		break;
-
-	case 3:
-		clearScreen();
-		clientetoCSV(ecocity);
-		break;
-
-	case 4:
-		clearScreen();
-		menuArbol(ecocity);
-		break;
-
-	case 5:
-		clearScreen();
-		asignarMoto(ecocity);
-		break;
-
-	case 6:
-		clearScreen();
-		return;
-		break;
-	}
-}
 
 void insertarItinerario(EcoCityMoto& ecocity) {
 
@@ -188,7 +141,7 @@ void itinerariotoCSV(EcoCityMoto& ecocity) {
 
 }
 
-void menuItinerarios(EcoCityMoto& ecocity) {
+void menuItinerarios(EcoCityMoto& ecocity, Cliente& cliente) {
 	int opcion;
 	cout << endl << endl << "Submenu de Itinerario" << endl << endl;
 	cout << "1 - Insertar itinerario" << endl;
@@ -220,8 +173,94 @@ void menuItinerarios(EcoCityMoto& ecocity) {
 	}
 }
 
-void insertarMoto(EcoCityMoto& ecocity) {
 
+void asignarMoto(EcoCityMoto& ecocity) {
+
+}
+
+void menuClientes(EcoCityMoto& ecocity) {
+	int opcion;
+	cout << endl << endl << "Submenu de Clientes" << endl << endl;
+	cout << "1 - Insertar cliente" << endl;
+	cout << "2 - Buscar cliente" << endl;
+	cout << "3 - Cliente a CSV" << endl;
+	cout << "4 - Ajustes del árbol" << endl;
+	cout << "5 - Acceso a itinerarios de un cliente" << endl;
+	cout << "6 - Asignar moto más cercana" << endl;
+	cout << "7 - Salir" << endl;
+	cout << "¿Que desea hacer?: ";
+	cin >> opcion;
+
+	switch (opcion) {
+	case 1:
+		clearScreen();
+		insertarCliente(ecocity);
+		break;
+
+	case 2:
+		clearScreen();
+		buscarCliente(ecocity);
+		break;
+
+	case 3:
+		clearScreen();
+		clientetoCSV(ecocity);
+		break;
+
+	case 4:
+		clearScreen();
+		menuArbol(ecocity);
+		break;
+
+	case 5:
+		clearScreen();
+		Cliente clienteBuscado;
+		clienteBuscado = buscarCliente(ecocity);
+		menuItinerarios(ecocity, clienteBuscado);
+		break;
+
+	case 6:
+		clearScreen();
+		asignarMoto(ecocity);
+		break;
+
+	case 7:
+		clearScreen();
+		return;
+		break;
+	}
+}
+
+
+void insertarMoto(EcoCityMoto& ecocity) {
+	string matricula;
+	UTM utm;
+	int estado;
+	Estado estadoMoto;
+	cout << "Introduzca la matricula de la moto: ";
+	getline(cin >> ws, matricula);
+	cout << "Introduzca la latitud en la que se encuentra la moto: ";
+	cin >> utm.latitud;
+	cout << "Introduzca la longitud en la que se encuentra la moto: ";
+	cin >> utm.longitud;
+	cout << "Introduzca el estado en el que se encuentra la moto (1 para bloqueado, 2 para activado, 3 para sinBateria, 4 para roto): ";
+	cin >> estado;
+	switch (estado) {
+	case 1:
+		estadoMoto.bloqueada = true;
+		break;
+	case 2:
+		estadoMoto.activa = true;
+		break;
+	case 3:
+		estadoMoto.sinbateria = true;
+		break;
+	case 4:
+		estadoMoto.roto = true;
+	}
+	Moto moto(matricula, utm, estadoMoto);
+	//ecocity.insertaMoto(moto);
+	
 }
 
 void buscarMoto(EcoCityMoto& ecocity) {
@@ -276,15 +315,14 @@ void carga(EcoCityMoto& ecocity) {
 
 bool menuPrincipal(EcoCityMoto& ecocity) {
 	int opcion=0;
-	while (opcion != 7) {
+	while (opcion != 6) {
 		cout << endl << endl << "Programa de Gestión de EcoCityMoto" << endl << endl;
 		cout << "1 - Instrucciones" << endl;
 		cout << "2 - Configuracion" << endl;
 		cout << "3 - Clientes (AVL)" << endl;
-		cout << "4 - Itinerarios (Lista Enlazada)" << endl;
-		cout << "5 - Motos (VDinamico)" << endl;
-		cout << "6 - Carga CSV" << endl;
-		cout << "7 - Salir" << endl;
+		cout << "4 - Motos (VDinamico)" << endl;
+		cout << "5 - Carga CSV" << endl;
+		cout << "6 - Salir" << endl;
 		cout << "¿Que desea hacer?: ";
 		cin >> opcion;
 		switch (opcion) {
@@ -306,15 +344,10 @@ bool menuPrincipal(EcoCityMoto& ecocity) {
 
 		case 4:
 			clearScreen();
-			menuItinerarios(ecocity);
-			break;
-
-		case 5:
-			clearScreen();
 			menuMotos(ecocity);
 			break;
 
-		case 6:
+		case 5:
 			clearScreen();
 			carga(ecocity);
 			break;

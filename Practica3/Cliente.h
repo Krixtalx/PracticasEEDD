@@ -35,6 +35,7 @@ public:
 	UTM getPosicion() const;
 	int crearItinerarios(int num, int idUltimo, UTM& minimo, UTM& maximo);
 	ListaDEnlazada<Itinerario>& getItinerarios();
+	void operator<<();
 };
 
 #endif /* CLIENTE_H */

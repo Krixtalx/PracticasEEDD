@@ -129,3 +129,6 @@ double Cliente::DistanciaCliente(Cliente& otro) {
 	return sqrt(pow(this->posicion.latitud - otro.getPosicion().latitud, 2) + pow(this->posicion.longitud - otro.getPosicion().longitud, 2));
 }
 
+void Cliente::operator<<(){
+
+}

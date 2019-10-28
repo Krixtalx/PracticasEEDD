@@ -79,3 +79,103 @@ void EcoCityMoto::desbloqueaMoto(Moto m, Cliente cli)
 {
 	m.seActiva(cli);
 }
+
+/**
+	@brief Inserta una moto en el vector de motos
+*/
+EcoCityMoto& EcoCityMoto::insertaMoto(Moto& moto)
+{
+	motos->insertarDato(moto);
+	return *this;
+}
+
+/**
+	@brief Inserta un cliente en el arbol de clientes
+*/
+EcoCityMoto& EcoCityMoto::insertaCliente(Cliente& cliente)
+{
+	clientes->inserta(cliente);
+	return *this;
+}
+
+/**
+	@brief Inserta un itinerario a la lista del cliente indicado
+*/
+EcoCityMoto& EcoCityMoto::insertaItinerario(Itinerario& itinerario, std::string dni)
+{
+	buscaCliente(dni).getItinerarios().insertaFinal(itinerario);
+	return *this;
+}
+
+/**
+	@brief Busca la moto cuya ID coincida con la indicada
+*/
+Moto& EcoCityMoto::buscaMoto(std::string id)
+{
+	for(int i = (*motos).getTamL() - 1; i >= 0; i--){
+		if ((*motos)[i].id == id)
+			return (*motos)[i];
+	}
+	//TODO: hacer algo si no esta
+}
+
+/**
+	@brief Busca el cliente cuyo DNI coicida con el indicado
+*/
+Cliente& EcoCityMoto::buscaCliente(std::string dni)
+{
+	Cliente encontrado;
+	Cliente buscado(dni);
+	if (clientes->busca(buscado, encontrado))
+		return encontrado;
+	//TODO: algo si no esta
+}
+
+/**
+	@brief Elimina la moto de la posicion indicada
+*/
+EcoCityMoto& EcoCityMoto::borraMoto(int pos)
+{
+	motos->eliminarDato(pos);
+	return *this;
+}
+/**
+	@brief Elimina el itinerario de la posicion indicada del cliente
+*/
+EcoCityMoto& EcoCityMoto::borraItinerario(int pos, std::string dni)
+{
+	Iterador<Itinerario> it;
+	it = buscaCliente(dni).getItinerarios().iterador();
+	while(pos > 0){
+		it++;
+		pos--;
+	}
+	buscaCliente(dni).getItinerarios().borra(it);
+	return *this;
+}
+
+/**
+	@brief Devuelve la altura del arbol de clientes
+*/
+unsigned int EcoCityMoto::getAlturaAVL()
+{
+	return clientes->altura();
+}
+
+/**
+	@brief Muestra el arbol de clientes en inorden
+*/
+EcoCityMoto& EcoCityMoto::recorreAVLInorden()
+{
+	clientes->recorreInorden();
+	return *this;
+}
+
+/**
+	@brief Muestra el arbol de clientes
+*/
+EcoCityMoto& EcoCityMoto::verArbolCliente()
+{
+	clientes->verArbol();
+	return *this;
+}
