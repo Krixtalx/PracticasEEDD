@@ -34,6 +34,7 @@ void configuracion(EcoCityMoto& ecocity) {
 	cout << "1 - Modificar archivo CSV de Clientes" << endl;
 	cout << "2 - Modificar archivo CSV de Motos" << endl;
 	cout << "3 - Modificar configuración de Sistema Operativo" << endl;
+	cout << "4 - Salir" << endl;
 	cout << "Introduzca la opción: ";
 	cin >> opt;
 	
@@ -50,6 +51,7 @@ void configuracion(EcoCityMoto& ecocity) {
 			break;
 		case 3:
 			char opcion;
+			clearScreen();
 			cout << "¿Que sistema operativo usa?" << endl << "W para windows, L para otro" << endl;
 			cin >> opcion;
 			if (opcion == 'W') {
@@ -60,7 +62,13 @@ void configuracion(EcoCityMoto& ecocity) {
 			}
 			clearScreen();
 			break;
+
+		case 4:
+			clearScreen();
+			return;
+			break;
 	}
+
 	clearScreen();
 }
 
@@ -76,7 +84,51 @@ void clientetoCSV(EcoCityMoto& ecocity) {
 
 }
 
+void alturaArbol(EcoCityMoto& ecocity) {
+
+}
+
+void recorridoInorden(EcoCityMoto& ecocity) {
+
+}
+
+void visualizaArbol(EcoCityMoto& ecocity) {
+
+}
+
 void menuArbol(EcoCityMoto& ecocity) {
+	int opcion;
+	cout << endl << endl << "Submenu de Árbol" << endl << endl;
+	cout << "1 - Ver altura del Árbol" << endl;
+	cout << "2 - Recorrido en Inorden" << endl;
+	cout << "3 - Visualiza Árbol en consola" << endl;
+	cout << "4 - Salir" << endl;
+	cout << "¿Que desea hacer?: ";
+	cin >> opcion;
+	switch (opcion) {
+	case 1:
+		clearScreen();
+		alturaArbol(ecocity);
+		break;
+
+	case 2:
+		clearScreen();
+		recorridoInorden(ecocity);
+		break;
+
+	case 3:
+		clearScreen();
+		visualizaArbol(ecocity);
+		break;
+
+	case 4:
+		clearScreen();
+		return;
+		break;
+	}
+}
+
+void asignarMoto(EcoCityMoto& ecocity) {
 
 }
 
@@ -86,8 +138,9 @@ void menuClientes(EcoCityMoto& ecocity) {
 	cout << "1 - Insertar cliente" << endl;
 	cout << "2 - Buscar cliente" << endl;
 	cout << "3 - Cliente a CSV" << endl;
-	cout << "4 - Ajustes del arbol" << endl;
-	cout << "5- Salir" << endl;
+	cout << "4 - Ajustes del árbol" << endl;
+	cout << "5 - Asignar moto más cercana" << endl;
+	cout << "6 - Salir" << endl;
 	cout << "¿Que desea hacer?: ";
 	cin >> opcion;
 	switch (opcion) {
@@ -112,6 +165,11 @@ void menuClientes(EcoCityMoto& ecocity) {
 		break;
 
 	case 5:
+		clearScreen();
+		asignarMoto(ecocity);
+		break;
+
+	case 6:
 		clearScreen();
 		return;
 		break;
@@ -222,9 +280,9 @@ bool menuPrincipal(EcoCityMoto& ecocity) {
 		cout << endl << endl << "Programa de Gestión de EcoCityMoto" << endl << endl;
 		cout << "1 - Instrucciones" << endl;
 		cout << "2 - Configuracion" << endl;
-		cout << "3 - Clientes" << endl;
-		cout << "4 - Itinerarios" << endl;
-		cout << "5 - Motos" << endl;
+		cout << "3 - Clientes (AVL)" << endl;
+		cout << "4 - Itinerarios (Lista Enlazada)" << endl;
+		cout << "5 - Motos (VDinamico)" << endl;
 		cout << "6 - Carga CSV" << endl;
 		cout << "7 - Salir" << endl;
 		cout << "¿Que desea hacer?: ";
@@ -233,7 +291,7 @@ bool menuPrincipal(EcoCityMoto& ecocity) {
 		case 1:
 			clearScreen();
 			cout << "Cada opcion lleva a un submenu que se encarga donde habra nuevas opciones para realizar acciones relacionadas con el nombre del menu" << endl
-				<< "En concreto, el submenu de Configuracion permite seleccionar el sistema operativo en el que se encuentra para la limpieza de la consola" << endl;
+				<< "En concreto, el submenu de Configuracion permite seleccionar el sistema operativo en el que se encuentra para la limpieza de la consola y los archivos de carga CSV" << endl;
 			break;
 
 		case 2:
