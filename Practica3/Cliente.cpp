@@ -5,8 +5,8 @@
 Cliente::Cliente() : dni(""), pass(""), nombre(""), apellido(""), direccion(""), nombreCompleto("") {
 }
 
-Cliente::Cliente(string nombre) :
-	nombre(nombre) {
+Cliente::Cliente(string dni) :
+	dni(dni) {
 }
 
 

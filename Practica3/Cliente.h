@@ -21,7 +21,7 @@ private:
 
 public:
 	Cliente();
-	Cliente(string nombre);
+	Cliente(string dni);
 	Cliente(string _dni, string _pass, string _nombre, string _apellido, string _direccion, double _latitud, double _longitud);
 	Cliente(const Cliente& orig);
 	virtual ~Cliente();
