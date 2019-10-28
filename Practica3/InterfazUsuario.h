@@ -73,14 +73,40 @@ void configuracion(EcoCityMoto& ecocity) {
 }
 
 void insertarCliente(EcoCityMoto& ecocity) {
+	string nombre, apellidos, dni, pass, direccion;
+	double longitud, latitud;
+	cout << "Introduzca el nombre del cliente: ";
+	getline(cin >> ws, nombre);
+	cout << "Introduzca el apellido del cliente: ";
+	getline(cin >> ws, apellidos);
+	cout << "Introduzca el DNI del cliente: ";
+	getline(cin >> ws, dni);
+	cout << "Introduzca la pass del cliente: ";
+	getline(cin >> ws, pass);
+	cout << "Introduzca la dirección del cliente: ";
+	getline(cin >> ws, direccion);
 
+	cout << "Introduzca la latitud del cliente: ";
+	cin >> latitud;
+	cout << "Introduzca la longitud del cliente: ";
+	cin >> longitud;
+
+	Cliente cliente(dni, pass, nombre, apellidos, direccion, latitud, longitud);
+	ecocity.insertaCliente(cliente);
 }
 
 Cliente& buscarCliente(EcoCityMoto& ecocity){
 	string dni;
+	bool encontrado;
 	cout << "Introduzca el DNI del cliente a buscar: ";
 	getline(cin >> ws, dni);
-	return ecocity.buscaCliente(dni);
+	Cliente aux(ecocity.buscaCliente(dni, encontrado));
+	if (encontrado) {
+		cout << "Cliente encontrado";
+		return aux;
+	}
+	else
+		cout << "Cliente no encontrado";
 }
 
 void clientetoCSV(EcoCityMoto& ecocity) {
@@ -178,7 +204,7 @@ void menuItinerarios(EcoCityMoto& ecocity, Cliente& cliente) {
 
 void accesoItinerarios(EcoCityMoto& ecocity) {
 	Cliente cliente(buscarCliente(ecocity));
-
+	menuItinerarios(ecocity, cliente);
 }
 
 void asignarMoto(EcoCityMoto& ecocity) {

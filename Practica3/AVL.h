@@ -109,13 +109,15 @@ void AVL<T>::recorreInorden(NodoAVL<T>* n)
 template<class T>
 void AVL<T>::borrarRama(NodoAVL<T>* n)
 {
-	if (n->izq != 0) {		//Si el nodo tiene hijo izquierdo
-		borrarRama(n->izq);		//elimina el subarbol
+	if (n) {
+		if (n->izq != 0) {		//Si el nodo tiene hijo izquierdo
+			borrarRama(n->izq);		//elimina el subarbol
+		}
+		if (n->der != 0) {		//Si el nodo tiene hijo derecho
+			borrarRama(n->der);		//elimina el subarbol
+		}
+		delete n;
 	}
-	if (n->der != 0) {		//Si el nodo tiene hijo derecho
-		borrarRama(n->der);		//elimina el subarbol
-	}
-	delete n;
 }
 
 /**
