@@ -144,8 +144,8 @@ EcoCityMoto& EcoCityMoto::borraMoto(int pos)
 */
 EcoCityMoto& EcoCityMoto::borraItinerario(int pos, std::string dni)
 {
-	Iterador<Itinerario> it;
-	it = buscaCliente(dni).getItinerarios().iterador();
+	Iterador<Itinerario> it(buscaCliente(dni).getItinerarios().iterador());
+	
 	while(pos > 0){
 		it++;
 		pos--;

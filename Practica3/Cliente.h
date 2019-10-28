@@ -26,6 +26,7 @@ public:
 	Cliente(const Cliente& orig);
 	virtual ~Cliente();
 	bool operator<(Cliente& otro);
+	bool operator>(Cliente& otro);
 	bool menorQue(Cliente& otro);
 	Cliente& operator=(const Cliente& right);
 	string GetApellido() const;
@@ -35,7 +36,7 @@ public:
 	UTM getPosicion() const;
 	int crearItinerarios(int num, int idUltimo, UTM& minimo, UTM& maximo);
 	ListaDEnlazada<Itinerario>& getItinerarios();
-	void operator<<();
+	friend ostream& operator<<(ostream& os, const Cliente& cliente);
 };
 
 #endif /* CLIENTE_H */

@@ -64,6 +64,10 @@ bool Cliente::operator<(Cliente& otro) {
 	return false;
 }
 
+bool Cliente::operator>(Cliente& otro){
+	return dni>otro.dni;
+}
+
 /**
  *  @brief Compara dos clientes por su nombre completo
  *  @param otro Cliente a comparar
@@ -129,6 +133,7 @@ double Cliente::DistanciaCliente(Cliente& otro) {
 	return sqrt(pow(this->posicion.latitud - otro.getPosicion().latitud, 2) + pow(this->posicion.longitud - otro.getPosicion().longitud, 2));
 }
 
-void Cliente::operator<<(){
-
+ostream& operator<<(ostream& os, const Cliente& cliente){
+	os << "DNI: " << cliente.dni << endl;
+	return os;
 }

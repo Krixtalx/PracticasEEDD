@@ -76,8 +76,11 @@ void insertarCliente(EcoCityMoto& ecocity) {
 
 }
 
-Cliente& buscarCliente(EcoCityMoto& ecocity) {
-
+Cliente& buscarCliente(EcoCityMoto& ecocity){
+	string dni;
+	cout << "Introduzca el DNI del cliente a buscar: ";
+	getline(cin >> ws, dni);
+	return ecocity.buscaCliente(dni);
 }
 
 void clientetoCSV(EcoCityMoto& ecocity) {
@@ -173,6 +176,10 @@ void menuItinerarios(EcoCityMoto& ecocity, Cliente& cliente) {
 	}
 }
 
+void accesoItinerarios(EcoCityMoto& ecocity) {
+	Cliente cliente(buscarCliente(ecocity));
+
+}
 
 void asignarMoto(EcoCityMoto& ecocity) {
 
@@ -214,9 +221,7 @@ void menuClientes(EcoCityMoto& ecocity) {
 
 	case 5:
 		clearScreen();
-		Cliente clienteBuscado;
-		clienteBuscado = buscarCliente(ecocity);
-		menuItinerarios(ecocity, clienteBuscado);
+		accesoItinerarios(ecocity);
 		break;
 
 	case 6:
