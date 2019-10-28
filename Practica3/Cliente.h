@@ -8,6 +8,8 @@
 
 using namespace std;
 
+class EcoCityMoto;
+
 class Cliente {
 private:
 	string dni = "";
@@ -18,6 +20,7 @@ private:
 	string nombreCompleto = "";
 	UTM posicion;
 	ListaDEnlazada<Itinerario> listaItinerarios;
+	EcoCityMoto* aplicacion = 0;
 
 public:
 	Cliente();
@@ -37,6 +40,7 @@ public:
 	int crearItinerarios(int num, int idUltimo, UTM& minimo, UTM& maximo);
 	ListaDEnlazada<Itinerario>& getItinerarios();
 	friend ostream& operator<<(ostream& os, const Cliente& cliente);
+	void setAplicacion(EcoCityMoto* app);
 };
 
 #endif /* CLIENTE_H */

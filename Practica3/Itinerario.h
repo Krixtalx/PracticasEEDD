@@ -4,11 +4,14 @@
 #include "Fecha.h"
 #include "UTM.h"
 
+class Moto;
+
 class Itinerario{
 	int id=0;
 	int minutos = 0;
 	UTM inicio, fin;
 	Fecha fecha;
+	Moto* vehiculo;
 
 public:
 	Itinerario();

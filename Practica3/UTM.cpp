@@ -17,3 +17,11 @@ bool UTM::operator<(UTM& right)
 		return true;
 	return false;
 }
+
+UTM UTM::operator-(UTM& right)
+{
+	UTM resta;
+	resta.latitud = latitud - right.latitud;
+	resta.longitud = longitud - right.longitud;
+	return resta;
+}

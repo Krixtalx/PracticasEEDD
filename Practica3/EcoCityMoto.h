@@ -2,13 +2,12 @@
 #ifndef ECOCITYMOTO_H
 #define ECOCITYMOTO_H
 
+#include "Moto.h"
+#include "Cliente.h"
 #include "AVL.h"
 #include "VDinamico.h"
-#include "Cliente.h"
-#include "Moto.h"
 
 #include <cmath>
-
 class EcoCityMoto
 {
 	unsigned idUltimo = 0;

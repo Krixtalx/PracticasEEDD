@@ -3,8 +3,8 @@
 #define MOTO_H
 
 #include <string>
-#include "UTM.h"
 #include "Cliente.h"
+#include "UTM.h"
 
 struct Estado {
 	bool bloqueada=false;
@@ -18,7 +18,7 @@ private:
 	std::string id;
 	UTM posicion;
 	Estado estatus;
-	Cliente usadoPor;
+	Cliente* usadoPor;
 	friend class EcoCityMoto;
 public:
 	Moto();
@@ -26,7 +26,7 @@ public:
 	Moto(const Moto& orig);
 	~Moto();
 	Moto& operator=(Moto& right);
-	void seActiva(Cliente usuario);
+	void seActiva(Cliente& usuario);
 	void seDesactiva();
 	void setSinbateria();
 	void setRoto();

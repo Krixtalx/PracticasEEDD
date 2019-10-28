@@ -30,11 +30,11 @@ Moto& Moto::operator=(Moto& right)
 *@Brief Método encargado de activar la moto
 *@Param Cliente: usuario que activa la moto
 */
-void Moto::seActiva(Cliente usuario){
+void Moto::seActiva(Cliente& usuario){
 	if (estatus.bloqueada && !estatus.sinbateria && !estatus.roto){
 		estatus.activa = true;
 		estatus.bloqueada = false;
-		usadoPor = usuario;
+		usadoPor = &usuario;
 	}
 }
 
@@ -43,7 +43,7 @@ void Moto::seActiva(Cliente usuario){
 */
 void Moto::seDesactiva(){
 	if (estatus.activa) {
-		Cliente aux("Nulo");
+		Cliente* aux = new Cliente("Nulo");
 		estatus.activa = false;
 		estatus.bloqueada = true;
 		usadoPor = aux;

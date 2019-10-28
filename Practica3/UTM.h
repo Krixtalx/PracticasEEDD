@@ -17,6 +17,7 @@ struct UTM {
 	UTM(double _lat, double _long);
 	std::string toCSV();
 	bool operator<(UTM& right);
+	UTM operator-(UTM& right);
 };
 
 

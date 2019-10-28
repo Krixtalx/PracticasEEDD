@@ -54,22 +54,27 @@ EcoCityMoto& EcoCityMoto::operator=(EcoCityMoto& right)
 Moto EcoCityMoto::localizaMotoCercana(UTM posicion)
 {
 	Moto masCercana;
-	UTM temp, temp2;
-	for (int i = motos->getTamL(); i > 1; i--)
+	UTM relativa;
+	for (int i = motos->getTamL() - 1; i >= 0; i--)
 	{
 		if ((*motos)[i].estatus.bloqueada && !((*motos)[i].estatus.roto) && !((*motos)[i].estatus.sinbateria)) {
-			if ((*motos)[i - 1].estatus.bloqueada && !((*motos)[i - 1].estatus.roto) && !((*motos)[i - 1].estatus.sinbateria)) {
-				temp.latitud = abs((*motos)[i].posicion.latitud - posicion.latitud);
-				temp.longitud = abs((*motos)[i].posicion.longitud - posicion.longitud);
-				temp2.latitud = abs((*motos)[i-1].posicion.latitud - posicion.latitud);
-				temp2.longitud = abs((*motos)[i-1].posicion.longitud - posicion.longitud);
-				if (temp < temp2)
-					masCercana = (*motos)[i];
-				else
-					masCercana = (*motos)[i - 1];
-			}
-			else
+			if (i = motos->getTamL() - 1) {
 				masCercana = (*motos)[i];
+				relativa = masCercana.posicion - posicion;
+				relativa.latitud = abs(relativa.latitud);
+				relativa.longitud = abs(relativa.longitud);
+			}
+			else {
+				UTM temp = (*motos)[i].posicion - posicion;
+				temp.latitud = abs(temp.latitud);
+				temp.longitud = abs(temp.longitud);
+				if (temp < relativa) {
+					masCercana = (*motos)[i];
+					relativa = masCercana.posicion - posicion;
+					relativa.latitud = abs(relativa.latitud);
+					relativa.longitud = abs(relativa.longitud);
+				}
+			}
 		}
 	}
 	return masCercana;

@@ -137,3 +137,8 @@ ostream& operator<<(ostream& os, const Cliente& cliente){
 	os << "DNI: " << cliente.dni << endl;
 	return os;
 }
+
+void Cliente::setAplicacion(EcoCityMoto* app)
+{
+	aplicacion = app;
+}
