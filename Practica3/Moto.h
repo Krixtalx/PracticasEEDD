@@ -18,7 +18,7 @@ private:
 	std::string id;
 	UTM posicion;
 	Estado estatus;
-	Cliente* usadoPor;
+	Cliente* usadoPor=0;
 	friend class EcoCityMoto;
 public:
 	Moto();
@@ -26,11 +26,13 @@ public:
 	Moto(const Moto& orig);
 	~Moto();
 	Moto& operator=(Moto& right);
+	std::string getId();
 	void seActiva(Cliente& usuario);
 	void seDesactiva();
 	void setSinbateria();
 	void setRoto();
 	double distanciaMoto(Moto& otro);
+	double distanciaCliente(Cliente& cliente);
 };
 
 #endif // !MOTO_H

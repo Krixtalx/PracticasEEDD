@@ -20,9 +20,10 @@ public:
 	~EcoCityMoto();
 	EcoCityMoto(EcoCityMoto& orig);
 	EcoCityMoto& operator=(EcoCityMoto& right);
-	Moto localizaMotoCercana(UTM posicion);
+	Moto& localizaMotoCercana(UTM posicion);
+	Moto& localizaMotoCercana(Cliente& cliente);
 	void desbloqueaMoto(Moto m, Cliente cli);
-	//Basicamente solo hay que utilizar el metodo de cada clase, pero es para tenerlo en la interfaz de usuario todo con EcoCityMoto, que si no te puedes pegar un tiro
+
 	EcoCityMoto& insertaMoto(Moto& moto);
 	EcoCityMoto& insertaCliente(Cliente& cliente);
 	EcoCityMoto& insertaItinerario(Itinerario& itinerario, std::string dni);

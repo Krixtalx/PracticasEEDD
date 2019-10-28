@@ -101,7 +101,7 @@ bool buscarCliente(EcoCityMoto& ecocity, Cliente& clienteEncontrado){
 	cout << "Introduzca el DNI del cliente a buscar: ";
 	getline(cin >> ws, dni);
 	if (ecocity.buscaCliente(dni, clienteEncontrado)) {
-		cout << "Cliente encontrado";
+		cout << "Cliente encontrado: "<<clienteEncontrado.GetNombreCompleto();
 		return true;
 	}
 	else
@@ -114,15 +114,33 @@ void clientetoCSV(EcoCityMoto& ecocity) {
 }
 
 void alturaArbol(EcoCityMoto& ecocity) {
-
+	cout << "La altura del árbol es " << ecocity.getAlturaAVL();
 }
 
 void recorridoInorden(EcoCityMoto& ecocity) {
-
+	char yon;
+	cout << "Este recorrido puede generar una salida muy grande" << endl << "¿Está seguro de que quiere hacerlo?   S/n"<<endl;
+	cin >> yon;
+	if (yon == 'S') {
+		cout << "Comenzando recorrido en Inorden del árbol..." << endl;
+		ecocity.recorreAVLInorden();
+	}
+	else {
+		clearScreen();
+	}
 }
 
 void visualizaArbol(EcoCityMoto& ecocity) {
-
+	char yon;
+	cout << "Esta función no funcionará correctamente con un gran número de Clientes" << endl << "¿Está seguro de que quiere hacerlo?   S/n" << endl;
+	cin >> yon;
+	if (yon == 'S') {
+		clearScreen();
+		ecocity.verArbolCliente();
+	}
+	else {
+		clearScreen();
+	}
 }
 
 void menuArbol(EcoCityMoto& ecocity) {
@@ -209,7 +227,22 @@ void accesoItinerarios(EcoCityMoto& ecocity) {
 }
 
 void asignarMoto(EcoCityMoto& ecocity) {
-
+	string dni;
+	Cliente cliente;
+	Moto motoCercana;
+	cout << "Introduzca el DNI del cliente al que se le asignará la moto: ";
+	getline(cin >> ws, dni);
+	if (ecocity.buscaCliente(dni, cliente)){
+		clearScreen();
+		cout << "Buscando moto más cercana...";
+		motoCercana = ecocity.localizaMotoCercana(cliente);
+		motoCercana.seActiva(cliente);
+		cout <<endl<< "Moto encontrada y activada: "<<motoCercana.getId();
+	}
+	else {
+		clearScreen();
+		cout << "DNI no encontrado";
+	}
 }
 
 void menuClientes(EcoCityMoto& ecocity) {
@@ -343,7 +376,7 @@ void carga(EcoCityMoto& ecocity) {
 	cout << "Comenzando carga de Motos..." << endl;
 	leeMotos(archivoMotos, ecocity);
 	cout << "Finalizando carga de Motos..." << endl;
-	clearScreen();
+	//clearScreen();
 }
 
 bool menuPrincipal(EcoCityMoto& ecocity) {
