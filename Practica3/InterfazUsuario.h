@@ -93,20 +93,20 @@ void insertarCliente(EcoCityMoto& ecocity) {
 
 	Cliente cliente(dni, pass, nombre, apellidos, direccion, latitud, longitud);
 	ecocity.insertaCliente(cliente);
+	clearScreen();
 }
 
-Cliente& buscarCliente(EcoCityMoto& ecocity){
+bool buscarCliente(EcoCityMoto& ecocity, Cliente& clienteEncontrado){
 	string dni;
-	bool encontrado;
 	cout << "Introduzca el DNI del cliente a buscar: ";
 	getline(cin >> ws, dni);
-	Cliente aux(ecocity.buscaCliente(dni, encontrado));
-	if (encontrado) {
+	if (ecocity.buscaCliente(dni, clienteEncontrado)) {
 		cout << "Cliente encontrado";
-		return aux;
+		return true;
 	}
 	else
 		cout << "Cliente no encontrado";
+	return false;
 }
 
 void clientetoCSV(EcoCityMoto& ecocity) {
@@ -203,8 +203,9 @@ void menuItinerarios(EcoCityMoto& ecocity, Cliente& cliente) {
 }
 
 void accesoItinerarios(EcoCityMoto& ecocity) {
-	Cliente cliente(buscarCliente(ecocity));
-	menuItinerarios(ecocity, cliente);
+	Cliente cliente;
+	if(buscarCliente(ecocity, cliente))
+		menuItinerarios(ecocity, cliente);
 }
 
 void asignarMoto(EcoCityMoto& ecocity) {
@@ -213,6 +214,7 @@ void asignarMoto(EcoCityMoto& ecocity) {
 
 void menuClientes(EcoCityMoto& ecocity) {
 	int opcion;
+	Cliente null;
 	cout << endl << endl << "Submenu de Clientes" << endl << endl;
 	cout << "1 - Insertar cliente" << endl;
 	cout << "2 - Buscar cliente" << endl;
@@ -232,7 +234,7 @@ void menuClientes(EcoCityMoto& ecocity) {
 
 	case 2:
 		clearScreen();
-		buscarCliente(ecocity);
+		buscarCliente(ecocity,null);
 		break;
 
 	case 3:
@@ -439,7 +441,7 @@ void leeClientes(string fileNameClientes, EcoCityMoto& ecocity) {
 				//con todos los atributos leídos, se crea el cliente
 				Cliente client(dni, pass, nombre, apellido, direccion, dlat, dlon);
 				try {
-					//ecocity.insertaCliente(client);
+					ecocity.insertaCliente(client);
 				}
 				catch (const std::bad_alloc & e) {
 					std::cout << "bad_alloc: " << e.what() << '\n';
@@ -516,7 +518,7 @@ void leeMotos(string fileNameMotos, EcoCityMoto& ecocity) {
 
 				Moto moto(matricula, utm, estadoMoto);
 				try {
-					//ecocity.insertaMoto(moto);
+					ecocity.insertaMoto(moto);
 				}
 				catch (const std::bad_alloc & e) {
 					std::cout << "bad_alloc: " << e.what() << '\n';

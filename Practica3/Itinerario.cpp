@@ -1,4 +1,5 @@
 #include "Itinerario.h"
+#include "Moto.h"
 #include <ctime>
 #include <time.h>
 

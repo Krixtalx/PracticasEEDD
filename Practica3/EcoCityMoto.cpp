@@ -1,5 +1,5 @@
 #include "EcoCityMoto.h"
-
+#include "Cliente.h"
 /**
 	@brief Constructor por defecto
 */
@@ -108,8 +108,9 @@ EcoCityMoto& EcoCityMoto::insertaCliente(Cliente& cliente)
 */
 EcoCityMoto& EcoCityMoto::insertaItinerario(Itinerario& itinerario, std::string dni)
 {
-	bool encontrado;
-	buscaCliente(dni, encontrado).getItinerarios().insertaFinal(itinerario);
+	Cliente encontrado;
+	buscaCliente(dni, encontrado);
+	encontrado.getItinerarios().insertaFinal(itinerario);
 	return *this;
 }
 
@@ -128,16 +129,14 @@ Moto& EcoCityMoto::buscaMoto(std::string id)
 /**
 	@brief Busca el cliente cuyo DNI coicida con el indicado
 */
-Cliente& EcoCityMoto::buscaCliente(std::string& dni, bool& find)
+bool EcoCityMoto::buscaCliente(std::string& dni, Cliente& clienteEncontrado)
 {
-	Cliente encontrado;
 	Cliente buscado(dni);
-	if (clientes->busca(buscado, encontrado)) {
-		find = true;
-		return encontrado;
+	if (clientes->busca(buscado, clienteEncontrado)) {
+		return true;
 	}
 	else {
-		find = false;
+		return false;
 	}
 }
 
@@ -154,14 +153,15 @@ EcoCityMoto& EcoCityMoto::borraMoto(int pos)
 */
 EcoCityMoto& EcoCityMoto::borraItinerario(int pos, std::string dni)
 {
-	bool encontrado;
-	Iterador<Itinerario> it(buscaCliente(dni, encontrado).getItinerarios().iterador());
+	Cliente encontrado;
+	buscaCliente(dni, encontrado);
+	Iterador<Itinerario> it(encontrado.getItinerarios().iterador());
 	
 	while(pos > 0){
 		it++;
 		pos--;
 	}
-	buscaCliente(dni, encontrado).getItinerarios().borra(it);
+	encontrado.getItinerarios().borra(it);
 	return *this;
 }
 

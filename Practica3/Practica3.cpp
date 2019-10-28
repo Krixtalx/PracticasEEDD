@@ -4,11 +4,13 @@
 #include <locale>
 
 int main(){
-	/*
+	
 	setlocale(LC_ALL, "spanish");
 	EcoCityMoto test;
 	if (menuPrincipal(test))
 		return 0;
-	*/
+	
+
+
 	return 0;
 }

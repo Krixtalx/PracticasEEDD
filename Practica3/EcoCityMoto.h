@@ -27,7 +27,7 @@ public:
 	EcoCityMoto& insertaCliente(Cliente& cliente);
 	EcoCityMoto& insertaItinerario(Itinerario& itinerario, std::string dni);
 	Moto& buscaMoto(std::string id);
-	Cliente& buscaCliente(std::string& dni, bool& find);
+	bool buscaCliente(std::string& dni, Cliente& clienteEncontrado);
 	EcoCityMoto& borraMoto(int pos);
 	EcoCityMoto& borraItinerario(int pos, std::string dni);
 	unsigned int getAlturaAVL();
