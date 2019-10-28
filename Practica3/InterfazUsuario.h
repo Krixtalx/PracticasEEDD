@@ -534,16 +534,16 @@ void leeMotos(string fileNameMotos, EcoCityMoto& ecocity) {
 				//con todos los atributos leídos, se crea el cliente
 				Estado estadoMoto;
 				switch (iestado) {
-				case 1:
+				case 0:
 					estadoMoto.bloqueada = true;
 					break;
-				case 2:
+				case 1:
 					estadoMoto.activa = true;
 					break;
-				case 3:
+				case 2:
 					estadoMoto.sinbateria = true;
 					break;
-				case 4:
+				case 3:
 					estadoMoto.roto = true;
 				}
 
