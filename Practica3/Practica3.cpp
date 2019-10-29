@@ -10,7 +10,15 @@ int main(){
 	if (menuPrincipal(test))
 		return 0;
 	*/
-
+	AVL<int> arbol;
+	for (int i = 0; i <= 30; i++)
+	{
+		arbol.inserta(i);
+		std::cout <<"Altura "<<i<<" : "<< arbol.altura()<<std::endl; 
+		arbol.verArbol();
+	}
+	
+	std::cout<<arbol.altura();
 
 	return 0;
 }

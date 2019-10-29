@@ -236,16 +236,6 @@ template<class T>
 bool AVL<T>::buscaIt(T& dato, T& resultado)
 {
 	NodoAVL<T>* i;
-	//for (i = raiz; i->dato != dato;){
-	//	if(i->dato==0)
-	//		return false;
-	//	if (dato < i->dato)
-	//		i = i->izq;
-	//	else if (i->dato < dato)
-	//		i = i->der;
-	//}
-	//resultado = i->dato;
-	//return true;
 	for (i = raiz; i != 0;){
 		if (i->dato == dato) {
 			resultado = i->dato;
@@ -298,12 +288,6 @@ void AVL<T>::rotarIzquierda(NodoAVL<T>* &nodo)
 								//Ajusta el balance de los nodos a partir de la altura de los hijos
 	temp->bal = alturaNodo(temp->izq) - alturaNodo(temp->der);
 	nodo->bal = alturaNodo(nodo->izq) - alturaNodo(nodo->der);
-	//temp->bal++;
-	//if (temp2->bal < 0)
-	//	temp->bal += -temp2->bal;
-	//temp2->bal++;
-	//if (temp->bal > 0)
-	//	temp2->bal += temp->bal;
 }
 
 /**
@@ -321,12 +305,6 @@ void AVL<T>::rotarDerecha(NodoAVL<T>*& nodo)
 								//Ajusta el balance de los nodos a partir de la altura de los hijos
 	temp->bal = alturaNodo(temp->izq) - alturaNodo(temp->der);
 	nodo->bal = alturaNodo(nodo->izq) - alturaNodo(nodo->der);
-	//temp->bal--;
-	//if (temp2->bal > 0)
-	//	temp->bal -= temp2->bal;
-	//temp2->bal--;
-	//if (temp->bal < 0)
-	//	temp2->bal -= -temp->bal;
 }
 
 /**
