@@ -13,14 +13,19 @@
 
 using namespace std;
 
+//Variables globales de configuracion
 bool windows = true;
 string archivoClientes="clientes.csv";
 string archivoMotos = "motos.txt";
 
+//Forward declaration
 bool menuPrincipal(EcoCityMoto& ecocity);
 void leeClientes(string fileNameClientes, EcoCityMoto& ecocity);
 void leeMotos(string fileNameMotos, EcoCityMoto& ecocity);
 
+/*
+*@Brief funcion encargada de limpiar la pantalla
+*/
 void clearScreen() {
 	if (windows) {
 		system("cls");
@@ -30,6 +35,9 @@ void clearScreen() {
 	}
 }
 
+/*
+*@Brief Submenú encargado de manejar la configuracion modificando las variables globales
+*/
 void configuracion(EcoCityMoto& ecocity) {
 	int opt = 0;
 	cout << "1 - Modificar archivo CSV de Clientes" << endl;
@@ -73,6 +81,9 @@ void configuracion(EcoCityMoto& ecocity) {
 	clearScreen();
 }
 
+/*
+*@Brief función encargada de recoger los datos para insertar un nuevo Cliente en el sistema
+*/
 void insertarCliente(EcoCityMoto& ecocity) {
 	string nombre, apellidos, dni, pass, direccion;
 	double longitud, latitud;
@@ -97,6 +108,9 @@ void insertarCliente(EcoCityMoto& ecocity) {
 	clearScreen();
 }
 
+/*
+*@Brief Busca un cliente en el sistema a partir de su DNI 
+*/
 bool buscarCliente(EcoCityMoto& ecocity, Cliente& clienteEncontrado){
 	string dni;
 	cout << "Introduzca el DNI del cliente a buscar: ";
@@ -110,14 +124,16 @@ bool buscarCliente(EcoCityMoto& ecocity, Cliente& clienteEncontrado){
 	return false;
 }
 
-void clientetoCSV(EcoCityMoto& ecocity) {
-
-}
-
+/*
+*@Brief Devuelve la altura del árbol AVL en el que están los clientes
+*/
 void alturaArbol(EcoCityMoto& ecocity) {
 	cout << "La altura del árbol es " << ecocity.getAlturaAVL();
 }
 
+/*
+*@Brief Muestra por consola el recorrido en Inorden del Arbol AVL en el que se encuentran los clientes
+*/
 void recorridoInorden(EcoCityMoto& ecocity) {
 	char yon;
 	cout << "Este recorrido puede generar una salida muy grande" << endl << "¿Está seguro de que quiere hacerlo?   S/n"<<endl;
@@ -131,6 +147,9 @@ void recorridoInorden(EcoCityMoto& ecocity) {
 	}
 }
 
+/*
+*@Brief Genera el arbol AVL formado por clientes en la consola. No sirve para un arbol AVL muy grande
+*/
 void visualizaArbol(EcoCityMoto& ecocity) {
 	char yon;
 	cout << "Esta función no funcionará correctamente con un gran número de Clientes" << endl << "¿Está seguro de que quiere hacerlo?   S/n" << endl;
@@ -144,6 +163,9 @@ void visualizaArbol(EcoCityMoto& ecocity) {
 	}
 }
 
+/*
+*@Brief Submenu de opciones del Arbol AVL de clientes
+*/
 void menuArbol(EcoCityMoto& ecocity) {
 	int opcion;
 	cout << endl << endl << "Submenu de Árbol" << endl << endl;
@@ -176,7 +198,9 @@ void menuArbol(EcoCityMoto& ecocity) {
 	}
 }
 
-
+/*
+*@Brief Permite ver por consola los itinerarios que tiene un cliente
+*/
 void verItinerario(EcoCityMoto& ecocity, Cliente& cliente) {
 	cout << "Itinerarios: " << endl;
 	try {
@@ -187,21 +211,22 @@ void verItinerario(EcoCityMoto& ecocity, Cliente& cliente) {
 	}
 }
 
+/*
+*@Brief Permite borrar el ultimo itinerario del cliente
+*/
 void borrarItinerario(EcoCityMoto& ecocity, Cliente& cliente) {
 
 }
 
-void itinerariotoCSV(EcoCityMoto& ecocity, Cliente& cliente) {
-
-}
-
+/*
+*@Brief Submenú para el manejo de itinerarios asociados a un cliente
+*/
 void menuItinerarios(EcoCityMoto& ecocity, Cliente& cliente) {
 	int opcion;
 	cout << endl << endl << "Submenu de Itinerario" << endl << endl;
 	cout << "1 - Ver itinerario" << endl;
-	cout << "2 - Borrar itinerario" << endl;
-	cout << "3 - Itinerario a CSV" << endl;
-	cout << "4 - Salir" << endl;
+	cout << "2 - Borrar último itinerario" << endl;
+	cout << "3 - Salir" << endl;
 	cout << "¿Que desea hacer?: ";
 	cin >> opcion;
 	switch (opcion) {
@@ -217,22 +242,23 @@ void menuItinerarios(EcoCityMoto& ecocity, Cliente& cliente) {
 
 	case 3:
 		clearScreen();
-		itinerariotoCSV(ecocity, cliente);
-		break;
-
-	case 4:
-		clearScreen();
 		return;
 		break;
 	}
 }
 
+/*
+*@Brief Función encargada de garantizar el acceso a los Itinerarios de un cliente
+*/
 void accesoItinerarios(EcoCityMoto& ecocity) {
 	Cliente cliente;
 	if(buscarCliente(ecocity, cliente))
 		menuItinerarios(ecocity, cliente);
 }
 
+/*
+*@Brief Metodo encargado de asignar la motocicleta mas cercana al cliente introducido por DNI
+*/
 void asignarMoto(EcoCityMoto& ecocity) {
 	string dni;
 	Cliente cliente;
@@ -252,16 +278,19 @@ void asignarMoto(EcoCityMoto& ecocity) {
 	}
 }
 
+/*
+*@Brief Submenu de Clientes
+*/
 void menuClientes(EcoCityMoto& ecocity) {
 	int opcion;
 	Cliente null;
 	cout << endl << endl << "Submenu de Clientes" << endl << endl;
 	cout << "1 - Insertar cliente" << endl;
 	cout << "2 - Buscar cliente" << endl;
-	cout << "3 - Cliente a CSV" << endl;
-	cout << "4 - Ajustes del árbol" << endl;
-	cout << "5 - Acceso a itinerarios de un cliente" << endl;
-	cout << "6 - Asignar moto más cercana" << endl;
+	cout << "3 - Ajustes del árbol" << endl;
+	cout << "4 - Acceso a itinerarios de un cliente" << endl;
+	cout << "5 - Asignar moto más cercana" << endl;
+	cout << "6 - Bloquear moto de un cliente" << endl;
 	cout << "7 - Salir" << endl;
 	cout << "¿Que desea hacer?: ";
 	cin >> opcion;
@@ -279,22 +308,22 @@ void menuClientes(EcoCityMoto& ecocity) {
 
 	case 3:
 		clearScreen();
-		clientetoCSV(ecocity);
+		menuArbol(ecocity);
 		break;
 
 	case 4:
 		clearScreen();
-		menuArbol(ecocity);
+		accesoItinerarios(ecocity);
 		break;
 
 	case 5:
 		clearScreen();
-		accesoItinerarios(ecocity);
+		asignarMoto(ecocity);
 		break;
 
 	case 6:
 		clearScreen();
-		asignarMoto(ecocity);
+		return;
 		break;
 
 	case 7:
@@ -304,7 +333,9 @@ void menuClientes(EcoCityMoto& ecocity) {
 	}
 }
 
-
+/*
+*@Brief Inserta una motocicleta en el vector dinámico de Motos con los datos introducidos por consola
+*/
 void insertarMoto(EcoCityMoto& ecocity) {
 	string matricula;
 	UTM utm;
@@ -332,10 +363,13 @@ void insertarMoto(EcoCityMoto& ecocity) {
 		estadoMoto.roto = true;
 	}
 	Moto moto(matricula, utm, estadoMoto);
-	//ecocity.insertaMoto(moto);
+	ecocity.insertaMoto(moto);
 	
 }
 
+/*
+*@Brief Busca la moto atraves del ID introducido 
+*/
 void buscarMoto(EcoCityMoto& ecocity) {
 	string matricula;
 	cout << "Introduzca la matricula de la motocicleta: ";
@@ -350,10 +384,16 @@ void buscarMoto(EcoCityMoto& ecocity) {
 
 }
 
+/*
+*@Brief Borra una moto del vector dinámico a través de su ID
+*/
 void borrarMoto(EcoCityMoto& ecocity) {
 
 }
 
+/*
+*@Brief Submenu de motos
+*/
 void menuMotos(EcoCityMoto& ecocity) {
 	int opcion;
 	cout << endl << endl << "Submenu de Motos" << endl << endl;
@@ -386,6 +426,9 @@ void menuMotos(EcoCityMoto& ecocity) {
 	}
 }
 
+/*
+*@Brief Funcion encargada de cargar los CSVs en memoria. Utiliza los nombres incluidos en las variables globales
+*/
 void carga(EcoCityMoto& ecocity) {
 	cout << "Comenzando carga de Clientes..." << endl;
 	leeClientes(archivoClientes, ecocity);
@@ -396,6 +439,9 @@ void carga(EcoCityMoto& ecocity) {
 	//clearScreen();
 }
 
+/*
+*@Brief Menu principal
+*/
 bool menuPrincipal(EcoCityMoto& ecocity) {
 	int opcion=0;
 	while (opcion != 6) {
@@ -440,6 +486,9 @@ bool menuPrincipal(EcoCityMoto& ecocity) {
 	return true;
 }
 
+/*
+*@Brief Metodo encargado de leer clientes de un CSV
+*/
 void leeClientes(string fileNameClientes, EcoCityMoto& ecocity) {
 	ifstream fe; //Flujo de entrada
 	string linea; //Cada línea tiene un clienete
@@ -508,6 +557,9 @@ void leeClientes(string fileNameClientes, EcoCityMoto& ecocity) {
 	}
 }
 
+/*
+*@Brief Metodo encargado de leer el CSV de motos
+*/
 void leeMotos(string fileNameMotos, EcoCityMoto& ecocity) {
 	ifstream fe; //Flujo de entrada
 	string linea; //Cada línea tiene un clienete
