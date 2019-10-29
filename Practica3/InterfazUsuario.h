@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <string>
 #include <fstream>
 #include "AVL.h"
 #include "Cliente.h"
@@ -101,7 +102,7 @@ bool buscarCliente(EcoCityMoto& ecocity, Cliente& clienteEncontrado){
 	cout << "Introduzca el DNI del cliente a buscar: ";
 	getline(cin >> ws, dni);
 	if (ecocity.buscaCliente(dni, clienteEncontrado)) {
-		cout << "Cliente encontrado: "<<clienteEncontrado.GetNombreCompleto();
+		cout << "Cliente encontrado: "<<clienteEncontrado.GetNombreCompleto()<< "    UTM: "<<clienteEncontrado.getPosicion().toCSV();
 		return true;
 	}
 	else
@@ -176,7 +177,7 @@ void menuArbol(EcoCityMoto& ecocity) {
 }
 
 
-void insertarItinerario(EcoCityMoto& ecocity) {
+void verItinerario(EcoCityMoto& ecocity) {
 
 }
 
@@ -191,7 +192,7 @@ void itinerariotoCSV(EcoCityMoto& ecocity) {
 void menuItinerarios(EcoCityMoto& ecocity, Cliente& cliente) {
 	int opcion;
 	cout << endl << endl << "Submenu de Itinerario" << endl << endl;
-	cout << "1 - Insertar itinerario" << endl;
+	cout << "1 - Ver itinerario" << endl;
 	cout << "2 - Borrar itinerario" << endl;
 	cout << "3 - Itinerario a CSV" << endl;
 	cout << "4 - Salir" << endl;
@@ -200,7 +201,7 @@ void menuItinerarios(EcoCityMoto& ecocity, Cliente& cliente) {
 	switch (opcion) {
 	case 1:
 		clearScreen();
-		insertarItinerario(ecocity);
+		verItinerario(ecocity);
 		break;
 
 	case 2:
@@ -234,10 +235,10 @@ void asignarMoto(EcoCityMoto& ecocity) {
 	getline(cin >> ws, dni);
 	if (ecocity.buscaCliente(dni, cliente)){
 		clearScreen();
-		cout << "Buscando moto más cercana...";
+		cout << "Buscando moto más cercana a "<<cliente.getPosicion().toCSV()<<" ...";
 		motoCercana = ecocity.localizaMotoCercana(cliente);
 		motoCercana.seActiva(cliente);
-		cout <<endl<< "Moto encontrada y activada: "<<motoCercana.getId();
+		cout <<endl<< "Moto encontrada y activada: "<<motoCercana.getId()<<"  -  "<<motoCercana.getUTM().toCSV();
 	}
 	else {
 		clearScreen();
@@ -330,6 +331,16 @@ void insertarMoto(EcoCityMoto& ecocity) {
 }
 
 void buscarMoto(EcoCityMoto& ecocity) {
+	string matricula;
+	cout << "Introduzca la matricula de la motocicleta: ";
+	getline(cin >> ws, matricula);
+	Moto moto;
+	if (ecocity.buscaMoto(matricula, moto)) {
+		cout << "Moto encontrada: " << moto.getId();
+	}
+	else {
+		cout << "Moto no encontrada.";
+	}
 
 }
 
@@ -467,10 +478,11 @@ void leeClientes(string fileNameClientes, EcoCityMoto& ecocity) {
 				//Leemos la latitud y longitud
 				getline(ss, latitud, ';'); //El caráter ; se lee y se elimina de ss
 				getline(ss, longitud, ';'); //El caráter ; se lee y se elimina de ss
-
-				dlat = stod(latitud);
-				dlon = stod(longitud);
-
+				
+				setlocale(LC_ALL, "english");
+				dlat = std::stod(latitud);
+				dlon = std::stod(longitud);
+				setlocale(LC_ALL, "spanish");
 				//con todos los atributos leídos, se crea el cliente
 				Cliente client(dni, pass, nombre, apellido, direccion, dlat, dlon);
 				try {
@@ -528,9 +540,10 @@ void leeMotos(string fileNameMotos, EcoCityMoto& ecocity) {
 				getline(ss, latitud, ';'); //El caráter ; se lee y se elimina de ss
 				getline(ss, longitud, ';'); //El caráter ; se lee y se elimina de ss
 				
+				setlocale(LC_ALL, "english");
 				dlat = stod(latitud);
 				dlon = stod(longitud);
-
+				setlocale(LC_ALL, "spanish");
 				//con todos los atributos leídos, se crea el cliente
 				Estado estadoMoto;
 				switch (iestado) {

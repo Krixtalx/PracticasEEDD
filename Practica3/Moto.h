@@ -27,6 +27,7 @@ public:
 	~Moto();
 	Moto& operator=(Moto& right);
 	std::string getId();
+	UTM getUTM();
 	void seActiva(Cliente& usuario);
 	void seDesactiva();
 	void setSinbateria();

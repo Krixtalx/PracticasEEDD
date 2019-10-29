@@ -87,8 +87,8 @@ Moto& EcoCityMoto::localizaMotoCercana(UTM posicion)
 
 Moto& EcoCityMoto::localizaMotoCercana(Cliente& cliente){
 	Moto* masCercana = 0;
-	double menorDistancia = 99999.99;
-	double distancia;
+	 double menorDistancia = 99999.99;
+	 double distancia;
 	for (int i = 0; i < motos->getTamL(); i++){		
 		distancia = (*motos)[i].distanciaCliente(cliente);
 		if (menorDistancia > distancia) {
@@ -136,13 +136,15 @@ EcoCityMoto& EcoCityMoto::insertaItinerario(Itinerario& itinerario, std::string 
 /**
 	@brief Busca la moto cuya ID coincida con la indicada
 */
-Moto& EcoCityMoto::buscaMoto(std::string id)
+bool EcoCityMoto::buscaMoto(std::string id, Moto& motoEncontrada)
 {
 	for(int i = (*motos).getTamL() - 1; i >= 0; i--){
-		if ((*motos)[i].id == id)
-			return (*motos)[i];
+		if ((*motos)[i].id == id) {
+			motoEncontrada = (*motos)[i];
+			return true;
+		}
 	}
-	//TODO: hacer algo si no esta
+	return false;
 }
 
 /**

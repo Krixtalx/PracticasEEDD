@@ -31,6 +31,11 @@ std::string Moto::getId()
 	return id;
 }
 
+UTM Moto::getUTM()
+{
+	return posicion;
+}
+
 /**
 *@Brief Método encargado de activar la moto
 *@Param Cliente: usuario que activa la moto
