@@ -11,7 +11,7 @@ class Itinerario{
 	int minutos = 0;
 	UTM inicio, fin;
 	Fecha fecha;
-	Moto* vehiculo;
+	Moto* vehiculo = 0;
 
 public:
 	Itinerario();

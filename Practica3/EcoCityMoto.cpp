@@ -50,18 +50,21 @@ EcoCityMoto& EcoCityMoto::operator=(EcoCityMoto& right)
 	return *this;
 }
 
-
+/**
+	@brief Busca la moto más cercana a la posicion indicada
+	@pre Debe haber alguna moto disponible (bloqueada, no rota y con bateria)
+*/
 Moto& EcoCityMoto::localizaMotoCercana(UTM posicion)
 {
 	
-	Moto masCercana;
+	int masCercana = -1;
 	UTM relativa;
 	for (int i = motos->getTamL() - 1; i >= 0; i--)
 	{
 		if ((*motos)[i].estatus.bloqueada && !((*motos)[i].estatus.roto) && !((*motos)[i].estatus.sinbateria)) {
 			if (i = motos->getTamL() - 1) {
-				masCercana = (*motos)[i];
-				relativa = masCercana.posicion - posicion;
+				masCercana = i;
+				relativa = (*motos)[i].posicion - posicion;
 				relativa.latitud = abs(relativa.latitud);
 				relativa.longitud = abs(relativa.longitud);
 			}
@@ -70,22 +73,22 @@ Moto& EcoCityMoto::localizaMotoCercana(UTM posicion)
 				temp.latitud = abs(temp.latitud);
 				temp.longitud = abs(temp.longitud);
 				if (temp < relativa) {
-					masCercana = (*motos)[i];
-					relativa = masCercana.posicion - posicion;
+					masCercana = i;
+					relativa = (*motos)[i].posicion - posicion;
 					relativa.latitud = abs(relativa.latitud);
 					relativa.longitud = abs(relativa.longitud);
 				}
 			}
 		}
 	}
-	return masCercana;
+	return (*motos)[masCercana];
 	
 }
 
 Moto& EcoCityMoto::localizaMotoCercana(Cliente& cliente){
 	Moto* masCercana = 0;
 	double menorDistancia = 99999.99;
-	float distancia;
+	double distancia;
 	for (int i = 0; i < motos->getTamL(); i++){		
 		distancia = (*motos)[i].distanciaCliente(cliente);
 		if (menorDistancia > distancia) {
