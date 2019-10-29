@@ -37,6 +37,17 @@ Itinerario::Itinerario(int num, const UTM& min, const UTM& max): id(num){
 Itinerario::~Itinerario(){
 }
 
+Itinerario& Itinerario::operator=(Itinerario& right)
+{
+	id = right.id;
+	minutos = right.minutos;
+	inicio = right.inicio;
+	fin = right.fin;
+	fecha = right.fecha;
+	vehiculo = right.vehiculo;
+	return *this;
+}
+
 /**
 *@Brief Generador pseudoaleatorio de coordenadas UTM de inicio y fin
 */

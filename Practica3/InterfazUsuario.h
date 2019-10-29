@@ -215,7 +215,21 @@ void verItinerario(EcoCityMoto& ecocity, Cliente& cliente) {
 *@Brief Permite borrar el ultimo itinerario del cliente
 */
 void borrarItinerario(EcoCityMoto& ecocity, Cliente& cliente) {
-
+	char yon;
+	cout << "Se borrará el ultimo itinerario de cliente si tiene alguno" << " ¿Está seguro?      S/n" << endl;
+	cin >> yon;
+	if (yon == 'S') {
+		clearScreen();
+		if (cliente.getItinerarios().getTam() > 0) {
+			cliente.getItinerarios().borrarFinal();
+			cout << "Itinerario borrado";
+		}
+		else
+			cout << "No tiene ningún itinerario";
+	}
+	else {
+		clearScreen();
+	}
 }
 
 /*
@@ -224,7 +238,7 @@ void borrarItinerario(EcoCityMoto& ecocity, Cliente& cliente) {
 void menuItinerarios(EcoCityMoto& ecocity, Cliente& cliente) {
 	int opcion;
 	cout << endl << endl << "Submenu de Itinerario" << endl << endl;
-	cout << "1 - Ver itinerario" << endl;
+	cout << "1 - Ver itinerarios" << endl;
 	cout << "2 - Borrar último itinerario" << endl;
 	cout << "3 - Salir" << endl;
 	cout << "¿Que desea hacer?: ";
@@ -278,6 +292,22 @@ void asignarMoto(EcoCityMoto& ecocity) {
 	}
 }
 
+void bloquearMoto(EcoCityMoto& ecocity) {
+	string dni;
+	Cliente cliente;
+	cout << "Introduzca el DNI del cliente al que se le bloqueará la moto: ";
+	getline(cin >> ws, dni);
+	if (ecocity.buscaCliente(dni, cliente)) {
+		clearScreen();
+		cliente.terminarTrayecto();
+		cout << "Moto bloqueada";
+	}
+	else {
+		clearScreen();
+		cout << "DNI no encontrado";
+	}
+}
+
 /*
 *@Brief Submenu de Clientes
 */
@@ -323,7 +353,7 @@ void menuClientes(EcoCityMoto& ecocity) {
 
 	case 6:
 		clearScreen();
-		return;
+		bloquearMoto;
 		break;
 
 	case 7:

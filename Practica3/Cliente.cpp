@@ -113,6 +113,11 @@ string Cliente::GetNombreCompleto() const {
 	return nombreCompleto;
 }
 
+string Cliente::getDni() const
+{
+	return dni;
+}
+
 /**
  * @brief Calcula la distancia entre 2 clientes utilizando la formula de la distancia entre 2 puntos
  * @param otro: Cliente con el que se calcula la distancia

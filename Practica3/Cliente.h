@@ -35,6 +35,7 @@ public:
 	string GetApellido() const;
 	string GetNombre() const;
 	string GetNombreCompleto() const;
+	string getDni() const;
 	double DistanciaCliente(Cliente& otro);
 	UTM getPosicion() const;
 	void crearItinerarios(int num, UTM& minimo, UTM& maximo);

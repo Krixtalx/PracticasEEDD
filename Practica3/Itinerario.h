@@ -17,6 +17,7 @@ public:
 	Itinerario();
 	Itinerario(int num, const UTM& min, const UTM& max);
 	~Itinerario();
+	Itinerario& operator= (Itinerario& right);
 	void generaUTM(const UTM &min, const UTM& max);
 	int getID();
 	void setInicio(UTM& pos);

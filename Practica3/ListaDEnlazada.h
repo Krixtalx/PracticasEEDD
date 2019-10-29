@@ -183,17 +183,19 @@ ListaDEnlazada<T>& ListaDEnlazada<T>::operator=(ListaDEnlazada<T>& right) {
 	unsigned int tamAux = right.tam;
 	aux = right.cabecera;
 	Nodo<T>* auxCop;
-	this->cabecera = new Nodo<T>(*aux);
-	auxCop = this->cabecera;
-	while (tamAux > 1) {
-		aux = aux->siguiente;
-		auxCop->siguiente = new Nodo<T>(*aux);
-		auxCop->siguiente->anterior = auxCop;
-		auxCop = auxCop->siguiente;
-		tamAux--;
+	if (aux != 0) {
+		this->cabecera = new Nodo<T>(*aux);
+		auxCop = this->cabecera;
+		while (tamAux > 1) {
+			aux = aux->siguiente;
+			auxCop->siguiente = new Nodo<T>(*aux);
+			auxCop->siguiente->anterior = auxCop;
+			auxCop = auxCop->siguiente;
+			tamAux--;
+		}
+		this->cola = auxCop;
+		this->tam = right.tam;
 	}
-	this->cola = auxCop;
-	this->tam = right.tam;
 	return *this;
 }
 
@@ -216,17 +218,19 @@ ListaDEnlazada<T>& ListaDEnlazada<T>::operator=(const ListaDEnlazada<T>& right) 
 	unsigned int tamAux = right.tam;
 	aux = right.cabecera;
 	Nodo<T>* auxCop;
-	this->cabecera = new Nodo<T>(*aux);
-	auxCop = this->cabecera;
-	while (tamAux > 1) {
-		aux = aux->siguiente;
-		auxCop->siguiente = new Nodo<T>(*aux);
-		auxCop->siguiente->anterior = auxCop;
-		auxCop = auxCop->siguiente;
-		tamAux--;
+	if (aux != 0) {
+		this->cabecera = new Nodo<T>(*aux);
+		auxCop = this->cabecera;
+		while (tamAux > 1) {
+			aux = aux->siguiente;
+			auxCop->siguiente = new Nodo<T>(*aux);
+			auxCop->siguiente->anterior = auxCop;
+			auxCop = auxCop->siguiente;
+			tamAux--;
+		}
+		this->cola = auxCop;
+		this->tam = right.tam;
 	}
-	this->cola = auxCop;
-	this->tam = right.tam;
 	return *this;
 }
 
