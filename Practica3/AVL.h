@@ -22,6 +22,7 @@ private:
 	int maximo(int a, int b);
 	bool busca(T& dato, T& resultado, NodoAVL<T>* inicio);
 	void verArbol(NodoAVL<T>* nodo, int n);
+	void ajustaAltura(NodoAVL<T>* nodo);
 
 public:
 	AVL();
@@ -286,6 +287,7 @@ void AVL<T>::rotarIzquierda(NodoAVL<T>* &nodo)
 	temp->der = nodo->izq;		//El subarbol izquierdo de nodo se asigna como hijo derecho del original
 	nodo->izq = temp;			//El nodo original se coloca como hijo izquierdo del nodo actualizado
 								//Ajusta el balance de los nodos a partir de la altura de los hijos
+	ajustaAltura(nodo);
 	temp->bal = alturaNodo(temp->izq) - alturaNodo(temp->der);
 	nodo->bal = alturaNodo(nodo->izq) - alturaNodo(nodo->der);
 }
@@ -303,6 +305,7 @@ void AVL<T>::rotarDerecha(NodoAVL<T>*& nodo)
 	temp->izq = nodo->der;		//El subarbol derecho de nodo se asigna como hijo izquierdo del original
 	nodo->der = temp;			//El nodo original se coloca como hijo derecho del nodo actualizado
 								//Ajusta el balance de los nodos a partir de la altura de los hijos
+	ajustaAltura(nodo);
 	temp->bal = alturaNodo(temp->izq) - alturaNodo(temp->der);
 	nodo->bal = alturaNodo(nodo->izq) - alturaNodo(nodo->der);
 }
@@ -318,37 +321,46 @@ void AVL<T>::rotarDerecha(NodoAVL<T>*& nodo)
 template<class T>
 bool AVL<T>::insertaPriv(T& dato, NodoAVL<T>*& n)
 {
-	if (!n) {										//Si no hay nodo, crea uno nuevo
+	if (!n) {
 		n = new NodoAVL<T>(dato);
 		n->bal = 0;
 		return true;
 	}
-	else if (dato < n->dato) {								//Si el dato a introducir es menor que el dato del nodo actual
-		if (insertaPriv(dato, n->izq)){							//Si se ha podido insertar a la izquierda
-			n->bal = alturaNodo(n->izq) - alturaNodo(n->der);		//Ajusta el balance a partir de las alturas de los hijos del nodo actual
-			if (n->bal == 2) {										//Si esta desbalanceado
-				if (n->izq->bal == -1)									//Comprueba que caso de rotacion es
-					rotarIzquierda(n->izq);									//CASO 2 = CASO 4 (rotacion a la izquierda) + CASO 1 (rotacion a la derecha)
-				rotarDerecha(n);										//CASO 1 (rotacion a la derecha)
+	else if (dato < n->dato) {
+		if (insertaPriv(dato, n->izq)){
+			n->bal = (alturaNodo(n->izq) + 1) - (alturaNodo(n->der) + 1);
+			if (n->bal == 2) {
+				if (n->izq->bal == -1)
+					rotarIzquierda(n->izq);
+				rotarDerecha(n);
 			}
-																	//Ajusta la altura a partir de las alturas de los hijos del nodo actual
 			n->altura = 1 + maximo(alturaNodo(n->izq), alturaNodo(n->der));
 			return true;
 		}
 	}
-	else if (n->dato < dato) {								//Si el dato a introducir es mayor que el dato del nodo actual
-		if (insertaPriv(dato, n->der)) {						//Si se ha podido insertar a la derecha
-			n->bal = alturaNodo(n->izq) - alturaNodo(n->der);		//Ajusta el balance a partir de las alturas de los hijos del nodo actual
-			if (n->bal == -2) {										//Si esta desbalanceado
-				if (n->der->bal == 1)									//Comprueba que caso de rotacion es
-					rotarDerecha(n->der);									//CASO 3 = CASO 1 (rotacion a la derecha) + CASO 4 (rotacion a la izquierda)
-				rotarIzquierda(n);										//CASO 4 (rotacion a la izquierda)
+	else if (n->dato < dato) {
+		if (insertaPriv(dato, n->der)) {
+			n->bal = (alturaNodo(n->izq) + 1) - (alturaNodo(n->der) + 1);
+			if (n->bal == -2) {
+				if (n->der->bal == 1)
+					rotarDerecha(n->der);
+				rotarIzquierda(n);
 			}
-																	//Ajusta la altura a partir de las alturas de los hijos del nodo actual
 			n->altura = 1 + maximo(alturaNodo(n->izq), alturaNodo(n->der));
 			return true;
 		}
 	}
 	return false;
 }
+
+template<class T>
+void AVL<T>::ajustaAltura(NodoAVL<T>* nodo)
+{
+	if (nodo->izq)
+		ajustaAltura(nodo->izq);
+	if (nodo->der)
+		ajustaAltura(nodo->der);
+	nodo->altura = 1 + maximo(alturaNodo(nodo->izq), alturaNodo(nodo->der));
+}
+
 #endif // !AVL_H
