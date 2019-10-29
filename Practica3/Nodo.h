@@ -20,7 +20,7 @@ public:
 	Nodo(T& _dato);
 	Nodo(const Nodo<T>& orig);
 	virtual ~Nodo();
-	Nodo<T>& operator=(const Nodo<T>* right);
+	Nodo<T>& operator=(Nodo<T>* right);
 	Nodo<T>* GetAnterior() const;
 	Nodo<T>* SetAnterior(Nodo<T>* anterior);
 	Nodo<T>* GetSiguiente() const;
@@ -48,9 +48,11 @@ Nodo<T>::Nodo(T& _dato) : dato(_dato), anterior(0), siguiente(0) {}
 */
 template<class T>
 Nodo<T>::Nodo(const Nodo<T>& orig) {
-	this->anterior = 0;
-	this->siguiente = 0;
-	this->dato = orig.dato;
+	if (this != &orig) {
+		this->anterior = 0;
+		this->siguiente = 0;
+		this->dato = orig.dato;
+	}
 }
 
 /**
@@ -63,12 +65,14 @@ Nodo<T>::~Nodo() {}
 	@brief Operador de asignacion
 */
 template<class T>
-Nodo<T>& Nodo<T>::operator=(const Nodo<T>* right)
+Nodo<T>& Nodo<T>::operator=(Nodo<T>* right)
 {
-	if (this = right)
+	if (this == right)
 		return *this;
-	this->anterior = right->anterior;
-	this->siguiente = right->siguiente;
+	if (right->anterior !=0)
+		this->anterior = right->anterior;
+	if(right->siguiente!=0)
+		this->siguiente = right->siguiente;
 	this->dato = right->dato;
 	return *this;
 }

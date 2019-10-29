@@ -177,15 +177,21 @@ void menuArbol(EcoCityMoto& ecocity) {
 }
 
 
-void verItinerario(EcoCityMoto& ecocity) {
+void verItinerario(EcoCityMoto& ecocity, Cliente& cliente) {
+	cout << "Itinerarios: " << endl;
+	try {
+		cout << ecocity.verItinerario(cliente);
+	}
+	catch (logic_error & e) {
+		cerr << e.what();
+	}
+}
+
+void borrarItinerario(EcoCityMoto& ecocity, Cliente& cliente) {
 
 }
 
-void borrarItinerario(EcoCityMoto& ecocity) {
-
-}
-
-void itinerariotoCSV(EcoCityMoto& ecocity) {
+void itinerariotoCSV(EcoCityMoto& ecocity, Cliente& cliente) {
 
 }
 
@@ -201,17 +207,17 @@ void menuItinerarios(EcoCityMoto& ecocity, Cliente& cliente) {
 	switch (opcion) {
 	case 1:
 		clearScreen();
-		verItinerario(ecocity);
+		verItinerario(ecocity, cliente);
 		break;
 
 	case 2:
 		clearScreen();
-		borrarItinerario(ecocity);
+		borrarItinerario(ecocity, cliente);
 		break;
 
 	case 3:
 		clearScreen();
-		itinerariotoCSV(ecocity);
+		itinerariotoCSV(ecocity, cliente);
 		break;
 
 	case 4:

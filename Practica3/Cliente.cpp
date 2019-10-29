@@ -16,10 +16,11 @@ Cliente::Cliente(string _dni, string _pass, string _nombre, string _apellido, st
 	nombreCompleto = nombre + " " + apellido;
 }
 
-Cliente::Cliente(const Cliente& orig) : dni(orig.dni), pass(orig.pass), nombre(orig.nombre), apellido(orig.apellido), direccion(orig.direccion) {
+Cliente::Cliente(Cliente& orig): dni(orig.dni), pass(orig.pass), nombre(orig.nombre), apellido(orig.apellido), direccion(orig.direccion), listaItinerarios(orig.listaItinerarios) {
 	nombreCompleto = orig.nombreCompleto;
 	posicion.latitud = orig.posicion.latitud;
 	posicion.longitud = orig.posicion.longitud;
+	
 }
 
 Cliente::~Cliente() {
@@ -83,6 +84,7 @@ Cliente& Cliente::operator=(const Cliente& right) {
 	this->pass = right.pass;
 	this->posicion = right.posicion;
 	this->nombreCompleto = right.nombreCompleto;
+	//this->listaItinerarios = right.listaItinerarios;
 
 	return *this;
 }

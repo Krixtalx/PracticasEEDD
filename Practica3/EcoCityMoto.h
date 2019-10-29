@@ -27,6 +27,8 @@ public:
 	EcoCityMoto& insertaMoto(Moto& moto);
 	EcoCityMoto& insertaCliente(Cliente& cliente);
 	EcoCityMoto& insertaItinerario(Itinerario& itinerario, std::string dni);
+	std::string& verItinerario(Cliente& cliente);
+	const std::string& verCliente(std::string& dni);
 	bool buscaMoto(std::string id, Moto& motoEncontrada);
 	bool buscaCliente(std::string& dni, Cliente& clienteEncontrado);
 	EcoCityMoto& borraMoto(int pos);

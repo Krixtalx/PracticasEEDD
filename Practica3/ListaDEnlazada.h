@@ -33,7 +33,8 @@ private:
 
 public:
 	ListaDEnlazada();
-	ListaDEnlazada(const ListaDEnlazada& orig);
+	ListaDEnlazada(const ListaDEnlazada<T>& orig);
+	ListaDEnlazada<T>& operator=(ListaDEnlazada<T>& right);
 	ListaDEnlazada<T>& operator=(const ListaDEnlazada<T>& right);
 	virtual ~ListaDEnlazada();
 	T& Inicio();
@@ -147,18 +148,20 @@ ListaDEnlazada<T>::ListaDEnlazada() : cabecera(0), cola(0), tam(0) {
 template <class T>
 ListaDEnlazada<T>::ListaDEnlazada(const ListaDEnlazada& orig) : tam(orig.tam) {
 	unsigned int tamAux = orig.tam;
-	Nodo<T>* auxOrig = orig.cabecera;
-	Nodo<T>* auxCop;
-	this->cabecera = new Nodo<T>(*auxOrig);
-	auxCop = this->cabecera;
-	while (tamAux > 1) {
-		auxOrig = auxOrig->siguiente;
-		auxCop->siguiente = new Nodo<T>(*auxOrig);
-		auxCop->siguiente->anterior = auxCop;
-		auxCop = auxCop->siguiente;
-		tamAux--;
+	Nodo<T>* auxOrig = orig.cabecera;	
+	Nodo<T>* auxCop=0;
+	if (auxOrig != 0) {
+		this->cabecera = new Nodo<T>(*auxOrig);
+		auxCop = this->cabecera;
+		while (tamAux > 1) {
+			auxOrig = auxOrig->siguiente;
+			auxCop->siguiente = new Nodo<T>(*auxOrig);
+			auxCop->siguiente->anterior = auxCop;
+			auxCop = auxCop->siguiente;
+			tamAux--;
+		}
+		this->cola = auxCop;
 	}
-	this->cola = auxCop;
 }
 
 /**
@@ -166,8 +169,8 @@ ListaDEnlazada<T>::ListaDEnlazada(const ListaDEnlazada& orig) : tam(orig.tam) {
 	@param right Lista a copiar
 */
 template<class T>
-ListaDEnlazada<T>& ListaDEnlazada<T>::operator=(const ListaDEnlazada<T>& right) {
-	if (this = *right)
+ListaDEnlazada<T>& ListaDEnlazada<T>::operator=(ListaDEnlazada<T>& right) {
+	if (this == &right)
 		return *this;
 	Nodo<T>* aux;
 	while (tam > 0) {
@@ -180,17 +183,50 @@ ListaDEnlazada<T>& ListaDEnlazada<T>::operator=(const ListaDEnlazada<T>& right) 
 	unsigned int tamAux = right.tam;
 	aux = right.cabecera;
 	Nodo<T>* auxCop;
-	this->cabecera = new Nodo<T>(aux);
+	this->cabecera = new Nodo<T>(*aux);
 	auxCop = this->cabecera;
 	while (tamAux > 1) {
 		aux = aux->siguiente;
-		auxCop->siguiente = new Nodo<T>(aux);
+		auxCop->siguiente = new Nodo<T>(*aux);
 		auxCop->siguiente->anterior = auxCop;
 		auxCop = auxCop->siguiente;
 		tamAux--;
 	}
 	this->cola = auxCop;
-	this.tam = tamAux;
+	this->tam = tamAux;
+	return *this;
+}
+
+/**
+	@brief Operador de asignacion
+	@param right Lista a copiar
+*/
+template<class T>
+ListaDEnlazada<T>& ListaDEnlazada<T>::operator=(const ListaDEnlazada<T>& right) {
+	if (this == &right)
+		return *this;
+	Nodo<T>* aux;
+	while (tam > 0) {
+		aux = cola->anterior;
+		delete cola;
+		cola = aux;
+		tam--;
+	}
+
+	unsigned int tamAux = right.tam;
+	aux = right.cabecera;
+	Nodo<T>* auxCop;
+	this->cabecera = new Nodo<T>(*aux);
+	auxCop = this->cabecera;
+	while (tamAux > 1) {
+		aux = aux->siguiente;
+		auxCop->siguiente = new Nodo<T>(*aux);
+		auxCop->siguiente->anterior = auxCop;
+		auxCop = auxCop->siguiente;
+		tamAux--;
+	}
+	this->cola = auxCop;
+	this->tam = tamAux;
 	return *this;
 }
 
@@ -327,7 +363,7 @@ ListaDEnlazada<T>& ListaDEnlazada<T>::borrarFinal() {
 template<class T>
 ListaDEnlazada<T>& ListaDEnlazada<T>::borra(Iterador<T>& iterador)
 {
-	if (iterador.nodoApuntado)
+	if (!iterador.nodoApuntado)
 		throw std::logic_error("[ListaDEnlazada<T>::borra()] El iterador no apunta a ningun nodo");
 	if (iterador.nodoApuntado == cabecera) {
 		this->borraInicio();

@@ -26,7 +26,7 @@ public:
 	Cliente();
 	Cliente(string dni);
 	Cliente(string _dni, string _pass, string _nombre, string _apellido, string _direccion, double _latitud, double _longitud);
-	Cliente(const Cliente& orig);
+	Cliente( Cliente& orig);
 	virtual ~Cliente();
 	bool operator<(Cliente& otro);
 	bool operator>(Cliente& otro);

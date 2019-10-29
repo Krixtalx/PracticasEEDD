@@ -117,6 +117,37 @@ EcoCityMoto& EcoCityMoto::insertaItinerario(Itinerario& itinerario, std::string 
 	return *this;
 }
 
+std::string& EcoCityMoto::verItinerario(Cliente& cliente){
+	string *aux=new string;
+	ListaDEnlazada<Itinerario> lista;
+	try {
+		lista = cliente.getItinerarios();
+	}
+	catch (std::logic_error& e) {
+		throw std::logic_error("El cliente no tiene ningun itinerario");
+	}
+	Iterador<Itinerario> iterator = lista.iterador();
+	for (unsigned int i = 0; i < lista.getTam(); i++) {
+		try {
+			*aux += (iterator.getNodo()->toCSV() + "\n");
+			if (i+1<lista.getTam())
+				iterator++;
+		}
+		catch (std::exception & e) {
+			std::cerr << e.what();
+		}
+	}
+	return *aux;
+}
+
+const std::string& EcoCityMoto::verCliente(std::string& dni){
+	Cliente aux;
+	if (buscaCliente(dni, aux)) {
+		return aux.GetNombreCompleto();
+	}
+}
+
+
 /**
 	@brief Busca la moto cuya ID coincida con la indicada
 */

@@ -21,12 +21,13 @@ int main(){
 	//}
 	//std::cout<<arbol.altura();
 	EcoCityMoto appWapa;
-	Cliente test("manoloprueba");
+	Cliente test("7");
 	test.setAplicacion(&appWapa);
 	UTM posTest(1,54);
 	Moto motico("unamoto", posTest, {true,false,false,false});
 	test.creaItinerario(motico);
 	test.creaItinerario(motico);
-	std::cout << test.getItinerarios().Final().getID();
+	appWapa.insertaCliente(test);
+	menuPrincipal(appWapa);
 	return 0;
 }
