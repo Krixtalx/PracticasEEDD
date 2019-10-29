@@ -31,7 +31,7 @@ std::string Moto::getId()
 	return id;
 }
 
-UTM Moto::getUTM()
+UTM& Moto::getUTM()
 {
 	return posicion;
 }
@@ -53,10 +53,10 @@ void Moto::seActiva(Cliente& usuario){
 */
 void Moto::seDesactiva(){
 	if (estatus.activa) {
-		Cliente* aux = new Cliente("Nulo");
+		//Cliente* aux = new Cliente("Nulo");
 		estatus.activa = false;
 		estatus.bloqueada = true;
-		usadoPor = aux;
+		usadoPor = 0;
 	}
 }
 /**

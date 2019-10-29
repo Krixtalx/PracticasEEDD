@@ -56,6 +56,26 @@ int Itinerario::getID(){
 	return id;
 }
 
+void Itinerario::setInicio(UTM& pos)
+{
+	inicio = pos;
+}
+
+void Itinerario::setVehiculo(Moto* m)
+{
+	vehiculo = m;
+}
+
+void Itinerario::setMinutos(int mins)
+{
+	minutos = mins;
+}
+
+Moto* Itinerario::getVehiculo()
+{
+	return vehiculo;
+}
+
 /**
 *@Brief Devuelve un string en formato CSV con los atributos del objeto
 */

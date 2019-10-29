@@ -22,7 +22,7 @@ public:
 	EcoCityMoto& operator=(EcoCityMoto& right);
 	Moto& localizaMotoCercana(UTM posicion);
 	Moto& localizaMotoCercana(Cliente& cliente);
-	void desbloqueaMoto(Moto m, Cliente cli);
+	void desbloqueaMoto(Moto& m, Cliente& cli);
 
 	EcoCityMoto& insertaMoto(Moto& moto);
 	EcoCityMoto& insertaCliente(Cliente& cliente);
@@ -34,6 +34,7 @@ public:
 	unsigned int getAlturaAVL();
 	EcoCityMoto& recorreAVLInorden();
 	EcoCityMoto& verArbolCliente();
+	int idItinerario();
 
 };
 

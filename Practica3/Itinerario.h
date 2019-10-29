@@ -19,6 +19,10 @@ public:
 	~Itinerario();
 	void generaUTM(const UTM &min, const UTM& max);
 	int getID();
+	void setInicio(UTM& pos);
+	void setVehiculo(Moto* m);
+	void setMinutos(int mins);
+	Moto* getVehiculo();
 	std::string toCSV();
 };
 

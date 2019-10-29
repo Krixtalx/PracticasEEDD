@@ -56,33 +56,17 @@ EcoCityMoto& EcoCityMoto::operator=(EcoCityMoto& right)
 */
 Moto& EcoCityMoto::localizaMotoCercana(UTM posicion)
 {
-	
-	int masCercana = -1;
-	UTM relativa;
-	for (int i = motos->getTamL() - 1; i >= 0; i--)
-	{
-		if ((*motos)[i].estatus.bloqueada && !((*motos)[i].estatus.roto) && !((*motos)[i].estatus.sinbateria)) {
-			if (i = motos->getTamL() - 1) {
-				masCercana = i;
-				relativa = (*motos)[i].posicion - posicion;
-				relativa.latitud = abs(relativa.latitud);
-				relativa.longitud = abs(relativa.longitud);
-			}
-			else {
-				UTM temp = (*motos)[i].posicion - posicion;
-				temp.latitud = abs(temp.latitud);
-				temp.longitud = abs(temp.longitud);
-				if (temp < relativa) {
-					masCercana = i;
-					relativa = (*motos)[i].posicion - posicion;
-					relativa.latitud = abs(relativa.latitud);
-					relativa.longitud = abs(relativa.longitud);
-				}
-			}
+	Moto* masCercana = 0;
+	double menorDistancia = 99999, distancia;
+	Cliente temp("", "", "", "", "", posicion.latitud, posicion.longitud);
+	for (int i = motos->getTamL() - 1; i >= 0; i--) {
+		distancia = (*motos)[i].distanciaCliente(temp);
+		if (distancia < menorDistancia) {
+			masCercana = &(*motos)[i];
+			menorDistancia = distancia;
 		}
 	}
-	return (*motos)[masCercana];
-	
+	return *masCercana;
 }
 
 Moto& EcoCityMoto::localizaMotoCercana(Cliente& cliente){
@@ -99,7 +83,7 @@ Moto& EcoCityMoto::localizaMotoCercana(Cliente& cliente){
 	return *masCercana;
 }
 
-void EcoCityMoto::desbloqueaMoto(Moto m, Cliente cli)
+void EcoCityMoto::desbloqueaMoto(Moto& m, Cliente& cli)
 {
 	m.seActiva(cli);
 }
@@ -210,4 +194,10 @@ EcoCityMoto& EcoCityMoto::verArbolCliente()
 {
 	clientes->verArbol();
 	return *this;
+}
+
+int EcoCityMoto::idItinerario()
+{
+	idUltimo++;
+	return idUltimo - 1;
 }

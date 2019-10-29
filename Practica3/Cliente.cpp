@@ -30,20 +30,6 @@ UTM Cliente::getPosicion() const {
 }
 
 /**
-*@Brief crea "num" itinerarios y los añade a la lista
-*@param num Numero de itinerarios a crear
-*@param idUltimo ID del ultimo de los itinerarios
-*/
-int Cliente::crearItinerarios(int num, int idUltimo, UTM &minimo, UTM &maximo){
-	for (int i = 0; i < num; i++) {
-		Itinerario* aux = new Itinerario(idUltimo, minimo, maximo);
-		listaItinerarios.insertaFinal(*aux);
-		idUltimo++;
-	}
-	return idUltimo;
-}
-
-/**
 	@brief Devuelve una referencia a la lista que almacena los itinerarios
 	@throws std::logic_error Si no se han creado itinerarios para el cliente
 */
@@ -142,4 +128,59 @@ ostream& operator<<(ostream& os, const Cliente& cliente){
 void Cliente::setAplicacion(EcoCityMoto* app)
 {
 	aplicacion = app;
+}
+
+Moto& Cliente::buscaMotoCercana()
+{
+	return aplicacion->localizaMotoCercana(*this);
+}
+
+/**
+*@Brief crea "num" itinerarios y los añade a la lista
+*@param num Numero de itinerarios a crear
+*@param idUltimo ID del ultimo de los itinerarios
+*/
+void Cliente::crearItinerarios(int num, UTM& minimo, UTM& maximo) {
+	for (int i = 0; i < num; i++) {
+		//TODO: revisar creacion junto a creaItinerario
+		Itinerario* aux = new Itinerario(aplicacion->idItinerario(), minimo, maximo);
+		listaItinerarios.insertaFinal(*aux);
+	}
+}
+
+/**
+	@brief Crea un nuevo itinerario en el cliente
+	@param m Moto usada en el viaje
+	@post Se genera un itinerario cuyo inicio es la posicion de la moto, y con un final generado aleatoriamente en el rango (37, 3)-(38, 4)
+*/
+void Cliente::creaItinerario(Moto& m)
+{
+	UTM tempMin, tempMax;
+	tempMin.latitud = 37;
+	tempMin.longitud = 3;
+	tempMax.latitud = 38;
+	tempMax.longitud = 4;
+	//TODO: revisar creacion junto a crearItinerarios
+	Itinerario nuevo(aplicacion->idItinerario(), tempMin, tempMax);
+	nuevo.setInicio(m.getUTM());
+	nuevo.setVehiculo(&m);
+	listaItinerarios.insertaFinal(nuevo);
+}
+
+/**
+	@brief Llama al metodo de EcoCityMoto para desbloquear la moto indicada
+*/
+void Cliente::desbloqueaMoto(Moto& m)
+{
+	aplicacion->desbloqueaMoto(m, *this);
+}
+
+/**
+	@brief Desactiva la moto que estubiese usando y genera un valor aleatorio para la duracion del viaje
+*/
+void Cliente::terminarTrayecto()
+{
+	listaItinerarios.Final().setMinutos(rand() % 300);
+	listaItinerarios.Final().getVehiculo()->seDesactiva();
+	
 }

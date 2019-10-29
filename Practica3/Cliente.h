@@ -37,10 +37,14 @@ public:
 	string GetNombreCompleto() const;
 	double DistanciaCliente(Cliente& otro);
 	UTM getPosicion() const;
-	int crearItinerarios(int num, int idUltimo, UTM& minimo, UTM& maximo);
+	void crearItinerarios(int num, UTM& minimo, UTM& maximo);
 	ListaDEnlazada<Itinerario>& getItinerarios();
 	friend ostream& operator<<(ostream& os, const Cliente& cliente);
 	void setAplicacion(EcoCityMoto* app);
+	Moto& buscaMotoCercana();
+	void creaItinerario(Moto& m);
+	void desbloqueaMoto(Moto& m);
+	void terminarTrayecto();
 };
 
 #endif /* CLIENTE_H */
