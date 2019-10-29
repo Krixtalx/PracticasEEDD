@@ -84,7 +84,7 @@ Cliente& Cliente::operator=(const Cliente& right) {
 	this->pass = right.pass;
 	this->posicion = right.posicion;
 	this->nombreCompleto = right.nombreCompleto;
-	//this->listaItinerarios = right.listaItinerarios;
+	this->listaItinerarios = right.listaItinerarios;
 
 	return *this;
 }

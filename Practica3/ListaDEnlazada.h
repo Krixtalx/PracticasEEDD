@@ -193,7 +193,7 @@ ListaDEnlazada<T>& ListaDEnlazada<T>::operator=(ListaDEnlazada<T>& right) {
 		tamAux--;
 	}
 	this->cola = auxCop;
-	this->tam = tamAux;
+	this->tam = right.tam;
 	return *this;
 }
 
@@ -226,7 +226,7 @@ ListaDEnlazada<T>& ListaDEnlazada<T>::operator=(const ListaDEnlazada<T>& right) 
 		tamAux--;
 	}
 	this->cola = auxCop;
-	this->tam = tamAux;
+	this->tam = right.tam;
 	return *this;
 }
 
