@@ -17,6 +17,7 @@ using namespace std;
 bool windows = true;
 string archivoClientes="clientes.csv";
 string archivoMotos = "motos.txt";
+Cliente* clienteaux= new Cliente;
 
 //Forward declaration
 bool menuPrincipal(EcoCityMoto& ecocity);
@@ -277,17 +278,22 @@ void accesoItinerarios(EcoCityMoto& ecocity) {
 */
 void asignarMoto(EcoCityMoto& ecocity) {
 	string dni;
-	Cliente cliente;
-	Moto motoCercana;
+	Moto* motoCercana;
 	cout << "Introduzca el DNI del cliente al que se le asignará la moto: ";
 	getline(cin >> ws, dni);
-	if (ecocity.buscaCliente(dni, cliente)){
+	if (ecocity.buscaCliente(dni, *clienteaux)){
 		clearScreen();
-		cout << "Buscando moto más cercana a "<<cliente.getPosicion().toCSV()<<" ...";
-		motoCercana = ecocity.localizaMotoCercana(cliente);
-		motoCercana.seActiva(cliente);
-		cliente.creaItinerario(motoCercana);
-		cout <<endl<< "Moto encontrada y activada: "<<motoCercana.getId()<<"  -  "<<motoCercana.getUTM().toCSV();
+		cout << "Buscando moto más cercana a "<<clienteaux->getPosicion().toCSV()<<" ..." << endl;
+		try {
+			motoCercana = &ecocity.localizaMotoCercana(*clienteaux);
+			motoCercana->seActiva(*clienteaux);
+			clienteaux->creaItinerario(*motoCercana);
+			cout  << "Moto encontrada y activada: " << motoCercana->getId() << "  -  " << motoCercana->getUTM().toCSV();
+		}
+		catch (std::runtime_error & e) {
+			cerr << e.what();
+		}
+		
 	}
 	else {
 		clearScreen();
@@ -304,6 +310,7 @@ void bloquearMoto(EcoCityMoto& ecocity) {
 		clearScreen();
 		try {
 			cliente.terminarTrayecto();
+			cliente.getItinerarios().Final().getVehiculo()->seDesactiva();
 		}
 		catch (std::runtime_error & e) {
 			cerr << e.what();
@@ -417,7 +424,8 @@ void buscarMoto(EcoCityMoto& ecocity) {
 	if (ecocity.buscaMoto(matricula, moto)) {
 		cout << "Moto encontrada: " << moto.getId() << "    UTM: " << moto.getUTM().toCSV()<<endl;
 		cout << "Estado de la moto: " << moto.getEstado();
-
+		if (moto.getEstado() == "Activada")
+			cout <<endl<< moto.getDatosCliente();
 	}
 	else {
 		cout << "Moto no encontrada.";

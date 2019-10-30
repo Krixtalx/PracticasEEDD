@@ -154,6 +154,7 @@ void Cliente::crearItinerarios(int num, UTM& minimo, UTM& maximo) {
 		//TODO: revisar creacion junto a creaItinerario
 		Itinerario* aux = new Itinerario(aplicacion->idItinerario(), minimo, maximo);
 		listaItinerarios->insertaFinal(*aux);
+		delete aux;
 	}
 }
 

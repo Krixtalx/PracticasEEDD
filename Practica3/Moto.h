@@ -29,6 +29,7 @@ public:
 	std::string getId();
 	UTM& getUTM();
 	std::string getEstado();
+	std::string getDatosCliente();
 	void seActiva(Cliente& usuario);
 	void seDesactiva();
 	void setSinbateria();

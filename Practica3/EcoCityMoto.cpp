@@ -71,8 +71,11 @@ Moto& EcoCityMoto::localizaMotoCercana(UTM posicion)
 
 Moto& EcoCityMoto::localizaMotoCercana(Cliente& cliente){
 	Moto* masCercana = 0;
-	 double menorDistancia = 99999.99;
-	 double distancia;
+	double menorDistancia = 99999.99;
+	double distancia;
+	if (motos->getTamL() <= 0) {
+		throw std::runtime_error("[Localiza moto cercana]: No hay ninguna moto en el sistema");
+	}
 	for (int i = 0; i < motos->getTamL(); i++){		
 		distancia = (*motos)[i].distanciaCliente(cliente);
 		if (menorDistancia > distancia) {

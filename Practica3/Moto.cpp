@@ -36,10 +36,16 @@ UTM& Moto::getUTM()
 	return posicion;
 }
 
+std::string Moto::getDatosCliente()
+{
+	if (usadoPor) {
+		return "Nombre: " + usadoPor->GetNombreCompleto() + "         DNI: " + usadoPor->getDni();
+	}
+}
 std::string Moto::getEstado()
 {
 	if (estatus.activa)
-		return "Activado";
+		return "Activada";
 	if (estatus.bloqueada)
 		return "Bloqueada";
 	if (estatus.roto)
