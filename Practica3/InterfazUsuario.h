@@ -534,7 +534,7 @@ bool menuPrincipal(EcoCityMoto& ecocity) {
 		switch (opcion) {
 		case 1:
 			clearScreen();
-			cout << "Cada opcion lleva a un submenu que se encarga donde habra nuevas opciones para realizar acciones relacionadas con el nombre del menu" << endl
+			cout << "Cada opcion lleva a un submenu donde habra nuevas opciones para realizar acciones relacionadas con el nombre del menu" << endl
 				<< "En concreto, el submenu de Configuracion permite seleccionar el sistema operativo en el que se encuentra para la limpieza de la consola y los archivos de carga CSV" << endl;
 			break;
 
