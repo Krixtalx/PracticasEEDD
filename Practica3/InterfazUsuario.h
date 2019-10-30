@@ -105,6 +105,7 @@ void insertarCliente(EcoCityMoto& ecocity) {
 	cin >> longitud;
 
 	Cliente cliente(dni, pass, nombre, apellidos, direccion, latitud, longitud);
+	cliente.setAplicacion(&ecocity);
 	ecocity.insertaCliente(cliente);
 	clearScreen();
 }
@@ -301,6 +302,9 @@ void asignarMoto(EcoCityMoto& ecocity) {
 	}
 }
 
+/*
+*@Brief Metodo encargado de bloquear la motocicleta de un cliente introducido por DNI
+*/
 void bloquearMoto(EcoCityMoto& ecocity) {
 	string dni;
 	Cliente cliente;
