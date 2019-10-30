@@ -77,6 +77,11 @@ void configuracion(EcoCityMoto& ecocity) {
 			clearScreen();
 			return;
 			break;
+
+		default:
+			clearScreen();
+			cout << "Opción invalida";
+			break;
 	}
 
 	clearScreen();
@@ -198,6 +203,11 @@ void menuArbol(EcoCityMoto& ecocity) {
 		clearScreen();
 		return;
 		break;
+
+	default:
+		clearScreen();
+		cout << "Opción invalida";
+		break;
 	}
 }
 
@@ -224,12 +234,15 @@ void borrarItinerario(EcoCityMoto& ecocity, Cliente& cliente) {
 	cin >> yon;
 	if (yon == 'S') {
 		clearScreen();
-		if (cliente.getItinerarios().getTam() > 0) {
-			cliente.getItinerarios().borrarFinal();
-			cout << "Itinerario borrado";
+		try {
+			if (cliente.getItinerarios().getTam() > 0) {
+				cliente.getItinerarios().borrarFinal();
+				cout << "Itinerario borrado";
+			}
 		}
-		else
-			cout << "No tiene ningún itinerario";
+		catch (std::logic_error & e) {
+			cerr << endl << "No tiene ningún itinerario para borrar";
+		}
 	}
 	else {
 		clearScreen();
@@ -261,6 +274,11 @@ void menuItinerarios(EcoCityMoto& ecocity, Cliente& cliente) {
 	case 3:
 		clearScreen();
 		return;
+		break;
+
+	default:
+		clearScreen();
+		cout << "Opción invalida";
 		break;
 	}
 }
@@ -380,6 +398,11 @@ void menuClientes(EcoCityMoto& ecocity) {
 		clearScreen();
 		return;
 		break;
+
+	default:
+		clearScreen();
+		cout << "Opción invalida";
+		break;
 	}
 }
 
@@ -411,6 +434,10 @@ void insertarMoto(EcoCityMoto& ecocity) {
 		break;
 	case 4:
 		estadoMoto.roto = true;
+		break;
+	default:
+		cout << "Opción invalida";
+		break;
 	}
 	Moto moto(matricula, utm, estadoMoto);
 	ecocity.insertaMoto(moto);
@@ -428,8 +455,13 @@ void buscarMoto(EcoCityMoto& ecocity) {
 	if (ecocity.buscaMoto(matricula, moto)) {
 		cout << "Moto encontrada: " << moto.getId() << "    UTM: " << moto.getUTM().toCSV()<<endl;
 		cout << "Estado de la moto: " << moto.getEstado();
-		if (moto.getEstado() == "Activada")
-			cout <<endl<< moto.getDatosCliente();
+		try {
+			if (moto.getEstado() == "Activada")
+				cout << endl << moto.getDatosCliente();
+		}
+		catch (std::exception & e) {
+			cerr << endl << e.what();
+		}
 	}
 	else {
 		cout << "Moto no encontrada.";
@@ -462,6 +494,11 @@ void menuMotos(EcoCityMoto& ecocity) {
 	case 3:
 		clearScreen();
 		return;
+		break;
+
+	default:
+		clearScreen();
+		cout << "Opción invalida";
 		break;
 	}
 }
@@ -519,6 +556,16 @@ bool menuPrincipal(EcoCityMoto& ecocity) {
 		case 5:
 			clearScreen();
 			carga(ecocity);
+			break;
+
+		case 6:
+			clearScreen();
+			return true;
+			break;
+
+		default:
+			clearScreen();
+			cout << "Opción invalida";
 			break;
 		}
 	}
