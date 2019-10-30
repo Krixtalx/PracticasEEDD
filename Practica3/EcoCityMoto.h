@@ -36,7 +36,7 @@ public:
 	unsigned int getAlturaAVL();
 	EcoCityMoto& recorreAVLInorden();
 	EcoCityMoto& verArbolCliente();
-	int idItinerario();
+	unsigned int idItinerario();
 
 };
 

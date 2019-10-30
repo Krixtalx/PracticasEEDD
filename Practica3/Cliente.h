@@ -19,7 +19,7 @@ private:
 	string direccion = "";
 	string nombreCompleto = "";
 	UTM posicion;
-	ListaDEnlazada<Itinerario> listaItinerarios;
+	ListaDEnlazada<Itinerario>* listaItinerarios=new ListaDEnlazada<Itinerario>;
 	EcoCityMoto* aplicacion = 0;
 
 public:

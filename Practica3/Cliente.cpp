@@ -20,6 +20,7 @@ Cliente::Cliente(Cliente& orig): dni(orig.dni), pass(orig.pass), nombre(orig.nom
 	nombreCompleto = orig.nombreCompleto;
 	posicion.latitud = orig.posicion.latitud;
 	posicion.longitud = orig.posicion.longitud;
+	aplicacion = orig.aplicacion;
 	
 }
 
@@ -36,9 +37,9 @@ UTM Cliente::getPosicion() const {
 */
 ListaDEnlazada<Itinerario>& Cliente::getItinerarios()
 {
-	if (listaItinerarios.getTam() == 0)
+	if (listaItinerarios->getTam() == 0)
 		throw std::logic_error("[Cliente.cpp] El cliente no tiene itinerarios");
-	return this->listaItinerarios;
+	return *(this->listaItinerarios);
 }
 
 /**
@@ -85,6 +86,7 @@ Cliente& Cliente::operator=(const Cliente& right) {
 	this->posicion = right.posicion;
 	this->nombreCompleto = right.nombreCompleto;
 	this->listaItinerarios = right.listaItinerarios;
+	this->aplicacion = right.aplicacion;
 
 	return *this;
 }
@@ -151,7 +153,7 @@ void Cliente::crearItinerarios(int num, UTM& minimo, UTM& maximo) {
 	for (int i = 0; i < num; i++) {
 		//TODO: revisar creacion junto a creaItinerario
 		Itinerario* aux = new Itinerario(aplicacion->idItinerario(), minimo, maximo);
-		listaItinerarios.insertaFinal(*aux);
+		listaItinerarios->insertaFinal(*aux);
 	}
 }
 
@@ -171,7 +173,7 @@ void Cliente::creaItinerario(Moto& m)
 	Itinerario nuevo(aplicacion->idItinerario(), tempMin, tempMax);
 	nuevo.setInicio(m.getUTM());
 	nuevo.setVehiculo(&m);
-	listaItinerarios.insertaFinal(nuevo);
+	listaItinerarios->insertaFinal(nuevo);
 }
 
 /**
@@ -187,7 +189,11 @@ void Cliente::desbloqueaMoto(Moto& m)
 */
 void Cliente::terminarTrayecto()
 {
-	listaItinerarios.Final().setMinutos(rand() % 300);
-	listaItinerarios.Final().getVehiculo()->seDesactiva();
-	
+	try {
+		listaItinerarios->Final().setMinutos(rand() % 300);
+		listaItinerarios->Final().getVehiculo()->seDesactiva();
+	}
+	catch (std::runtime_error & e) {
+		throw std::runtime_error(e);
+	}
 }

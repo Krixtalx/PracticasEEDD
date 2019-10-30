@@ -227,8 +227,7 @@ EcoCityMoto& EcoCityMoto::verArbolCliente()
 	return *this;
 }
 
-int EcoCityMoto::idItinerario()
-{
+unsigned int EcoCityMoto::idItinerario(){
 	idUltimo++;
 	return idUltimo - 1;
 }

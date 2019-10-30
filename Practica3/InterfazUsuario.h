@@ -139,6 +139,7 @@ void recorridoInorden(EcoCityMoto& ecocity) {
 	cout << "Este recorrido puede generar una salida muy grande" << endl << "¿Está seguro de que quiere hacerlo?   S/n"<<endl;
 	cin >> yon;
 	if (yon == 'S') {
+		clearScreen();
 		cout << "Comenzando recorrido en Inorden del árbol..." << endl;
 		ecocity.recorreAVLInorden();
 	}
@@ -284,6 +285,7 @@ void asignarMoto(EcoCityMoto& ecocity) {
 		cout << "Buscando moto más cercana a "<<cliente.getPosicion().toCSV()<<" ...";
 		motoCercana = ecocity.localizaMotoCercana(cliente);
 		motoCercana.seActiva(cliente);
+		cliente.creaItinerario(motoCercana);
 		cout <<endl<< "Moto encontrada y activada: "<<motoCercana.getId()<<"  -  "<<motoCercana.getUTM().toCSV();
 	}
 	else {
@@ -299,7 +301,13 @@ void bloquearMoto(EcoCityMoto& ecocity) {
 	getline(cin >> ws, dni);
 	if (ecocity.buscaCliente(dni, cliente)) {
 		clearScreen();
-		cliente.terminarTrayecto();
+		try {
+			cliente.terminarTrayecto();
+		}
+		catch (std::runtime_error & e) {
+			cerr << e.what();
+			return;
+		}
 		cout << "Moto bloqueada";
 	}
 	else {
@@ -353,7 +361,7 @@ void menuClientes(EcoCityMoto& ecocity) {
 
 	case 6:
 		clearScreen();
-		bloquearMoto;
+		bloquearMoto(ecocity);
 		break;
 
 	case 7:
@@ -414,12 +422,6 @@ void buscarMoto(EcoCityMoto& ecocity) {
 
 }
 
-/*
-*@Brief Borra una moto del vector dinámico a través de su ID
-*/
-void borrarMoto(EcoCityMoto& ecocity) {
-
-}
 
 /*
 *@Brief Submenu de motos
@@ -429,8 +431,7 @@ void menuMotos(EcoCityMoto& ecocity) {
 	cout << endl << endl << "Submenu de Motos" << endl << endl;
 	cout << "1 - Insertar moto" << endl;
 	cout << "2 - Buscar moto" << endl;
-	cout << "3 - Borrar moto" << endl;
-	cout << "4 - Salir" << endl;
+	cout << "3 - Salir" << endl;
 	cout << "¿Que desea hacer?: ";
 	cin >> opcion;
 	switch (opcion) {
@@ -445,11 +446,6 @@ void menuMotos(EcoCityMoto& ecocity) {
 		break;
 
 	case 3:
-		clearScreen();
-		borrarMoto(ecocity);
-		break;
-
-	case 4:
 		clearScreen();
 		return;
 		break;
@@ -570,6 +566,7 @@ void leeClientes(string fileNameClientes, EcoCityMoto& ecocity) {
 				setlocale(LC_ALL, "spanish");
 				//con todos los atributos leídos, se crea el cliente
 				Cliente client(dni, pass, nombre, apellido, direccion, dlat, dlon);
+				client.setAplicacion(&ecocity);
 				try {
 					ecocity.insertaCliente(client);
 				}
