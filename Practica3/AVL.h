@@ -232,7 +232,11 @@ bool AVL<T>::busca(T& dato, T& resultado){
 	 return busca(dato, resultado, raiz);
 }
 
-//TODO: comentar esto
+/**
+	@brief Busca un dato en el arbol de forma iterativa
+	@param dato Dato a buscar
+	@param resultado Si se encuentra el dato, se guarda en resultado
+*/
 template<class T>
 bool AVL<T>::buscaIt(T& dato, T& resultado)
 {
