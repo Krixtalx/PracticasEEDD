@@ -414,12 +414,13 @@ void buscarMoto(EcoCityMoto& ecocity) {
 	getline(cin >> ws, matricula);
 	Moto moto;
 	if (ecocity.buscaMoto(matricula, moto)) {
-		cout << "Moto encontrada: " << moto.getId();
+		cout << "Moto encontrada: " << moto.getId() << "    UTM: " << moto.getUTM().toCSV()<<endl;
+		cout << "Estado de la moto: " << moto.getEstado();
+
 	}
 	else {
 		cout << "Moto no encontrada.";
 	}
-
 }
 
 

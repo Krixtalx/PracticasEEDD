@@ -36,6 +36,18 @@ UTM& Moto::getUTM()
 	return posicion;
 }
 
+std::string Moto::getEstado()
+{
+	if (estatus.activa)
+		return "Activado";
+	if (estatus.bloqueada)
+		return "Bloqueada";
+	if (estatus.roto)
+		return "Rota";
+	if (estatus.sinbateria)
+		return "Sin bateria";
+}
+
 /**
 *@Brief Método encargado de activar la moto
 *@Param Cliente: usuario que activa la moto
