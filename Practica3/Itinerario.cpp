@@ -34,9 +34,17 @@ Itinerario::Itinerario(int num, const UTM& min, const UTM& max): id(num){
 	this->minutos = (rand() % 500) +1;
 }
 
+/**
+	@brief Destructor
+*/
 Itinerario::~Itinerario(){
 }
 
+/**
+	@brief Operador de asignacion
+	@param right Objeto cuyos atributos se usan en la asignacion
+	@return El propio objeto para operaciones en cascada
+*/
 Itinerario& Itinerario::operator=(Itinerario& right)
 {
 	id = right.id;

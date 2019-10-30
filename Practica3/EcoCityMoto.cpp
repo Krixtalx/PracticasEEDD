@@ -69,6 +69,10 @@ Moto& EcoCityMoto::localizaMotoCercana(UTM posicion)
 	return *masCercana;
 }
 
+/**
+	@brief Busca la moto más cercana al cliente indicado
+	@pre Debe haber alguna moto disponible (bloqueada, no rota y con bateria)
+*/
 Moto& EcoCityMoto::localizaMotoCercana(Cliente& cliente){
 	Moto* masCercana = 0;
 	double menorDistancia = 99999.99;
@@ -86,6 +90,9 @@ Moto& EcoCityMoto::localizaMotoCercana(Cliente& cliente){
 	return *masCercana;
 }
 
+/**
+	@brief Activa la moto indicada y le asigna el cliente dado
+*/
 void EcoCityMoto::desbloqueaMoto(Moto& m, Cliente& cli)
 {
 	m.seActiva(cli);
@@ -120,6 +127,9 @@ EcoCityMoto& EcoCityMoto::insertaItinerario(Itinerario& itinerario, std::string 
 	return *this;
 }
 
+/**
+	@brief Muestra en formato CSV los itinerarios del cliente indicado
+*/
 std::string& EcoCityMoto::verItinerario(Cliente& cliente){
 	string *aux=new string;
 	ListaDEnlazada<Itinerario> lista;
@@ -127,7 +137,8 @@ std::string& EcoCityMoto::verItinerario(Cliente& cliente){
 		lista = cliente.getItinerarios();
 	}
 	catch (std::logic_error& e) {
-		throw std::logic_error("El cliente no tiene ningun itinerario");
+		string temp = e.what();
+		throw std::logic_error("[EcoCityMoto::verItinerario]" + temp);
 	}
 	Iterador<Itinerario> iterator = lista.iterador();
 	for (unsigned int i = 0; i < lista.getTam(); i++) {
@@ -143,6 +154,9 @@ std::string& EcoCityMoto::verItinerario(Cliente& cliente){
 	return *aux;
 }
 
+/**
+	@brief Busca el cliente con el dni indicado y devuelve su nombre completo
+*/
 const std::string& EcoCityMoto::verCliente(std::string& dni){
 	Cliente aux;
 	if (buscaCliente(dni, aux)) {
@@ -184,7 +198,13 @@ bool EcoCityMoto::buscaCliente(std::string& dni, Cliente& clienteEncontrado)
 */
 EcoCityMoto& EcoCityMoto::borraMoto(int pos)
 {
-	motos->eliminarDato(pos);
+	try {
+		motos->eliminarDato(pos);
+	}
+	catch (std::out_of_range & e) {
+		string temp = e.what();
+		throw std::out_of_range("[EcoCityMoto::borraMoto]" + temp);
+	}
 	return *this;
 }
 /**
@@ -200,7 +220,13 @@ EcoCityMoto& EcoCityMoto::borraItinerario(int pos, std::string dni)
 		it++;
 		pos--;
 	}
-	encontrado.getItinerarios().borra(it);
+	try {
+		encontrado.getItinerarios().borra(it);
+	}
+	catch (std::logic_error & e) {
+		string temp = e.what();
+		throw std::logic_error("[EcoCityMoto::borraItinerario]" + temp);
+	}
 	return *this;
 }
 
@@ -230,6 +256,9 @@ EcoCityMoto& EcoCityMoto::verArbolCliente()
 	return *this;
 }
 
+/**
+	@brief Devuelve el id del siguiente itinerario a crear e incrementa en 1 el total
+*/
 unsigned int EcoCityMoto::idItinerario(){
 	idUltimo++;
 	return idUltimo - 1;

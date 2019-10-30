@@ -35,7 +35,6 @@ public:
 	ListaDEnlazada();
 	ListaDEnlazada(const ListaDEnlazada<T>& orig);
 	ListaDEnlazada<T>& operator=(ListaDEnlazada<T>& right);
-	ListaDEnlazada<T>& operator=(const ListaDEnlazada<T>& right);
 	virtual ~ListaDEnlazada();
 	T& Inicio();
 	T& Final();
@@ -170,41 +169,6 @@ ListaDEnlazada<T>::ListaDEnlazada(const ListaDEnlazada& orig) : tam(orig.tam) {
 */
 template<class T>
 ListaDEnlazada<T>& ListaDEnlazada<T>::operator=(ListaDEnlazada<T>& right) {
-	if (this == &right)
-		return *this;
-	Nodo<T>* aux;
-	while (tam > 0) {
-		aux = cola->anterior;
-		delete cola;
-		cola = aux;
-		tam--;
-	}
-
-	unsigned int tamAux = right.tam;
-	aux = right.cabecera;
-	Nodo<T>* auxCop;
-	if (aux != 0) {
-		this->cabecera = new Nodo<T>(*aux);
-		auxCop = this->cabecera;
-		while (tamAux > 1) {
-			aux = aux->siguiente;
-			auxCop->siguiente = new Nodo<T>(*aux);
-			auxCop->siguiente->anterior = auxCop;
-			auxCop = auxCop->siguiente;
-			tamAux--;
-		}
-		this->cola = auxCop;
-		this->tam = right.tam;
-	}
-	return *this;
-}
-
-/**
-	@brief Operador de asignacion
-	@param right Lista a copiar
-*/
-template<class T>
-ListaDEnlazada<T>& ListaDEnlazada<T>::operator=(const ListaDEnlazada<T>& right) {
 	if (this == &right)
 		return *this;
 	Nodo<T>* aux;
