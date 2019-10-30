@@ -204,6 +204,7 @@ void menuArbol(EcoCityMoto& ecocity) {
 */
 void verItinerario(EcoCityMoto& ecocity, Cliente& cliente) {
 	cout << "Itinerarios: " << endl;
+	cout << "ID ; Duración ; UTM Inicio ; UTM Final ; Fecha" << endl;
 	try {
 		cout << ecocity.verItinerario(cliente);
 	}
