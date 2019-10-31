@@ -8,6 +8,7 @@
 #include "VDinamico.h"
 
 #include <cmath>
+
 class EcoCityMoto
 {
 	unsigned idUltimo = 0;

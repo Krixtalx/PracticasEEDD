@@ -72,7 +72,8 @@ AVL<T>::~AVL()
 template<class T>
 AVL<T>& AVL<T>::operator=(const AVL<T>& right) 
 {
-	raiz = copiaRama(right.raiz);
+	borrarRama(raiz);
+	raiz = copiaRama(right.raiz);	
 	return *this;
 }
 
