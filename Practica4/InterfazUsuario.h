@@ -3,11 +3,8 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include "AVL.h"
 #include "Cliente.h"
-#include "ListaDEnlazada.h"
 #include "Itinerario.h"
-#include "VDinamico.h"
 #include "Moto.h"
 #include "EcoCityMoto.h"
 
@@ -131,6 +128,7 @@ bool buscarCliente(EcoCityMoto& ecocity, Cliente& clienteEncontrado){
 	return false;
 }
 
+//TODO: borrar esto :(
 /*
 *@Brief Devuelve la altura del árbol AVL en el que están los clientes
 */
@@ -148,13 +146,14 @@ void recorridoInorden(EcoCityMoto& ecocity) {
 	if (yon == 'S') {
 		clearScreen();
 		cout << "Comenzando recorrido en Inorden del árbol..." << endl;
-		ecocity.recorreAVLInorden();
+		ecocity.recorreMapa();
 	}
 	else {
 		clearScreen();
 	}
 }
 
+//TODO: borrar esto tambien :(
 /*
 *@Brief Genera el arbol AVL formado por clientes en la consola. No sirve para un arbol AVL muy grande
 */
@@ -235,8 +234,8 @@ void borrarItinerario(EcoCityMoto& ecocity, Cliente& cliente) {
 	if (yon == 'S') {
 		clearScreen();
 		try {
-			if (cliente.getItinerarios().getTam() > 0) {
-				cliente.getItinerarios().borrarFinal();
+			if (cliente.getItinerarios().size()) {
+				cliente.getItinerarios().pop_back();
 				cout << "Itinerario borrado";
 			}
 		}
@@ -332,7 +331,7 @@ void bloquearMoto(EcoCityMoto& ecocity) {
 		clearScreen();
 		try {
 			cliente.terminarTrayecto();
-			cliente.getItinerarios().Final().getVehiculo()->seDesactiva();
+			cliente.getItinerarios().back().getVehiculo()->seDesactiva();
 		}
 		catch (std::runtime_error & e) {
 			cerr << e.what();

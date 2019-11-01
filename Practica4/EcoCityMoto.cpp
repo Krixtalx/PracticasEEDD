@@ -9,7 +9,7 @@
 EcoCityMoto::EcoCityMoto()
 {
 	motos = new vector<Moto>;
-	clientes = new AVL<Cliente>;
+	clientes = new map<std::string, Cliente>;
 }
 
 /**
@@ -19,7 +19,7 @@ EcoCityMoto::EcoCityMoto()
 EcoCityMoto::EcoCityMoto(unsigned _idUltimo) : idUltimo(_idUltimo)
 {
 	motos = new vector<Moto>;
-	clientes = new AVL<Cliente>;
+	clientes = new map<std::string, Cliente>;
 }
 
 /**
@@ -38,7 +38,7 @@ EcoCityMoto::~EcoCityMoto()
 EcoCityMoto::EcoCityMoto(EcoCityMoto& orig) : idUltimo(orig.idUltimo)
 {
 	motos = new vector<Moto>(*(orig.motos));
-	clientes = new AVL<Cliente>(*(orig.clientes));
+	clientes = new map<std::string, Cliente>(*(orig.clientes));
 }
 
 /**
@@ -120,7 +120,7 @@ EcoCityMoto& EcoCityMoto::insertaMoto(Moto& moto)
 */
 EcoCityMoto& EcoCityMoto::insertaCliente(Cliente& cliente)
 {
-	clientes->inserta(cliente);
+	clientes->insert(cliente);
 	return *this;
 }
 
@@ -192,8 +192,10 @@ bool EcoCityMoto::buscaMoto(std::string id, Moto& motoEncontrada)
 */
 bool EcoCityMoto::buscaCliente(std::string& dni, Cliente& clienteEncontrado)
 {
-	Cliente buscado(dni);
-	if (clientes->busca(buscado, clienteEncontrado)) {
+	std::map<std::string, Cliente>::iterator it;
+	it = clientes->find(dni);
+	if (it != clientes->end()) {
+		clienteEncontrado = it->second;
 		return true;
 	}
 	else {
@@ -231,28 +233,14 @@ EcoCityMoto& EcoCityMoto::borraItinerario(int pos, std::string dni)
 }
 
 /**
-	@brief Devuelve la altura del arbol de clientes
+	@brief Muestra el mapa de clientes en inorden
 */
-unsigned int EcoCityMoto::getAlturaAVL()
+EcoCityMoto& EcoCityMoto::recorreMapa()
 {
-	return clientes->altura();
-}
-
-/**
-	@brief Muestra el arbol de clientes en inorden
-*/
-EcoCityMoto& EcoCityMoto::recorreAVLInorden()
-{
-	clientes->recorreInorden();
-	return *this;
-}
-
-/**
-	@brief Muestra el arbol de clientes
-*/
-EcoCityMoto& EcoCityMoto::verArbolCliente()
-{
-	clientes->verArbol();
+	std::map<std::string, Cliente>::iterator it;
+	for (it = clientes->begin(); it != clientes->end(); it++) {
+		std::cout << it->second;
+	}
 	return *this;
 }
 

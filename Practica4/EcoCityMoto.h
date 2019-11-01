@@ -4,7 +4,7 @@
 
 #include "Moto.h"
 #include "Cliente.h"
-#include "AVL.h"
+#include <map>
 #include <vector>
 
 #include <cmath>
@@ -13,7 +13,7 @@ class EcoCityMoto
 {
 	unsigned idUltimo = 0;
 	std::vector<Moto>* motos = 0;
-	AVL<Cliente>* clientes = 0;
+	std::map<std::string, Cliente>* clientes = 0;
 
 public:
 	EcoCityMoto();
@@ -34,9 +34,7 @@ public:
 	bool buscaCliente(std::string& dni, Cliente& clienteEncontrado);
 	EcoCityMoto& borraMoto(int pos);
 	EcoCityMoto& borraItinerario(int pos, std::string dni);
-	unsigned int getAlturaAVL();
-	EcoCityMoto& recorreAVLInorden();
-	EcoCityMoto& verArbolCliente();
+	EcoCityMoto& recorreMapa();
 	unsigned int idItinerario();
 
 };
