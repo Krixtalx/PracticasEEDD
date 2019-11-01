@@ -35,9 +35,9 @@ UTM Cliente::getPosicion() const {
 	@brief Devuelve una referencia a la lista que almacena los itinerarios
 	@throws std::logic_error Si no se han creado itinerarios para el cliente
 */
-ListaDEnlazada<Itinerario>& Cliente::getItinerarios()
+list<Itinerario>& Cliente::getItinerarios()
 {
-	if (listaItinerarios->getTam() == 0)
+	if (listaItinerarios->size() == 0)
 		throw std::logic_error("[Cliente.cpp] El cliente no tiene itinerarios");
 	return *(this->listaItinerarios);
 }
@@ -153,7 +153,7 @@ void Cliente::crearItinerarios(int num, UTM& minimo, UTM& maximo) {
 	for (int i = 0; i < num; i++) {
 		//TODO: revisar creacion junto a creaItinerario
 		Itinerario* aux = new Itinerario(aplicacion->idItinerario(), minimo, maximo);
-		listaItinerarios->insertaFinal(*aux);
+		listaItinerarios->push_back(*aux);
 		delete aux;
 	}
 }
@@ -174,7 +174,7 @@ void Cliente::creaItinerario(Moto& m)
 	Itinerario nuevo(aplicacion->idItinerario(), tempMin, tempMax);
 	nuevo.setInicio(m.getUTM());
 	nuevo.setVehiculo(&m);
-	listaItinerarios->insertaFinal(nuevo);
+	listaItinerarios->push_back(nuevo);
 }
 
 /**
@@ -191,8 +191,8 @@ void Cliente::desbloqueaMoto(Moto& m)
 void Cliente::terminarTrayecto()
 {
 	try {
-		listaItinerarios->Final().setMinutos(rand() % 300);
-		listaItinerarios->Final().getVehiculo()->seDesactiva();
+		listaItinerarios->back().setMinutos(rand() % 300);
+		listaItinerarios->back().getVehiculo()->seDesactiva();
 	}
 	catch (std::runtime_error & e) {
 		throw std::runtime_error(e);

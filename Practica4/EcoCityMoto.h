@@ -5,14 +5,14 @@
 #include "Moto.h"
 #include "Cliente.h"
 #include "AVL.h"
-#include "VDinamico.h"
+#include <vector>
 
 #include <cmath>
 
 class EcoCityMoto
 {
 	unsigned idUltimo = 0;
-	VDinamico<Moto>* motos = 0;
+	std::vector<Moto>* motos = 0;
 	AVL<Cliente>* clientes = 0;
 
 public:

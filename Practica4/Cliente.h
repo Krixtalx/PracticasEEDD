@@ -2,6 +2,7 @@
 #define CLIENTE_H
 
 #include <string>
+#include <list>
 #include "UTM.h"
 #include "Itinerario.h"
 
@@ -18,7 +19,7 @@ private:
 	string direccion = "";
 	string nombreCompleto = "";
 	UTM posicion;
-	ListaDEnlazada<Itinerario>* listaItinerarios=new ListaDEnlazada<Itinerario>;
+	std::list<Itinerario>* listaItinerarios=new std::list<Itinerario>;
 	EcoCityMoto* aplicacion = 0;
 
 public:
@@ -38,7 +39,7 @@ public:
 	double DistanciaCliente(Cliente& otro);
 	UTM getPosicion() const;
 	void crearItinerarios(int num, UTM& minimo, UTM& maximo);
-	ListaDEnlazada<Itinerario>& getItinerarios();
+	std::list<Itinerario>& getItinerarios();
 	friend ostream& operator<<(ostream& os, const Cliente& cliente);
 	void setAplicacion(EcoCityMoto* app);
 	Moto& buscaMotoCercana();

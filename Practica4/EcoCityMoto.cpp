@@ -1,11 +1,14 @@
 #include "EcoCityMoto.h"
 #include "Cliente.h"
+
+#include <iostream>
+
 /**
 	@brief Constructor por defecto
 */
 EcoCityMoto::EcoCityMoto()
 {
-	motos = new VDinamico<Moto>;
+	motos = new vector<Moto>;
 	clientes = new AVL<Cliente>;
 }
 
@@ -15,7 +18,7 @@ EcoCityMoto::EcoCityMoto()
 */
 EcoCityMoto::EcoCityMoto(unsigned _idUltimo) : idUltimo(_idUltimo)
 {
-	motos = new VDinamico<Moto>;
+	motos = new vector<Moto>;
 	clientes = new AVL<Cliente>;
 }
 
@@ -34,7 +37,7 @@ EcoCityMoto::~EcoCityMoto()
 */
 EcoCityMoto::EcoCityMoto(EcoCityMoto& orig) : idUltimo(orig.idUltimo)
 {
-	motos = new VDinamico<Moto>(*(orig.motos));
+	motos = new vector<Moto>(*(orig.motos));
 	clientes = new AVL<Cliente>(*(orig.clientes));
 }
 
@@ -59,7 +62,7 @@ Moto& EcoCityMoto::localizaMotoCercana(UTM posicion)
 	Moto* masCercana = 0;
 	double menorDistancia = 99999, distancia;
 	Cliente temp("", "", "", "", "", posicion.latitud, posicion.longitud);
-	for (int i = motos->getTamL() - 1; i >= 0; i--) {
+	for (int i = motos->size() - 1; i >= 0; i--) {
 		distancia = (*motos)[i].distanciaCliente(temp);
 		if (distancia < menorDistancia) {
 			masCercana = &(*motos)[i];
@@ -78,10 +81,10 @@ Moto& EcoCityMoto::localizaMotoCercana(Cliente& cliente){
 	double menorDistancia = 99999.99;
 	double distancia;
 	bool aux=false;
-	if (motos->getTamL() <= 0) {
+	if (motos->size() <= 0) {
 		throw std::runtime_error("[Localiza moto cercana]: No hay ninguna moto en el sistema");
 	}
-	for (int i = 0; i < motos->getTamL(); i++){		
+	for (int i = 0; i < motos->size(); i++){		
 		distancia = (*motos)[i].distanciaCliente(cliente);
 		if (menorDistancia > distancia) {
 			aux = true;
@@ -108,7 +111,7 @@ void EcoCityMoto::desbloqueaMoto(Moto& m, Cliente& cli)
 */
 EcoCityMoto& EcoCityMoto::insertaMoto(Moto& moto)
 {
-	motos->insertarDato(moto);
+	motos->push_back(moto);
 	return *this;
 }
 
@@ -128,7 +131,7 @@ EcoCityMoto& EcoCityMoto::insertaItinerario(Itinerario& itinerario, std::string 
 {
 	Cliente encontrado;
 	buscaCliente(dni, encontrado);
-	encontrado.getItinerarios().insertaFinal(itinerario);
+	encontrado.getItinerarios().push_back(itinerario);
 	return *this;
 }
 
@@ -137,7 +140,7 @@ EcoCityMoto& EcoCityMoto::insertaItinerario(Itinerario& itinerario, std::string 
 */
 std::string& EcoCityMoto::verItinerario(Cliente& cliente){
 	string *aux=new string;
-	ListaDEnlazada<Itinerario> lista;
+	std::list<Itinerario> lista;
 	try {
 		lista = cliente.getItinerarios();
 	}
@@ -145,11 +148,11 @@ std::string& EcoCityMoto::verItinerario(Cliente& cliente){
 		string temp = e.what();
 		throw std::logic_error("[EcoCityMoto::verItinerario]" + temp);
 	}
-	Iterador<Itinerario> iterator = lista.iterador();
-	for (unsigned int i = 0; i < lista.getTam(); i++) {
+	list<Itinerario>::iterator iterator = lista.begin();
+	for (unsigned int i = 0; i < lista.size(); i++) {
 		try {
-			*aux += (iterator.getNodo()->toCSV() + "\n");
-			if (i+1<lista.getTam())
+			*aux += (iterator->toCSV() + "\n");
+			if (i+1<lista.size())
 				iterator++;
 		}
 		catch (std::exception & e) {
@@ -175,7 +178,7 @@ const std::string& EcoCityMoto::verCliente(std::string& dni){
 */
 bool EcoCityMoto::buscaMoto(std::string id, Moto& motoEncontrada)
 {
-	for(int i = (*motos).getTamL() - 1; i >= 0; i--){
+	for(int i = (*motos).size() - 1; i >= 0; i--){
 		if ((*motos)[i].id == id) {
 			motoEncontrada = (*motos)[i];
 			return true;
@@ -204,7 +207,10 @@ bool EcoCityMoto::buscaCliente(std::string& dni, Cliente& clienteEncontrado)
 EcoCityMoto& EcoCityMoto::borraMoto(int pos)
 {
 	try {
-		motos->eliminarDato(pos);
+		std::vector<Moto>::iterator it = motos->begin();
+		for (int i = pos; i >= 0; i--)
+			it++;
+		motos->erase(it);
 	}
 	catch (std::out_of_range & e) {
 		string temp = e.what();
@@ -219,14 +225,14 @@ EcoCityMoto& EcoCityMoto::borraItinerario(int pos, std::string dni)
 {
 	Cliente encontrado;
 	buscaCliente(dni, encontrado);
-	Iterador<Itinerario> it(encontrado.getItinerarios().iterador());
+	std::list<Itinerario>::iterator it = encontrado.getItinerarios().begin();
 	
 	while(pos > 0){
 		it++;
 		pos--;
 	}
 	try {
-		encontrado.getItinerarios().borra(it);
+		encontrado.getItinerarios().erase(it);
 	}
 	catch (std::logic_error & e) {
 		string temp = e.what();
