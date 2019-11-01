@@ -190,11 +190,9 @@ void Cliente::desbloqueaMoto(Moto& m)
 */
 void Cliente::terminarTrayecto()
 {
-	try {
+	
 		listaItinerarios->back().setMinutos(rand() % 300);
+		if(listaItinerarios->size() == 0)
+			throw std::runtime_error("[Cliente::terminarTrayecto] El cliente no tiene itinerarios");
 		listaItinerarios->back().getVehiculo()->seDesactiva();
-	}
-	catch (std::runtime_error & e) {
-		throw std::runtime_error(e);
-	}
 }

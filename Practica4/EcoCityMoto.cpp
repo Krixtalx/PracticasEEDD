@@ -206,16 +206,12 @@ bool EcoCityMoto::buscaCliente(std::string& dni, Cliente& clienteEncontrado)
 */
 EcoCityMoto& EcoCityMoto::borraMoto(int pos)
 {
-	try {
-		std::vector<Moto>::iterator it = motos->begin();
-		for (int i = pos; i >= 0; i--)
-			it++;
-		motos->erase(it);
-	}
-	catch (std::out_of_range & e) {
-		string temp = e.what();
-		throw std::out_of_range("[EcoCityMoto::borraMoto]" + temp);
-	}
+	if (pos < 0 || motos->size() < pos)
+		throw std::out_of_range("[EcoCityMoto::borraMoto] Se ha intentado borrar en una posicion no valida");
+	std::vector<Moto>::iterator it = motos->begin();
+	for (int i = pos; i >= 0; i--)
+		it++;
+	motos->erase(it);
 	return *this;
 }
 /**
@@ -225,19 +221,12 @@ EcoCityMoto& EcoCityMoto::borraItinerario(int pos, std::string dni)
 {
 	Cliente encontrado;
 	buscaCliente(dni, encontrado);
+	if (pos < 0 || encontrado.getItinerarios().size() < pos)
+		throw std::out_of_range("[EcoCityMoto::borraItinerario] Se ha intentado borrar en una posicion no valida");
 	std::list<Itinerario>::iterator it = encontrado.getItinerarios().begin();
-	
-	while(pos > 0){
+	for (int i = pos; i >= 0; i--)
 		it++;
-		pos--;
-	}
-	try {
-		encontrado.getItinerarios().erase(it);
-	}
-	catch (std::logic_error & e) {
-		string temp = e.what();
-		throw std::logic_error("[EcoCityMoto::borraItinerario]" + temp);
-	}
+	encontrado.getItinerarios().erase(it);
 	return *this;
 }
 
