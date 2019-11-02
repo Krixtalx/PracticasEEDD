@@ -546,6 +546,11 @@ void carga(EcoCityMoto& ecocity) {
 *@Brief Menu principal
 */
 bool menuPrincipal(EcoCityMoto& ecocity) {
+	std::ifstream cargaItinerarios;
+	cargaItinerarios.open("itinerarios.txt");
+	if (cargaItinerarios.good()) {
+		//TODO: cargar itinerarios en cada cliente
+	}
 	int opcion=0;
 	while (opcion != 6) {
 		cout << endl << endl << "Programa de Gestión de EcoCityMoto" << endl << endl;

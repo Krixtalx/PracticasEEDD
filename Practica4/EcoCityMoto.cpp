@@ -2,6 +2,8 @@
 #include "Cliente.h"
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
 /**
 	@brief Constructor por defecto
@@ -27,6 +29,17 @@ EcoCityMoto::EcoCityMoto(unsigned _idUltimo) : idUltimo(_idUltimo)
 */
 EcoCityMoto::~EcoCityMoto()
 {
+	std::ofstream archivoItis;
+	archivoItis.open("itinerarios.txt");
+	if (!archivoItis.good())
+		throw std::runtime_error("[~EcoCityMoto] No se pudo crear el archivo");
+	cout << endl << "Iniciando guardado de itinerarios en el fichero itinerarios.txt..." << endl;
+	for (std::map<string,Cliente>::iterator it = clientes->begin(); it != clientes->end(); it++)
+	{
+		archivoItis << "-" << it->second.getDni() << endl;
+		archivoItis << verItinerario(it->second);
+	}
+	cout << "Itinerarios guardados satisfactoriamente!";
 	delete motos;
 	delete clientes;
 }
