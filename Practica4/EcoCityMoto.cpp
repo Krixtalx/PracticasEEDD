@@ -33,7 +33,7 @@ EcoCityMoto::~EcoCityMoto()
 	archivoItis.open("itinerarios.txt");
 	if (!archivoItis.good())
 		throw std::runtime_error("[~EcoCityMoto] No se pudo crear el archivo");
-	cout << endl << "Iniciando guardado de itinerarios en el fichero itinerarios.txt..." << endl;
+	cout << endl << "Iniciando guardado de itinerarios en el fichero: itinerarios.txt" << endl;
 	for (std::map<string,Cliente>::iterator it = clientes->begin(); it != clientes->end(); it++)
 	{
 		archivoItis << "-" << it->second.getDni() << endl;
