@@ -133,7 +133,7 @@ bool buscarCliente(EcoCityMoto& ecocity, Cliente& clienteEncontrado){
 *@Brief Devuelve la altura del árbol AVL en el que están los clientes
 */
 void alturaArbol(EcoCityMoto& ecocity) {
-	cout << "La altura del árbol es " << ecocity.getAlturaAVL();
+	//cout << "La altura del árbol es " << ecocity.getAlturaAVL();
 }
 
 /*
@@ -163,7 +163,7 @@ void visualizaArbol(EcoCityMoto& ecocity) {
 	cin >> yon;
 	if (yon == 'S') {
 		clearScreen();
-		ecocity.verArbolCliente();
+		//ecocity.verArbolCliente();
 	}
 	else {
 		clearScreen();
@@ -292,6 +292,28 @@ void accesoItinerarios(EcoCityMoto& ecocity) {
 }
 
 /*
+*@Brief Función encargada de generar aleatoriamente itinerarios para todos los clientes
+*/
+void generaItinerarios(EcoCityMoto& ecocity) {
+	if (!ecocity.numeroClientes()) {
+		cout << "No hay clientes cargados en la aplicacion." << endl;
+		return;
+	}
+	double min1, min2, max1, max2;
+	cout << "Latitud mínima: ";
+	cin >> min1;
+	cout << endl << "Latitud máxima: ";
+	cin >> max1;
+	cout << endl << "Longitud mínima: ";
+	cin >> min2;
+	cout << endl << "Longitud máxima: ";
+	cin >> max2;
+	UTM minimo(min1, max2), maximo(max1, min2);
+	ecocity.crearItinerarios(minimo, maximo);
+	cout << endl << "Se han generado itinerarios para todos los clientes" << endl;
+}
+
+/*
 *@Brief Metodo encargado de asignar la motocicleta mas cercana al cliente introducido por DNI
 */
 void asignarMoto(EcoCityMoto& ecocity) {
@@ -331,7 +353,7 @@ void bloquearMoto(EcoCityMoto& ecocity) {
 		clearScreen();
 		try {
 			cliente.terminarTrayecto();
-			cliente.getItinerarios().back().getVehiculo()->seDesactiva();
+			cliente.getItinerarios().back()->getVehiculo()->seDesactiva();
 		}
 		catch (std::runtime_error & e) {
 			cerr << e.what();
@@ -358,7 +380,8 @@ void menuClientes(EcoCityMoto& ecocity) {
 	cout << "4 - Acceso a itinerarios de un cliente" << endl;
 	cout << "5 - Asignar moto más cercana" << endl;
 	cout << "6 - Bloquear moto de un cliente" << endl;
-	cout << "7 - Salir" << endl;
+	cout << "7 - Generar itinerarios aleatorios" << endl;
+	cout << "8 - Salir" << endl;
 	cout << "¿Que desea hacer?: ";
 	cin >> opcion;
 
@@ -394,6 +417,10 @@ void menuClientes(EcoCityMoto& ecocity) {
 		break;
 
 	case 7:
+		clearScreen();
+		generaItinerarios(ecocity);
+		break;
+	case 8:
 		clearScreen();
 		return;
 		break;
@@ -438,7 +465,7 @@ void insertarMoto(EcoCityMoto& ecocity) {
 		cout << "Opción invalida";
 		break;
 	}
-	Moto moto(matricula, utm, estadoMoto);
+	Moto* moto = new Moto(matricula, utm, estadoMoto);
 	ecocity.insertaMoto(moto);
 	
 }
@@ -450,13 +477,13 @@ void buscarMoto(EcoCityMoto& ecocity) {
 	string matricula;
 	cout << "Introduzca la matricula de la motocicleta: ";
 	getline(cin >> ws, matricula);
-	Moto moto;
+	Moto* moto = new Moto;
 	if (ecocity.buscaMoto(matricula, moto)) {
-		cout << "Moto encontrada: " << moto.getId() << "    UTM: " << moto.getUTM().toCSV()<<endl;
-		cout << "Estado de la moto: " << moto.getEstado();
+		cout << "Moto encontrada: " << moto->getId() << "    UTM: " << moto->getUTM().toCSV()<<endl;
+		cout << "Estado de la moto: " << moto->getEstado();
 		try {
-			if (moto.getEstado() == "Activada")
-				cout << endl << moto.getDatosCliente();
+			if (moto->getEstado() == "Activada")
+				cout << endl << moto->getDatosCliente();
 		}
 		catch (std::exception & e) {
 			cerr << endl << e.what();
@@ -630,8 +657,8 @@ void leeClientes(string fileNameClientes, EcoCityMoto& ecocity) {
 				try {
 					ecocity.insertaCliente(client);
 				}
-				catch (const std::bad_alloc & e) {
-					std::cout << "bad_alloc: " << e.what() << '\n';
+				catch (const std::runtime_error & e) {
+					std::cout << e.what() << '\n';
 				}
 			}
 		}
@@ -707,13 +734,8 @@ void leeMotos(string fileNameMotos, EcoCityMoto& ecocity) {
 
 				UTM utm(dlat, dlon);
 
-				Moto moto(matricula, utm, estadoMoto);
-				try {
-					ecocity.insertaMoto(moto);
-				}
-				catch (const std::bad_alloc & e) {
-					std::cout << "bad_alloc: " << e.what() << '\n';
-				}
+				Moto* moto = new Moto(matricula, utm, estadoMoto);
+				ecocity.insertaMoto(moto);
 			}
 		}
 

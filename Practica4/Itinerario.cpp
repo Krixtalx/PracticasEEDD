@@ -14,7 +14,6 @@ Itinerario::Itinerario() {
 */
 Itinerario::Itinerario(int num, const UTM& min, const UTM& max): id(num){
 	generaUTM(min, max);
-	srand(time(0)+rand());
 	const unsigned int diasMes[12] = { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 	unsigned int ano = (rand() % 40)+2019;
 	unsigned int mes = (rand() % 12)+1;
@@ -61,7 +60,6 @@ Itinerario& Itinerario::operator=(Itinerario& right)
 */
 void Itinerario::generaUTM(const UTM& min, const UTM& max)
 {
-	srand(time(0)+rand());
 	this->inicio.latitud = ((double)rand() / (double)RAND_MAX) * (max.latitud - min.latitud) + min.latitud;
 	this->inicio.longitud = ((double)rand() / (double)RAND_MAX) * (max.longitud - min.longitud) + min.longitud;
 	this->fin.latitud = ((double)rand() / (double)RAND_MAX) * (max.latitud - min.latitud) + min.latitud;

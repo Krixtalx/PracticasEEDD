@@ -1,6 +1,13 @@
 #include <iostream>
+#include <ctime>
+#include "InterfazUsuario.h"
+#include "EcoCityMoto.h"
+
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	srand(time(0));
+	setlocale(LC_ALL, "spanish");
+	EcoCityMoto app;
+	menuPrincipal(app);
 }

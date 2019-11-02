@@ -16,7 +16,7 @@ Cliente::Cliente(string _dni, string _pass, string _nombre, string _apellido, st
 	nombreCompleto = nombre + " " + apellido;
 }
 
-Cliente::Cliente(Cliente& orig): dni(orig.dni), pass(orig.pass), nombre(orig.nombre), apellido(orig.apellido), direccion(orig.direccion), listaItinerarios(orig.listaItinerarios) {
+Cliente::Cliente(const Cliente& orig): dni(orig.dni), pass(orig.pass), nombre(orig.nombre), apellido(orig.apellido), direccion(orig.direccion), listaItinerarios(orig.listaItinerarios) {
 	nombreCompleto = orig.nombreCompleto;
 	posicion.latitud = orig.posicion.latitud;
 	posicion.longitud = orig.posicion.longitud;
@@ -35,7 +35,7 @@ UTM Cliente::getPosicion() const {
 	@brief Devuelve una referencia a la lista que almacena los itinerarios
 	@throws std::logic_error Si no se han creado itinerarios para el cliente
 */
-list<Itinerario>& Cliente::getItinerarios()
+list<Itinerario*>& Cliente::getItinerarios()
 {
 	if (listaItinerarios->size() == 0)
 		throw std::logic_error("[Cliente.cpp] El cliente no tiene itinerarios");
@@ -151,10 +151,8 @@ Moto& Cliente::buscaMotoCercana()
 */
 void Cliente::crearItinerarios(int num, UTM& minimo, UTM& maximo) {
 	for (int i = 0; i < num; i++) {
-		//TODO: revisar creacion junto a creaItinerario
 		Itinerario* aux = new Itinerario(aplicacion->idItinerario(), minimo, maximo);
-		listaItinerarios->push_back(*aux);
-		delete aux;
+		listaItinerarios->push_back(aux);
 	}
 }
 
@@ -170,10 +168,9 @@ void Cliente::creaItinerario(Moto& m)
 	tempMin.longitud = 3;
 	tempMax.latitud = 38;
 	tempMax.longitud = 4;
-	//TODO: revisar creacion junto a crearItinerarios
-	Itinerario nuevo(aplicacion->idItinerario(), tempMin, tempMax);
-	nuevo.setInicio(m.getUTM());
-	nuevo.setVehiculo(&m);
+	Itinerario* nuevo = new Itinerario(aplicacion->idItinerario(), tempMin, tempMax);
+	nuevo->setInicio(m.getUTM());
+	nuevo->setVehiculo(&m);
 	listaItinerarios->push_back(nuevo);
 }
 
@@ -191,8 +188,8 @@ void Cliente::desbloqueaMoto(Moto& m)
 void Cliente::terminarTrayecto()
 {
 	
-		listaItinerarios->back().setMinutos(rand() % 300);
+		listaItinerarios->back()->setMinutos(rand() % 300);
 		if(listaItinerarios->size() == 0)
 			throw std::runtime_error("[Cliente::terminarTrayecto] El cliente no tiene itinerarios");
-		listaItinerarios->back().getVehiculo()->seDesactiva();
+		listaItinerarios->back()->getVehiculo()->seDesactiva();
 }
