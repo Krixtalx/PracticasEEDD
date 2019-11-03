@@ -46,6 +46,7 @@ public:
 	void creaItinerario(Moto& m);
 	void desbloqueaMoto(Moto& m);
 	void terminarTrayecto();
+	void addItinerario(Itinerario* iti);
 };
 
 #endif /* CLIENTE_H */

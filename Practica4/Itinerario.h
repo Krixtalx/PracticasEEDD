@@ -16,6 +16,7 @@ class Itinerario{
 public:
 	Itinerario();
 	Itinerario(int num, const UTM& min, const UTM& max);
+	Itinerario(int _id, int _minutos, UTM& _inicio, UTM& _fin, Fecha& _fecha);
 	~Itinerario();
 	Itinerario& operator= (Itinerario& right);
 	void generaUTM(const UTM &min, const UTM& max);

@@ -146,9 +146,9 @@ EcoCityMoto& EcoCityMoto::insertaCliente(Cliente& cliente)
 */
 EcoCityMoto& EcoCityMoto::insertaItinerario(Itinerario* itinerario, std::string dni)
 {
-	Cliente encontrado;
+	Cliente* encontrado;
 	buscaCliente(dni, encontrado);
-	encontrado.getItinerarios().push_back(itinerario);
+	encontrado->getItinerarios().push_back(itinerario);
 	return *this;
 }
 
@@ -199,9 +199,9 @@ std::string& EcoCityMoto::verItinerario(Cliente& cliente){
 	@brief Busca el cliente con el dni indicado y devuelve su nombre completo
 */
 const std::string& EcoCityMoto::verCliente(std::string& dni){
-	Cliente aux;
+	Cliente* aux;
 	if (buscaCliente(dni, aux)) {
-		return aux.GetNombreCompleto();
+		return aux->GetNombreCompleto();
 	}
 }
 
@@ -225,12 +225,12 @@ bool EcoCityMoto::buscaMoto(std::string id, Moto* &motoEncontrada)
 /**
 	@brief Busca el cliente cuyo DNI coicida con el indicado
 */
-bool EcoCityMoto::buscaCliente(std::string& dni, Cliente& clienteEncontrado)
+bool EcoCityMoto::buscaCliente(std::string& dni, Cliente* &clienteEncontrado)
 {
 	std::map<std::string, Cliente>::iterator it;
 	it = clientes->find(dni);
 	if (it != clientes->end()) {
-		clienteEncontrado = it->second;
+		clienteEncontrado = &(it->second);
 		return true;
 	}
 	else {
@@ -256,14 +256,14 @@ EcoCityMoto& EcoCityMoto::borraMoto(int pos)
 */
 EcoCityMoto& EcoCityMoto::borraItinerario(int pos, std::string dni)
 {
-	Cliente encontrado;
+	Cliente* encontrado;
 	buscaCliente(dni, encontrado);
-	if (pos < 0 || encontrado.getItinerarios().size() < pos)
+	if (pos < 0 || encontrado->getItinerarios().size() < pos)
 		throw std::out_of_range("[EcoCityMoto::borraItinerario] Se ha intentado borrar en una posicion no valida");
-	std::list<Itinerario*>::iterator it = encontrado.getItinerarios().begin();
+	std::list<Itinerario*>::iterator it = encontrado->getItinerarios().begin();
 	for (int i = pos; i >= 0; i--)
 		it++;
-	encontrado.getItinerarios().erase(it);
+	encontrado->getItinerarios().erase(it);
 	return *this;
 }
 
@@ -290,4 +290,9 @@ unsigned int EcoCityMoto::idItinerario(){
 unsigned int EcoCityMoto::numeroClientes()
 {
 	return clientes->size();
+}
+
+void EcoCityMoto::setIdUltimo(unsigned _id)
+{
+	idUltimo = _id;
 }

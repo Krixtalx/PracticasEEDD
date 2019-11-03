@@ -193,3 +193,8 @@ void Cliente::terminarTrayecto()
 			throw std::runtime_error("[Cliente::terminarTrayecto] El cliente no tiene itinerarios");
 		listaItinerarios->back()->getVehiculo()->seDesactiva();
 }
+
+void Cliente::addItinerario(Itinerario* iti)
+{
+	listaItinerarios->push_back(iti);
+}

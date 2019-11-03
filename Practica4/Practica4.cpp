@@ -3,6 +3,7 @@
 #include "InterfazUsuario.h"
 #include "EcoCityMoto.h"
 
+#include <sstream>
 
 int main()
 {

@@ -32,12 +32,13 @@ public:
 	std::string& verItinerario(Cliente& cliente);
 	const std::string& verCliente(std::string& dni);
 	bool buscaMoto(std::string id, Moto* &motoEncontrada);
-	bool buscaCliente(std::string& dni, Cliente& clienteEncontrado);
+	bool buscaCliente(std::string& dni, Cliente* &clienteEncontrado);
 	EcoCityMoto& borraMoto(int pos);
 	EcoCityMoto& borraItinerario(int pos, std::string dni);
 	EcoCityMoto& recorreMapa();
 	unsigned int idItinerario();
 	unsigned int numeroClientes();
+	void setIdUltimo(unsigned _id);
 
 };
 

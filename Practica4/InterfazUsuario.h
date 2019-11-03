@@ -14,12 +14,14 @@ using namespace std;
 bool windows = true;
 string archivoClientes="clientes.csv";
 string archivoMotos = "motos.txt";
+string archivoItinerarios = "itinerarios.txt";
 Cliente* clienteaux= new Cliente;
 
 //Forward declaration
 bool menuPrincipal(EcoCityMoto& ecocity);
 void leeClientes(string fileNameClientes, EcoCityMoto& ecocity);
 void leeMotos(string fileNameMotos, EcoCityMoto& ecocity);
+void leeItinerarios(string archivo, EcoCityMoto& ecocity);
 
 /*
 *@Brief funcion encargada de limpiar la pantalla
@@ -115,12 +117,12 @@ void insertarCliente(EcoCityMoto& ecocity) {
 /*
 *@Brief Busca un cliente en el sistema a partir de su DNI 
 */
-bool buscarCliente(EcoCityMoto& ecocity, Cliente& clienteEncontrado){
+bool buscarCliente(EcoCityMoto& ecocity, Cliente* &clienteEncontrado){
 	string dni;
 	cout << "Introduzca el DNI del cliente a buscar: ";
 	getline(cin >> ws, dni);
 	if (ecocity.buscaCliente(dni, clienteEncontrado)) {
-		cout << "Cliente encontrado: "<<clienteEncontrado.GetNombreCompleto()<< "    UTM: "<<clienteEncontrado.getPosicion().toCSV();
+		cout << "Cliente encontrado: "<<clienteEncontrado->GetNombreCompleto()<< "    UTM: "<<clienteEncontrado->getPosicion().toCSV();
 		return true;
 	}
 	else
@@ -286,9 +288,9 @@ void menuItinerarios(EcoCityMoto& ecocity, Cliente& cliente) {
 *@Brief Función encargada de garantizar el acceso a los Itinerarios de un cliente
 */
 void accesoItinerarios(EcoCityMoto& ecocity) {
-	Cliente cliente;
+	Cliente* cliente;
 	if(buscarCliente(ecocity, cliente))
-		menuItinerarios(ecocity, cliente);
+		menuItinerarios(ecocity, *cliente);
 }
 
 /*
@@ -321,7 +323,7 @@ void asignarMoto(EcoCityMoto& ecocity) {
 	Moto* motoCercana;
 	cout << "Introduzca el DNI del cliente al que se le asignará la moto: ";
 	getline(cin >> ws, dni);
-	if (ecocity.buscaCliente(dni, *clienteaux)){
+	if (ecocity.buscaCliente(dni, clienteaux)){
 		clearScreen();
 		cout << "Buscando moto más cercana a "<<clienteaux->getPosicion().toCSV()<<" ..." << endl;
 		try {
@@ -346,14 +348,14 @@ void asignarMoto(EcoCityMoto& ecocity) {
 */
 void bloquearMoto(EcoCityMoto& ecocity) {
 	string dni;
-	Cliente cliente;
+	Cliente* cliente;
 	cout << "Introduzca el DNI del cliente al que se le bloqueará la moto: ";
 	getline(cin >> ws, dni);
 	if (ecocity.buscaCliente(dni, cliente)) {
 		clearScreen();
 		try {
-			cliente.terminarTrayecto();
-			cliente.getItinerarios().back()->getVehiculo()->seDesactiva();
+			cliente->terminarTrayecto();
+			cliente->getItinerarios().back()->getVehiculo()->seDesactiva();
 		}
 		catch (std::runtime_error & e) {
 			cerr << e.what();
@@ -393,7 +395,8 @@ void menuClientes(EcoCityMoto& ecocity) {
 
 	case 2:
 		clearScreen();
-		buscarCliente(ecocity,null);
+		Cliente* temp;
+		buscarCliente(ecocity,temp);
 		break;
 
 	case 3:
@@ -539,6 +542,9 @@ void carga(EcoCityMoto& ecocity) {
 	cout << "Comenzando carga de Motos..." << endl;
 	leeMotos(archivoMotos, ecocity);
 	cout << "Finalizando carga de Motos..." << endl;
+	cout << "Comenzando carga de Itinerarios..." << endl;
+	leeItinerarios(archivoItinerarios, ecocity);
+	cout << "Finalizando carga de Itinerarios..." << endl;
 	//clearScreen();
 }
 
@@ -750,4 +756,54 @@ void leeMotos(string fileNameMotos, EcoCityMoto& ecocity) {
 	else {
 		cerr << "No se puede abrir el fichero" << endl;
 	}
+}
+
+void leeItinerarios(string archivo, EcoCityMoto& ecocity) {
+	ifstream test;
+	test.open(archivo);
+	if (test.good()) {
+		string linea;
+		Cliente* clienteActivo = 0;
+		while (!test.eof()) {
+			stringstream ss;
+			getline(test, linea);
+			if (linea == "")
+				continue;
+			if (linea[0] == '-') {
+				string temp = linea.substr(1);
+				if (!ecocity.buscaCliente(temp, clienteActivo)){
+					cerr << "Erorr al cargar datos del cliente " << temp << endl;
+					break;
+				}
+			}
+			else {
+				if (!clienteActivo)
+					throw std::runtime_error("[leeItinerarios] Error al buscar cliente");
+				ss << linea;
+				string id, minutos;
+				string latInicio, lonInicio, latFinal, lonFinal;
+				string dia, mes, anio, hora, minuto;
+				getline(ss, id, ';');
+				getline(ss, minutos, ';');
+				getline(ss, latInicio, ':');
+				getline(ss, lonInicio, ';');
+				getline(ss, latFinal, ':');
+				getline(ss, lonFinal, ';');
+				getline(ss, dia, '/');
+				getline(ss, mes, '/');
+				getline(ss, anio, ' ');
+				getline(ss, hora, ':');
+				getline(ss, minuto);
+				UTM inicio(stod(latInicio), stod(lonInicio)), fin(stod(latFinal), stod(lonFinal));
+				Fecha fecha(stoi(dia), stoi(mes), stoi(anio), stoi(hora), stoi(minuto));
+				Itinerario* iti = new Itinerario(stoi(id), stoi(minutos), inicio, fin, fecha);
+				clienteActivo->addItinerario(iti);
+				ecocity.setIdUltimo(stoi(id));
+			}
+		}
+	}
+	else {
+		cerr << "No se pudo cargar los itinerarios" << endl;
+	}
+
 }

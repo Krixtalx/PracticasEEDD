@@ -33,6 +33,14 @@ Itinerario::Itinerario(int num, const UTM& min, const UTM& max): id(num){
 	this->minutos = (rand() % 500) +1;
 }
 
+Itinerario::Itinerario(int _id, int _minutos, UTM& _inicio, UTM& _fin, Fecha& _fecha) :
+	id(_id), minutos(_minutos)
+{
+	inicio = _inicio;
+	fin = _fin;
+	fecha = _fecha;
+}
+
 /**
 	@brief Destructor
 */
