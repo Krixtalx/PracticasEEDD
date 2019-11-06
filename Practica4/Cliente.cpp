@@ -194,7 +194,19 @@ void Cliente::terminarTrayecto()
 		listaItinerarios->back()->getVehiculo()->seDesactiva();
 }
 
+/**
+	@brief Inserta el itinerario en la lista del cliente
+*/
 void Cliente::addItinerario(Itinerario* iti)
 {
 	listaItinerarios->push_back(iti);
 }
+
+/**
+	@brief Devuleve la informacion del cliente en formato CSV
+*/
+string Cliente::toCSV()
+{
+	return (dni + ";" + pass + ";" + nombreCompleto + ";" + direccion + ";" + std::to_string(posicion.latitud) + ";" + std::to_string(posicion.longitud));
+}
+

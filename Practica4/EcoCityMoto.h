@@ -26,7 +26,7 @@ public:
 	void desbloqueaMoto(Moto& m, Cliente& cli);
 
 	EcoCityMoto& insertaMoto(Moto* moto);
-	EcoCityMoto& insertaCliente(Cliente& cliente);
+	Cliente* insertaCliente(Cliente& cliente);
 	EcoCityMoto& insertaItinerario(Itinerario* itinerario, std::string dni);
 	EcoCityMoto& crearItinerarios(UTM& min, UTM& max);
 	std::string& verItinerario(Cliente& cliente);

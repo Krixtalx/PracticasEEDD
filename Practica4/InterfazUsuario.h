@@ -21,7 +21,7 @@ Cliente* clienteaux= new Cliente;
 bool menuPrincipal(EcoCityMoto& ecocity);
 void leeClientes(string fileNameClientes, EcoCityMoto& ecocity);
 void leeMotos(string fileNameMotos, EcoCityMoto& ecocity);
-void leeItinerarios(string archivo, EcoCityMoto& ecocity);
+void leeItinerariosYClientes(string archivo, EcoCityMoto& ecocity);
 
 /*
 *@Brief funcion encargada de limpiar la pantalla
@@ -536,7 +536,7 @@ void menuMotos(EcoCityMoto& ecocity) {
 *@Brief Funcion encargada de cargar los CSVs en memoria. Utiliza los nombres incluidos en las variables globales
 */
 void carga(EcoCityMoto& ecocity) {
-	cout << "Comenzando carga de Clientes..." << endl;
+	/*cout << "Comenzando carga de Clientes..." << endl;
 	leeClientes(archivoClientes, ecocity);
 	cout << "Finalizando carga de Clientes..." << endl;
 	cout << "Comenzando carga de Motos..." << endl;
@@ -544,8 +544,14 @@ void carga(EcoCityMoto& ecocity) {
 	cout << "Finalizando carga de Motos..." << endl;
 	cout << "Comenzando carga de Itinerarios..." << endl;
 	leeItinerarios(archivoItinerarios, ecocity);
-	cout << "Finalizando carga de Itinerarios..." << endl;
+	cout << "Finalizando carga de Itinerarios..." << endl;*/
 	//clearScreen();
+	cout << "Comenzando carga de Clientes e Itinerarios..." << endl;
+	leeItinerariosYClientes(archivoItinerarios, ecocity);
+	cout << "Finalizando carga de Clientes e Itinerarios..." << endl;
+	cout << "Comenzando carga de Motos..." << endl;
+	leeMotos(archivoMotos, ecocity);
+	cout << "Finalizando carga de Motos..." << endl;
 }
 
 /*
@@ -758,27 +764,74 @@ void leeMotos(string fileNameMotos, EcoCityMoto& ecocity) {
 	}
 }
 
-void leeItinerarios(string archivo, EcoCityMoto& ecocity) {
-	ifstream test;
-	test.open(archivo);
-	if (test.good()) {
+void leeLineaCliente(string& csv, EcoCityMoto& ecocity, Cliente* &cliActivo) {
+	stringstream ss;
+	string dni, pass, nombre, apellido, direccion, latitud, longitud;
+	float dlat, dlon;
+	//Inicializamos el contenido de ss
+	ss << csv;
+
+	//Leemos el NIF
+	getline(ss, dni, ';'); //El carácter ; se lee y se elimina de ss
+
+	//Leemos el pass
+	getline(ss, pass, ';'); //El caráter ; se lee y se elimina de ss
+
+	//Leemos el nombre
+	getline(ss, nombre, ' '); //El caráter ' ' se lee y se elimina de ss
+
+	//Leemos el apellido
+	getline(ss, apellido, ';'); //El carácter ; se lee y se elimina de ss
+
+	//Leemos la dirección
+	getline(ss, direccion, ';'); //El caráter ; se lee y se elimina de ss
+
+	//Leemos la latitud y longitud
+	getline(ss, latitud, ';'); //El caráter ; se lee y se elimina de ss
+	getline(ss, longitud, ';'); //El caráter ; se lee y se elimina de ss
+
+	setlocale(LC_ALL, "english");
+	dlat = std::stod(latitud);
+	dlon = std::stod(longitud);
+	setlocale(LC_ALL, "spanish");
+	//con todos los atributos leídos, se crea el cliente
+	Cliente client(dni, pass, nombre, apellido, direccion, dlat, dlon);
+	client.setAplicacion(&ecocity);
+	try {
+		cliActivo = ecocity.insertaCliente(client);
+	}
+	catch (const std::runtime_error & e) {
+		std::cout << e.what() << '\n';
+	}
+}
+
+void leeItinerariosYClientes(string archivo, EcoCityMoto& ecocity) {
+	ifstream fichero;
+	fichero.open(archivo);
+	if (fichero.good()) {
 		string linea;
 		Cliente* clienteActivo = 0;
-		while (!test.eof()) {
+		while (!fichero.eof()) {
 			stringstream ss;
-			getline(test, linea);
+			getline(fichero, linea);
 			if (linea == "")
 				continue;
 			if (linea[0] == '-') {
 				string temp = linea.substr(1);
+				try {
+					leeLineaCliente(temp, ecocity, clienteActivo);
+				}
+				catch (std::runtime_error & e) {
+					cout << e.what() << endl;
+				}/*
 				if (!ecocity.buscaCliente(temp, clienteActivo)){
 					cerr << "Erorr al cargar datos del cliente " << temp << endl;
 					break;
-				}
+				}*/
 			}
 			else {
 				if (!clienteActivo)
-					throw std::runtime_error("[leeItinerarios] Error al buscar cliente");
+					throw std::runtime_error("[leeItinerariosYClientes] Error al buscar cliente");
 				ss << linea;
 				string id, minutos;
 				string latInicio, lonInicio, latFinal, lonFinal;

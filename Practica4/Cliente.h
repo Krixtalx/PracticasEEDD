@@ -47,6 +47,7 @@ public:
 	void desbloqueaMoto(Moto& m);
 	void terminarTrayecto();
 	void addItinerario(Itinerario* iti);
+	string toCSV();
 };
 
 #endif /* CLIENTE_H */

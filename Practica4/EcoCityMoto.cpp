@@ -29,17 +29,22 @@ EcoCityMoto::EcoCityMoto(unsigned _idUltimo) : idUltimo(_idUltimo)
 */
 EcoCityMoto::~EcoCityMoto()
 {
-	std::ofstream archivoItis;
-	archivoItis.open("itinerarios.txt");
-	if (!archivoItis.good())
-		throw std::runtime_error("[~EcoCityMoto] No se pudo crear el archivo");
-	cout << endl << "Iniciando guardado de itinerarios en el fichero: itinerarios.txt" << endl;
-	for (std::map<string,Cliente>::iterator it = clientes->begin(); it != clientes->end(); it++)
-	{
-		archivoItis << "-" << it->second.getDni() << endl;
-		archivoItis << verItinerario(it->second);
+	char guardar;
+	cout << "¿Quiere guardar el estado actual de los clientes? [S/n]: ";
+	cin >> guardar;
+	if (guardar == 'S') {
+		std::ofstream archivoItis;
+		archivoItis.open("itinerarios.txt");
+		if (!archivoItis.good())
+			throw std::runtime_error("[~EcoCityMoto] No se pudo crear el archivo");
+		cout << endl << "Iniciando guardado de itinerarios en el fichero: itinerarios.txt" << endl;
+		for (std::map<string, Cliente>::iterator it = clientes->begin(); it != clientes->end(); it++)
+		{
+			archivoItis << "-" << it->second.toCSV() << endl;
+			archivoItis << verItinerario(it->second);
+		}
+		cout << "Itinerarios guardados satisfactoriamente!";
 	}
-	cout << "Itinerarios guardados satisfactoriamente!";
 	delete motos;
 	delete clientes;
 }
@@ -130,15 +135,16 @@ EcoCityMoto& EcoCityMoto::insertaMoto(Moto* moto)
 
 /**
 	@brief Inserta un cliente en el arbol de clientes
+	@return Puntero al cliente recien insertado
 */
-EcoCityMoto& EcoCityMoto::insertaCliente(Cliente& cliente)
+Cliente* EcoCityMoto::insertaCliente(Cliente& cliente)
 {
 	std::map<std::string, Cliente>::iterator it;
 	std::pair<std::map<std::string, Cliente>::iterator, bool> parInserta;
 	parInserta = clientes->insert(std::pair<const std::string, Cliente>(cliente.getDni(), cliente));
 	if (!parInserta.second)
 		throw std::runtime_error("[EcoCityMoto::insertaCliente] No se pudo insertar");
-	return *this;
+	return &(parInserta.first->second);
 }
 
 /**
