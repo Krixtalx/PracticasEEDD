@@ -39,6 +39,7 @@ public:
 	unsigned int idItinerario();
 	unsigned int numeroClientes();
 	void setIdUltimo(unsigned _id);
+	Moto* localizaMotoSinBateria(float porctBateria);
 
 };
 

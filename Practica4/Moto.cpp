@@ -4,12 +4,17 @@
 	@brief Constructor por defecto
 */
 Moto::Moto() : id("0") {
+	porcentajeBateria = rand() % 100;
+	//if (porcentajeBateria < limiteBateria)
+		//estatus.sinbateria = true;
 }
 
 /**
 	@brief Constructor parametrizado
 */
-Moto::Moto(std::string id, UTM posicion, Estado estatus): id(id), posicion(posicion), estatus(estatus), usadoPor(0){
+Moto::Moto(std::string id, UTM posicion, estatus _estado, int porcentajeBateria): id(id), posicion(posicion), estado(_estado), porcentajeBateria(porcentajeBateria),usadoPor(0){
+	//if (porcentajeBateria < limiteBateria)
+		//estatus.sinbateria = true;
 }
 
 /**
@@ -18,8 +23,9 @@ Moto::Moto(std::string id, UTM posicion, Estado estatus): id(id), posicion(posic
 Moto::Moto(const Moto& orig){
 	id = orig.id;
 	posicion = orig.posicion;
-	estatus = orig.estatus;
+	estado = orig.estado;
 	usadoPor = orig.usadoPor;
+	porcentajeBateria = orig.porcentajeBateria;
 }
 
 /**
@@ -37,8 +43,9 @@ Moto& Moto::operator=(Moto& right)
 	id = right.id;
 	posicion.latitud = right.posicion.latitud;
 	posicion.longitud = right.posicion.longitud;
-	estatus = right.estatus;
+	estado = right.estado;
 	usadoPor = right.usadoPor;
+	porcentajeBateria = right.porcentajeBateria;
 	return *this;
 }
 
@@ -67,9 +74,10 @@ std::string Moto::getDatosCliente()
 /**
 	@brief Devuelve un string con el estado de la moto
 */
-std::string Moto::getEstado()
+estatus Moto::getEstado()
 {
-	if (estatus.activa)
+	return estado;
+	/*if (estatus.activa)
 		return "Activada";
 	if (estatus.bloqueada)
 		return "Bloqueada";
@@ -77,7 +85,7 @@ std::string Moto::getEstado()
 		return "Rota";
 	if (estatus.sinbateria)
 		return "Sin bateria";
-	throw std::invalid_argument("[Moto::getEstado] Error en el estado");
+	throw std::invalid_argument("[Moto::getEstado] Error en el estado");*/
 }
 
 /**
@@ -85,9 +93,13 @@ std::string Moto::getEstado()
 *@Param Cliente: usuario que activa la moto
 */
 void Moto::seActiva(Cliente& usuario){
-	if (estatus.bloqueada && !estatus.sinbateria && !estatus.roto){
+	/*if (estatus.bloqueada && !estatus.sinbateria && !estatus.roto){
 		estatus.activa = true;
 		estatus.bloqueada = false;
+		usadoPor = &usuario;
+	}*/
+	if (estado == estatus::bloqueada){
+		estado = estatus::activa;
 		usadoPor = &usuario;
 	}
 }
@@ -96,24 +108,37 @@ void Moto::seActiva(Cliente& usuario){
 *@Brief Método encargado de desactivar la moto
 */
 void Moto::seDesactiva(){
-	if (estatus.activa) {
+	if (/*estatus.activa*/estado == estatus::activa) {
 		//Cliente* aux = new Cliente("Nulo");
-		estatus.activa = false;
-		estatus.bloqueada = true;
+		//estatus.activa = false;
+		//estatus.bloqueada = true;
+		estado = estatus::bloqueada;
 		usadoPor = 0;
 	}
+}
+void Moto::setPorcentajeBateria(int porcentaje)
+{
+	porcentajeBateria = porcentaje;
+	if (porcentajeBateria < limiteBateria)
+		estado = estatus::sinbateria;
+}
+int Moto::getPorcentajeBateria()
+{
+	return porcentajeBateria;
 }
 /**
 *@Brief Setter del campo sinBateria de estatus
 */
 void Moto::setSinbateria(){
-	estatus.sinbateria = true;
+	//estatus.sinbateria = true;
+	estado = estatus::sinbateria;
 }
 /**
 *@Brief Setter del campo Roto de estatus
 */
 void Moto::setRoto(){
-	estatus.roto = true;
+	//estatus.roto = true;
+	estado = estatus::rota;
 }
 /**
 *@Brief Calcula la distancia entre 2 motos
@@ -126,7 +151,9 @@ double Moto::distanciaMoto(Moto& otro){
 	@brief Calcula la distancia entre la moto y el cliente indicado
 */
 double Moto::distanciaCliente(Cliente& cliente){
-	if (estatus.bloqueada && !estatus.roto && !estatus.sinbateria) {
+	//if (estatus.bloqueada && !estatus.roto && !estatus.sinbateria) 
+	if(estado == estatus::bloqueada)
+	{
 		return sqrt(pow(this->posicion.latitud - cliente.getPosicion().latitud, 2) + pow(this->posicion.longitud - cliente.getPosicion().longitud, 2));
 	}
 	return 99999999.99;

@@ -302,3 +302,11 @@ void EcoCityMoto::setIdUltimo(unsigned _id)
 {
 	idUltimo = _id;
 }
+
+Moto* EcoCityMoto::localizaMotoSinBateria(float porctBateria){
+	for(int i = 0; i < motos->size(); i++){
+		if ((*motos)[i]->getEstado=="Sin bateria") {
+			
+		}
+	}
+}
