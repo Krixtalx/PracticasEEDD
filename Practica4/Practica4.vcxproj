@@ -155,6 +155,7 @@
     <ClCompile Include="EcoCityMoto.cpp" />
     <ClCompile Include="Fecha.cpp" />
     <ClCompile Include="Itinerario.cpp" />
+    <ClCompile Include="leerFich.cpp" />
     <ClCompile Include="Moto.cpp" />
     <ClCompile Include="Practica4.cpp" />
     <ClCompile Include="UTM.cpp" />

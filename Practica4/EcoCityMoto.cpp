@@ -325,3 +325,16 @@ Moto* EcoCityMoto::localizaMotoSinBateria(float porctBateria){
 	}*/
 	return new Moto();
 }
+
+void EcoCityMoto::borrarEEDD()
+{
+	delete motos;
+	delete clientes;
+	motos = new vector<Moto*>;
+	clientes = new map<std::string, Cliente>;
+}
+
+int EcoCityMoto::getNumClientes()
+{
+	return clientes->size();
+}
