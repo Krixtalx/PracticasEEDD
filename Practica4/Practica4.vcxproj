@@ -163,6 +163,7 @@
     <ClInclude Include="Cliente.h" />
     <ClInclude Include="EcoCityMoto.h" />
     <ClInclude Include="Fecha.h" />
+    <ClInclude Include="leerFich.h" />
     <ClInclude Include="InterfazUsuario.h" />
     <ClInclude Include="Itinerario.h" />
     <ClInclude Include="Moto.h" />

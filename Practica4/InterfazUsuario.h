@@ -442,7 +442,7 @@ void insertarMoto(EcoCityMoto& ecocity) {
 	string matricula;
 	UTM utm;
 	int estado;
-	Estado estadoMoto;
+	estatus estadoMoto;
 	cout << "Introduzca la matricula de la moto: ";
 	getline(cin >> ws, matricula);
 	cout << "Introduzca la latitud en la que se encuentra la moto: ";
@@ -451,24 +451,31 @@ void insertarMoto(EcoCityMoto& ecocity) {
 	cin >> utm.longitud;
 	cout << "Introduzca el estado en el que se encuentra la moto (1 para bloqueado, 2 para activado, 3 para sinBateria, 4 para roto): ";
 	cin >> estado;
-	switch (estado) {
-	case 1:
-		estadoMoto.bloqueada = true;
-		break;
-	case 2:
-		estadoMoto.activa = true;
-		break;
-	case 3:
-		estadoMoto.sinbateria = true;
-		break;
-	case 4:
-		estadoMoto.roto = true;
-		break;
-	default:
-		cout << "Opción invalida";
-		break;
+	bool cinCorrecto = false;
+	while (!cinCorrecto) {
+		switch (estado) {
+		case 1:
+			estadoMoto = estatus::bloqueada;
+			cinCorrecto = true;
+			break;
+		case 2:
+			estadoMoto = estatus::activa;
+			cinCorrecto = true;
+			break;
+		case 3:
+			estadoMoto = estatus::sinbateria;
+			cinCorrecto = true;
+			break;
+		case 4:
+			estadoMoto = estatus::rota;
+			cinCorrecto = true;
+			break;
+		default:
+			cout << "Opción invalida";
+			break;
+		}
 	}
-	Moto* moto = new Moto(matricula, utm, estadoMoto);
+	Moto* moto = new Moto(matricula, utm, estadoMoto, 1 + (rand() % 100));
 	ecocity.insertaMoto(moto);
 	
 }
@@ -485,7 +492,7 @@ void buscarMoto(EcoCityMoto& ecocity) {
 		cout << "Moto encontrada: " << moto->getId() << "    UTM: " << moto->getUTM().toCSV()<<endl;
 		cout << "Estado de la moto: " << moto->getEstado();
 		try {
-			if (moto->getEstado() == "Activada")
+			if (moto->getEstado() == estatus::activa)
 				cout << endl << moto->getDatosCliente();
 		}
 		catch (std::exception & e) {
@@ -734,24 +741,24 @@ void leeMotos(string fileNameMotos, EcoCityMoto& ecocity) {
 				dlon = stod(longitud);
 				setlocale(LC_ALL, "spanish");
 				//con todos los atributos leídos, se crea el cliente
-				Estado estadoMoto;
+				estatus estadoMoto;
 				switch (iestado) {
 				case 0:
-					estadoMoto.bloqueada = true;
+					estadoMoto = estatus::bloqueada;
 					break;
 				case 1:
-					estadoMoto.activa = true;
+					estadoMoto = estatus::activa;
 					break;
 				case 2:
-					estadoMoto.sinbateria = true;
+					estadoMoto = estatus::sinbateria;
 					break;
 				case 3:
-					estadoMoto.roto = true;
+					estadoMoto = estatus::rota;
 				}
 
 				UTM utm(dlat, dlon);
 
-				Moto* moto = new Moto(matricula, utm, estadoMoto);
+				Moto* moto = new Moto(matricula, utm, estadoMoto, 1 + (rand() % 100));
 				ecocity.insertaMoto(moto);
 			}
 		}

@@ -1,9 +1,21 @@
 #include "EcoCityMoto.h"
 #include "Cliente.h"
+#include "leerFich.h"
 
 #include <iostream>
 #include <fstream>
 #include <sstream>
+
+void EcoCityMoto::cargaEEDD(string fichCli, string fichMotos)
+{
+	cout << "¿Quiere iniciar la lectura desde los ficheros por defecto? [S/n]: " << endl;
+	char entrada;
+	cin >> entrada;
+	if (entrada == 'S') {
+		leerFich::leeMotos(fichMotos, this);
+		leerFich::leeItinerariosYClientes(fichCli, this);
+	}
+}
 
 /**
 	@brief Constructor por defecto
@@ -12,6 +24,7 @@ EcoCityMoto::EcoCityMoto()
 {
 	motos = new vector<Moto*>;
 	clientes = new map<std::string, Cliente>;
+	cargaEEDD("itinerarios.txt", "motos.txt");
 }
 
 /**
@@ -22,6 +35,7 @@ EcoCityMoto::EcoCityMoto(unsigned _idUltimo) : idUltimo(_idUltimo)
 {
 	motos = new vector<Moto*>;
 	clientes = new map<std::string, Cliente>;
+	cargaEEDD("itinerarios.txt", "motos.txt");
 }
 
 /**
@@ -304,9 +318,10 @@ void EcoCityMoto::setIdUltimo(unsigned _id)
 }
 
 Moto* EcoCityMoto::localizaMotoSinBateria(float porctBateria){
-	for(int i = 0; i < motos->size(); i++){
-		if ((*motos)[i]->getEstado=="Sin bateria") {
+	/*for(int i = 0; i < motos->size(); i++){
+		if ((*motos)[i]->getEstado() == estatus::sinbateria) {
 			
 		}
-	}
+	}*/
+	return new Moto();
 }
