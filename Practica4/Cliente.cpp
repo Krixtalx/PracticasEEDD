@@ -152,6 +152,13 @@ Moto& Cliente::buscaMotoCercana()
 void Cliente::crearItinerarios(int num, UTM& minimo, UTM& maximo) {
 	for (int i = 0; i < num; i++) {
 		Itinerario* aux = new Itinerario(aplicacion->idItinerario(), minimo, maximo);
+		try {
+			aux->setVehiculo(aplicacion->getMotoAleatoria());
+		}
+		catch (std::range_error &e) {
+			string temp = e.what();
+			throw std::range_error("[Cliente::crearItinerarios]" + temp);
+		}
 		listaItinerarios->push_back(aux);
 	}
 }

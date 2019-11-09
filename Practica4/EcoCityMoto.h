@@ -31,18 +31,21 @@ public:
 	EcoCityMoto& insertaItinerario(Itinerario* itinerario, std::string dni);
 	EcoCityMoto& crearItinerarios(UTM& min, UTM& max);
 	std::string& verItinerario(Cliente& cliente);
-	const std::string& verCliente(std::string& dni);
+	//const std::string& verCliente(std::string& dni);
 	bool buscaMoto(std::string id, Moto* &motoEncontrada);
 	bool buscaCliente(std::string& dni, Cliente* &clienteEncontrado);
 	EcoCityMoto& borraMoto(int pos);
 	EcoCityMoto& borraItinerario(int pos, std::string dni);
 	EcoCityMoto& recorreMapa();
 	unsigned int idItinerario();
-	unsigned int numeroClientes();
 	void setIdUltimo(unsigned _id);
-	Moto* localizaMotoSinBateria(float porctBateria);
+	vector<Moto*>* localizaMotoSinBateria(float porctBateria);
 	void borrarEEDD();
-	int getNumClientes();
+	void borraClientes();
+	void borraMotos();
+	unsigned getNumClientes();
+	unsigned getNumMotos();
+	Moto* getMotoAleatoria();
 
 };
 

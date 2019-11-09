@@ -72,20 +72,16 @@ std::string Moto::getDatosCliente()
 }
 
 /**
-	@brief Devuelve un string con el estado de la moto
+	@brief Devuelve el estado actual de la moto
 */
 estatus Moto::getEstado()
 {
 	return estado;
-	/*if (estatus.activa)
-		return "Activada";
-	if (estatus.bloqueada)
-		return "Bloqueada";
-	if (estatus.roto)
-		return "Rota";
-	if (estatus.sinbateria)
-		return "Sin bateria";
-	throw std::invalid_argument("[Moto::getEstado] Error en el estado");*/
+}
+
+void Moto::setEstado(estatus _estado)
+{
+	estado = _estado;
 }
 
 /**

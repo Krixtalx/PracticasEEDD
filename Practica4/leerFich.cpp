@@ -150,6 +150,7 @@ void leerFich::leeItinerariosYClientes(string archivo, EcoCityMoto* ecocity) {
 				string id, minutos;
 				string latInicio, lonInicio, latFinal, lonFinal;
 				string dia, mes, anio, hora, minuto;
+				string idMoto;
 				getline(ss, id, ';');
 				getline(ss, minutos, ';');
 				getline(ss, latInicio, ':');
@@ -160,10 +161,14 @@ void leerFich::leeItinerariosYClientes(string archivo, EcoCityMoto* ecocity) {
 				getline(ss, mes, '/');
 				getline(ss, anio, ' ');
 				getline(ss, hora, ':');
-				getline(ss, minuto);
+				getline(ss, minuto, ';');
+				getline(ss, idMoto);
 				UTM inicio(stod(latInicio), stod(lonInicio)), fin(stod(latFinal), stod(lonFinal));
 				Fecha fecha(stoi(dia), stoi(mes), stoi(anio), stoi(hora), stoi(minuto));
+				Moto* temp = 0;
+				ecocity->buscaMoto(idMoto, temp);
 				Itinerario* iti = new Itinerario(stoi(id), stoi(minutos), inicio, fin, fecha);
+				iti->setVehiculo(temp);
 				clienteActivo->addItinerario(iti);
 				ecocity->setIdUltimo(stoi(id));
 				totalIti++;
@@ -182,7 +187,7 @@ void leerFich::leeClientes(string fileNameClientes, EcoCityMoto* ecocity) {
 	cout << "Comenzando lectura del fichero " << fileNameClientes << "..." << endl;
 	ifstream fe; //Flujo de entrada
 	string linea; //Cada línea tiene un clienete
-	int total = 0; //Contador de líneas o clientes
+	int total = 1; //Contador de líneas o clientes
 
 	//Variables auxiliares para almacenar los valores leídos
 	string dni, nombre, apellido, pass, direccion, latitud, longitud;
@@ -195,8 +200,7 @@ void leerFich::leeClientes(string fileNameClientes, EcoCityMoto* ecocity) {
 		//Mientras no se haya llegado al final del fichero
 		while (!fe.eof()) {
 			getline(fe, linea); //Toma una línea del fichero
-			if (!total || linea == ""){
-				total++;
+			if (linea == "" || linea[0] == 'N'){
 				continue;
 			}
 			Cliente* cli = 0;

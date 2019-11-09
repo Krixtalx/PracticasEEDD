@@ -178,12 +178,12 @@ void menuArbol(EcoCityMoto& ecocity) {
 */
 void verItinerario(EcoCityMoto& ecocity, Cliente& cliente) {
 	cout << "Itinerarios: " << endl;
-	cout << "ID ; Duración ; UTM Inicio ; UTM Final ; Fecha" << endl;
+	cout << "ID;Duración;UTM Inicio;UTM Final;Fecha;IDMoto" << endl;
 	try {
 		cout << ecocity.verItinerario(cliente);
 	}
 	catch (logic_error & e) {
-		cerr << e.what();
+		cerr << "El cliente no tiene itinerarios" << endl;
 	}
 }
 
@@ -202,8 +202,8 @@ void borrarItinerario(EcoCityMoto& ecocity, Cliente& cliente) {
 				cout << "Itinerario borrado";
 			}
 		}
-		catch (std::logic_error & e) {
-			cerr << endl << "No tiene ningún itinerario para borrar";
+		catch (std::logic_error &e) {
+			cerr << endl << e.what();
 		}
 	}
 	else {
@@ -258,7 +258,7 @@ void accesoItinerarios(EcoCityMoto& ecocity) {
 *@Brief Función encargada de generar aleatoriamente itinerarios para todos los clientes
 */
 void generaItinerarios(EcoCityMoto& ecocity) {
-	if (!ecocity.numeroClientes()) {
+	if (!ecocity.getNumClientes()) {
 		cout << "No hay clientes cargados en la aplicacion." << endl;
 		return;
 	}
@@ -272,7 +272,13 @@ void generaItinerarios(EcoCityMoto& ecocity) {
 	cout << endl << "Longitud máxima: ";
 	cin >> max2;
 	UTM minimo(min1, max2), maximo(max1, min2);
-	ecocity.crearItinerarios(minimo, maximo);
+	try {
+		ecocity.crearItinerarios(minimo, maximo);
+	}
+	catch (range_error & e) {
+		cout << e.what() << endl;
+		return;
+	}
 	cout << endl << "Se han generado itinerarios para todos los clientes" << endl;
 }
 
@@ -495,44 +501,159 @@ void menuMotos(EcoCityMoto& ecocity) {
 
 	default:
 		clearScreen();
-		cout << "Opción invalida";
+		cout << "Opción inválida";
 		break;
 	}
+}
+
+void mostrarEstado(EcoCityMoto& ecocity) {
+	cout << ecocity.getNumClientes() << " clientes almacenados en la aplicación" << endl;
+	cout << ecocity.getNumMotos() << " motos almacenadas en la aplicación" << endl;
+	int idTemp = ecocity.idItinerario();
+	ecocity.setIdUltimo(idTemp);
+	if (!idTemp) {
+		idTemp = 1;
+	}
+	cout << "El ID del último itinerario creado es: " << idTemp - 1 << endl;
 }
 
 /*
 *@Brief Funcion encargada de cargar los CSVs en memoria. Utiliza los nombres incluidos en las variables globales
 */
 void carga(EcoCityMoto& ecocity) {
-	char confirmar;
-	cout << "¿Realmente quiere sobreescribir el estado actual? Se borrara toda la informacion almacenada sobre Motos y Clientes en la aplicacion actual [S/n]: ";
-	cin >> confirmar;
+	char confMotos = '\0', confCli = '\0';
+	/*if (ecocity.getNumClientes()) {
+		cout << "¿Realmente quiere sobreescribir el estado actual? Se borrara toda la informacion almacenada sobre Motos y Clientes en la aplicacion actual [S/n]: ";
+		cin >> confirmar;
+	}
+	else
+		confirmar = 's';
 	if (confirmar == 'S' || confirmar == 's') {
 		cout << "Borrando informacion almacenada..." << endl;
 		ecocity.borrarEEDD();
 		cout << "Borrado completo" << endl;
 		leerFich::leeItinerariosYClientes(archivoItinerarios, &ecocity);
 		leerFich::leeMotos(archivoMotos, &ecocity);
+	}*/
+	if (ecocity.getNumMotos()) {
+		cout << "Se eliminará la información actual sobre motos de la aplicación y comenzará la carga desde fichero. ¿Quiere continuar la operación? [S/n]: ";
+		cin >> confMotos;
+	}
+	if (ecocity.getNumClientes()) {
+		cout << "Se eliminará la información actual sobre clientes e itinerarios de la aplicación y comenzará la carga desde fichero. ¿Quiere continuar la operación? [S/n]: ";
+		cin >> confCli;
+	}
+	if (confMotos == 'S' || confMotos == 's') {
+		cout << "Borrando información de motos..." << endl;
+		ecocity.borraMotos();
+		leerFich::leeMotos(archivoMotos, &ecocity);
+	}
+	if (confCli == 'S' || confCli == 's') {
+		cout << "Borrando información de clientes e itinerarios..." << endl;
+		ecocity.borraClientes();
+		leerFich::leeItinerariosYClientes(archivoItinerarios, &ecocity);
 	}
 	clearScreen();
 }
 
-void cargaClientes(EcoCityMoto& ecocity) {
+void cargaParcial(EcoCityMoto& ecocity) {
+	char confMotos = 's', confCli = 's';
 	if (ecocity.getNumClientes()) {
-		cout << "Ya existen clientes en la aplicacion, no es posible cargar desde el fichero" << endl;
-	}else
+		cout << "Se eliminará la información actual sobre clientes de la aplicación y comenzará la carga desde fichero. ¿Quiere continuar la operación? [S/n]: ";
+		cin >> confCli;
+	}
+	if (ecocity.getNumMotos()) {
+		cout << "Se eliminará la información actual sobre motos de la aplicación y comenzará la carga desde fichero. ¿Quiere continuar la operación? [S/n]: ";
+		cin >> confMotos;
+	}
+	if (confMotos == 'S' || confMotos == 's') {
+		cout << "Borrando información de motos..." << endl;
+		ecocity.borraMotos();
+		leerFich::leeMotos(archivoMotos, &ecocity);
+	}
+	if (confCli == 'S' || confCli == 's') {
+		cout << "Borrando información de clientes..." << endl;
+		ecocity.borraClientes();
 		leerFich::leeClientes(archivoClientes, &ecocity);
+	}
+}
+
+void cargaUnica(EcoCityMoto& ecocity) {
+	char opcionInicio;
+	cout << "El uso de este menú podría eliminar cualquier información previa almacenada en las EEDD de la aplicación, ¿desea continuar? [S/n]: ";
+	cin >> opcionInicio;
+	if (opcionInicio != 'S' && opcionInicio != 's')
+		return;
+	int opcion;
+	cout << endl << endl << "Cargas desde fichero disponibles: " << endl;
+	cout << "1 - Clientes" << endl;
+	cout << "2 - Motos" << endl;
+	cout << "3 - Clientes + Itinerarios" << endl;
+	cout << "4 - Salir" << endl;
+	cout << "¿Qué desea hacer?: ";
+	cin >> opcion;
+	switch (opcion)
+	{
+	case 1:
+		clearScreen();
+		leerFich::leeClientes(archivoClientes, &ecocity);
+		break;
+	case 2:
+		clearScreen();
+		leerFich::leeMotos(archivoMotos, &ecocity);
+		break;
+	case 3:
+		clearScreen();
+		if (ecocity.getNumMotos())
+			leerFich::leeItinerariosYClientes(archivoItinerarios, &ecocity);
+		else
+			cout << "No hay motos cargadas, por favor, cargue primero las motos en la aplicación" << endl;
+		break;
+	case 4:
+		clearScreen();
+		return;
+	default:
+		cout << "Opción inválida" << endl;
+		break;
+	}
+}
+
+void menuCarga(EcoCityMoto& ecocity) {
+	int opcion;
+	cout << endl << endl << "Submenu de Carga" << endl << endl;
+	cout << "1 - Carga completa (Clientes, itinerarios y motos)" << endl;
+	cout << "2 - Carga parcial (Clientes y motos)" << endl;
+	cout << "3 - Carga unica" << endl;
+	cout << "4 - Salir" << endl;
+	cout << "¿Que desea hacer?: ";
+	cin >> opcion;
+	switch (opcion)
+	{
+	case 1:
+		clearScreen();
+		carga(ecocity);
+		break;
+	case 2:
+		clearScreen();
+		cargaParcial(ecocity);
+		break;
+	case 3:
+		clearScreen();
+		cargaUnica(ecocity);
+		break;
+	case 4:
+		clearScreen();
+		return;
+	default:
+		cout << "Opción inválida";
+		break;
+	}
 }
 
 /*
 *@Brief Menu principal
 */
 bool menuPrincipal(EcoCityMoto& ecocity) {
-	std::ifstream cargaItinerarios;
-	cargaItinerarios.open("itinerarios.txt");
-	if (cargaItinerarios.good()) {
-		//TODO: cargar itinerarios en cada cliente
-	}
 	int opcion=0;
 	while (opcion != 7) {
 		cout << endl << endl << "Programa de Gestión de EcoCityMoto" << endl << endl;
@@ -540,8 +661,8 @@ bool menuPrincipal(EcoCityMoto& ecocity) {
 		cout << "2 - Configuracion" << endl;
 		cout << "3 - Clientes (STL Map)" << endl;
 		cout << "4 - Motos (STL Vector)" << endl;
-		cout << "5 - Carga CSV (sobreescribe las EEDD actuales)" << endl;
-		cout << "6 - Carga Clientes (solo si no hay clientes cargados)" << endl;
+		cout << "5 - Cargar datos" << endl;
+		cout << "6 - Estado actual" << endl;
 		cout << "7 - Salir" << endl;
 		cout << "¿Que desea hacer?: ";
 		cin >> opcion;
@@ -569,12 +690,12 @@ bool menuPrincipal(EcoCityMoto& ecocity) {
 
 		case 5:
 			clearScreen();
-			carga(ecocity);
+			menuCarga(ecocity);
 			break;
 
 		case 6:
 			clearScreen();
-			cargaClientes(ecocity);
+			mostrarEstado(ecocity);
 			break;
 		case 7:
 			clearScreen();

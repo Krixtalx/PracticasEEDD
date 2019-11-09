@@ -46,18 +46,20 @@ EcoCityMoto::~EcoCityMoto()
 	char guardar;
 	cout << "¿Quiere guardar el estado actual de los clientes? [S/n]: ";
 	cin >> guardar;
-	if (guardar == 'S') {
+	if (guardar == 'S' || guardar == 's') {
 		std::ofstream archivoItis;
 		archivoItis.open("itinerarios.txt");
 		if (!archivoItis.good())
-			throw std::runtime_error("[~EcoCityMoto] No se pudo crear el archivo");
-		cout << endl << "Iniciando guardado de itinerarios en el fichero: itinerarios.txt" << endl;
-		for (std::map<string, Cliente>::iterator it = clientes->begin(); it != clientes->end(); it++)
-		{
-			archivoItis << "-" << it->second.toCSV() << endl;
-			archivoItis << verItinerario(it->second);
+			cout << "Error en el archivo itinerarios.txt" << endl;
+		else {
+			cout << endl << "Iniciando guardado de itinerarios en el fichero: itinerarios.txt" << endl;
+			for (std::map<string, Cliente>::iterator it = clientes->begin(); it != clientes->end(); it++)
+			{
+				archivoItis << "-" << it->second.toCSV() << endl;
+				archivoItis << verItinerario(it->second);
+			}
+			cout << "Itinerarios guardados satisfactoriamente!";
 		}
-		cout << "Itinerarios guardados satisfactoriamente!";
 	}
 	delete motos;
 	delete clientes;
@@ -116,7 +118,7 @@ Moto& EcoCityMoto::localizaMotoCercana(Cliente& cliente){
 	if (motos->size() <= 0) {
 		throw std::runtime_error("[Localiza moto cercana]: No hay ninguna moto en el sistema");
 	}
-	for (int i = 0; i < motos->size(); i++){		
+	for (unsigned i = 0; i < motos->size(); i++){		
 		distancia = (*motos)[i]->distanciaCliente(cliente);
 		if (menorDistancia > distancia) {
 			aux = true;
@@ -180,7 +182,13 @@ EcoCityMoto& EcoCityMoto::crearItinerarios(UTM& min, UTM& max)
 {
 	std::map<std::string, Cliente>::iterator it;
 	for (it = clientes->begin(); it != clientes->end(); it++) {
-		it->second.crearItinerarios((rand() % 5) + 1, min, max);
+		try {
+			it->second.crearItinerarios((rand() % 5) + 1, min, max);
+		}
+		catch (std::range_error & e) {
+			string temp = e.what();
+			throw std::range_error("[EcoCityMoto::crearItinerarios]" + temp);
+		}
 	}
 	return *this;
 }
@@ -198,17 +206,6 @@ std::string& EcoCityMoto::verItinerario(Cliente& cliente){
 		string temp = e.what();
 		throw std::logic_error("[EcoCityMoto::verItinerario]" + temp);
 	}
-	/*list<Itinerario*>::iterator iterator = lista.begin();
-	for (unsigned int i = 0; i < lista.size(); i++) {
-		try {
-			*aux += ((*iterator)->toCSV() + "\n");
-			if (i+1<lista.size())
-				iterator++;
-		}
-		catch (std::exception & e) {
-			std::cerr << e.what();
-		}
-	}*/
 	list<Itinerario*>::iterator iterator;
 	for (iterator = lista.begin(); iterator != lista.end(); iterator++)
 			*aux += ((*iterator)->toCSV() + "\n");
@@ -217,14 +214,16 @@ std::string& EcoCityMoto::verItinerario(Cliente& cliente){
 
 /**
 	@brief Busca el cliente con el dni indicado y devuelve su nombre completo
-*/
+
 const std::string& EcoCityMoto::verCliente(std::string& dni){
 	Cliente* aux;
 	if (buscaCliente(dni, aux)) {
 		return aux->GetNombreCompleto();
 	}
+	else
+		throw std::runtime_error("[EcoCityMoto::verCliente] Cliente no encontrado");
 }
-
+*/
 
 /**
 	@brief Busca la moto cuya ID coincida con la indicada
@@ -307,23 +306,21 @@ unsigned int EcoCityMoto::idItinerario(){
 	return idUltimo - 1;
 }
 
-unsigned int EcoCityMoto::numeroClientes()
-{
-	return clientes->size();
-}
-
 void EcoCityMoto::setIdUltimo(unsigned _id)
 {
 	idUltimo = _id;
 }
 
-Moto* EcoCityMoto::localizaMotoSinBateria(float porctBateria){
-	/*for(int i = 0; i < motos->size(); i++){
-		if ((*motos)[i]->getEstado() == estatus::sinbateria) {
-			
+vector<Moto*>* EcoCityMoto::localizaMotoSinBateria(float porctBateria) {
+	vector<Moto*>* mSinBateria = new vector<Moto*>;
+	for(unsigned i = 0; i < motos->size(); i++){
+		if ((*motos)[i]->getEstado() == estatus::sinbateria || (*motos)[i]->getPorcentajeBateria() <= porctBateria) {
+			if ((*motos)[i]->getPorcentajeBateria() <= porctBateria)
+				(*motos)[i]->setEstado(estatus::sinbateria);
+			mSinBateria->push_back((*motos)[i]);
 		}
-	}*/
-	return new Moto();
+	}
+	return mSinBateria;
 }
 
 void EcoCityMoto::borrarEEDD()
@@ -334,7 +331,32 @@ void EcoCityMoto::borrarEEDD()
 	clientes = new map<std::string, Cliente>;
 }
 
-int EcoCityMoto::getNumClientes()
+void EcoCityMoto::borraClientes()
+{
+	delete clientes;
+	clientes = new map<std::string, Cliente>;
+}
+
+void EcoCityMoto::borraMotos()
+{
+	delete motos;
+	motos = new vector<Moto*>;
+}
+
+unsigned EcoCityMoto::getNumClientes()
 {
 	return clientes->size();
+}
+
+unsigned EcoCityMoto::getNumMotos()
+{
+	return motos->size();
+}
+
+Moto* EcoCityMoto::getMotoAleatoria()
+{
+	if (!motos->size()){
+		throw std::range_error("[EcoCityMoto::getMotoAleatoria] No hay motos cargadas");
+	}
+	return (*motos)[rand() % motos->size()];
 }

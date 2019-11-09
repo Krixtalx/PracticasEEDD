@@ -105,10 +105,10 @@ Moto* Itinerario::getVehiculo()
 *@Brief Devuelve un string en formato CSV con los atributos del objeto
 */
 std::string Itinerario::toCSV(){
-	std::string idString = to_string(id);
+	/*std::string idString = to_string(id);
 	std::string minutosString = to_string(minutos);
 	std::string inicioString = inicio.toCSV();
 	std::string finString = fin.toCSV();
-	std::string fechaString = fecha.cadena();
-	return idString + ";" + minutosString + ";" + inicioString + ";" + finString + ";" + fechaString;
+	std::string fechaString = fecha.cadena();*/
+	return to_string(id) + ";" + to_string(minutos) + ";" + inicio.toCSV() + ";" + fin.toCSV() + ";" + fecha.cadena() + ";" + vehiculo->getId();
 }

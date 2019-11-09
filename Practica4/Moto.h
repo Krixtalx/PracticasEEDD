@@ -33,6 +33,7 @@ public:
 	std::string getId();
 	UTM& getUTM();
 	estatus getEstado();
+	void setEstado(estatus _estado);
 	std::string getDatosCliente();
 	void seActiva(Cliente& usuario);
 	void seDesactiva();
