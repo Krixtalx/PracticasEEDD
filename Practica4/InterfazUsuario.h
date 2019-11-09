@@ -521,7 +521,7 @@ void mostrarEstado(EcoCityMoto& ecocity) {
 *@Brief Funcion encargada de cargar los CSVs en memoria. Utiliza los nombres incluidos en las variables globales
 */
 void carga(EcoCityMoto& ecocity) {
-	char confMotos = '\0', confCli = '\0';
+	char confMotos = 'S', confCli = 'S';
 	/*if (ecocity.getNumClientes()) {
 		cout << "¿Realmente quiere sobreescribir el estado actual? Se borrara toda la informacion almacenada sobre Motos y Clientes en la aplicacion actual [S/n]: ";
 		cin >> confirmar;

@@ -25,6 +25,8 @@ Cliente::Cliente(const Cliente& orig): dni(orig.dni), pass(orig.pass), nombre(or
 }
 
 Cliente::~Cliente() {
+	if(listaItinerarios->size())
+		delete listaItinerarios;
 }
 
 UTM Cliente::getPosicion() const {
