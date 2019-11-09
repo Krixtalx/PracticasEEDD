@@ -5,16 +5,16 @@
 */
 Moto::Moto() : id("0") {
 	porcentajeBateria = rand() % 100;
-	//if (porcentajeBateria < limiteBateria)
-		//estatus.sinbateria = true;
+	if (porcentajeBateria < limiteBateria)
+		estado = estatus::sinbateria;
 }
 
 /**
 	@brief Constructor parametrizado
 */
 Moto::Moto(std::string id, UTM posicion, estatus _estado, int porcentajeBateria): id(id), posicion(posicion), estado(_estado), porcentajeBateria(porcentajeBateria),usadoPor(0){
-	//if (porcentajeBateria < limiteBateria)
-		//estatus.sinbateria = true;
+	if (porcentajeBateria < limiteBateria)
+		estado = estatus::sinbateria;
 }
 
 /**
@@ -93,11 +93,6 @@ estatus Moto::getEstado()
 *@Param Cliente: usuario que activa la moto
 */
 void Moto::seActiva(Cliente& usuario){
-	/*if (estatus.bloqueada && !estatus.sinbateria && !estatus.roto){
-		estatus.activa = true;
-		estatus.bloqueada = false;
-		usadoPor = &usuario;
-	}*/
 	if (estado == estatus::bloqueada){
 		estado = estatus::activa;
 		usadoPor = &usuario;
@@ -108,10 +103,7 @@ void Moto::seActiva(Cliente& usuario){
 *@Brief Método encargado de desactivar la moto
 */
 void Moto::seDesactiva(){
-	if (/*estatus.activa*/estado == estatus::activa) {
-		//Cliente* aux = new Cliente("Nulo");
-		//estatus.activa = false;
-		//estatus.bloqueada = true;
+	if (estado == estatus::activa) {
 		estado = estatus::bloqueada;
 		usadoPor = 0;
 	}
@@ -130,14 +122,12 @@ int Moto::getPorcentajeBateria()
 *@Brief Setter del campo sinBateria de estatus
 */
 void Moto::setSinbateria(){
-	//estatus.sinbateria = true;
 	estado = estatus::sinbateria;
 }
 /**
 *@Brief Setter del campo Roto de estatus
 */
 void Moto::setRoto(){
-	//estatus.roto = true;
 	estado = estatus::rota;
 }
 /**
