@@ -650,12 +650,22 @@ void menuCarga(EcoCityMoto& ecocity) {
 	}
 }
 
+void reiniciarApp(EcoCityMoto* ecocity) {
+	char opcion;
+	cout << "¿Desea eliminar toda la información actual? Se creará una nueva instancia de la aplicación, siendo necesario volver a cargar la información [S/n]: ";
+	cin >> opcion;
+	if (opcion == 'S' || opcion == 's') {
+		ecocity->borrarEEDD();
+		ecocity->setIdUltimo(0);
+	}
+}
+
 /*
 *@Brief Menu principal
 */
 bool menuPrincipal(EcoCityMoto& ecocity) {
 	int opcion=0;
-	while (opcion != 7) {
+	while (opcion != 8) {
 		cout << endl << endl << "Programa de Gestión de EcoCityMoto" << endl << endl;
 		cout << "1 - Instrucciones" << endl;
 		cout << "2 - Configuracion" << endl;
@@ -663,7 +673,8 @@ bool menuPrincipal(EcoCityMoto& ecocity) {
 		cout << "4 - Motos (STL Vector)" << endl;
 		cout << "5 - Cargar datos" << endl;
 		cout << "6 - Estado actual" << endl;
-		cout << "7 - Salir" << endl;
+		cout << "7 - Reiniciar información" << endl;
+		cout << "8 - Salir" << endl;
 		cout << "¿Que desea hacer?: ";
 		cin >> opcion;
 		switch (opcion) {
@@ -697,7 +708,13 @@ bool menuPrincipal(EcoCityMoto& ecocity) {
 			clearScreen();
 			mostrarEstado(ecocity);
 			break;
+
 		case 7:
+			clearScreen();
+			reiniciarApp(&ecocity);
+			break;
+
+		case 8:
 			clearScreen();
 			return true;
 			break;

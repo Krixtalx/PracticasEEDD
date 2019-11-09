@@ -43,7 +43,7 @@ EcoCityMoto::EcoCityMoto(unsigned _idUltimo) : idUltimo(_idUltimo)
 */
 EcoCityMoto::~EcoCityMoto()
 {
-	char guardar;
+	char guardar = '\0';
 	cout << "¿Quiere guardar el estado actual de los clientes? [S/n]: ";
 	cin >> guardar;
 	if (guardar == 'S' || guardar == 's') {
