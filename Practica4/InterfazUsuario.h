@@ -409,7 +409,7 @@ void menuClientes(EcoCityMoto& ecocity) {
 void insertarMoto(EcoCityMoto& ecocity) {
 	string matricula;
 	UTM utm;
-	int estado;
+	int estado, bateria = -1;
 	estatus estadoMoto;
 	cout << "Introduzca la matricula de la moto: ";
 	getline(cin >> ws, matricula);
@@ -417,6 +417,10 @@ void insertarMoto(EcoCityMoto& ecocity) {
 	cin >> utm.latitud;
 	cout << "Introduzca la longitud en la que se encuentra la moto: ";
 	cin >> utm.longitud;
+	while (bateria < 0 || bateria > 100) {
+		cout << "Introduzca el porcentaje de batería de la moto (valor entre 0 y 100): ";
+		cin >> bateria;
+	}
 	cout << "Introduzca el estado en el que se encuentra la moto (1 para bloqueado, 2 para activado, 3 para sinBateria, 4 para roto): ";
 	cin >> estado;
 	bool cinCorrecto = false;
@@ -443,7 +447,7 @@ void insertarMoto(EcoCityMoto& ecocity) {
 			break;
 		}
 	}
-	Moto* moto = new Moto(matricula, utm, estadoMoto, 1 + (rand() % 100));
+	Moto* moto = new Moto(matricula, utm, estadoMoto, bateria);
 	ecocity.insertaMoto(moto);
 	
 }
@@ -459,6 +463,8 @@ void buscarMoto(EcoCityMoto& ecocity) {
 	if (ecocity.buscaMoto(matricula, moto)) {
 		cout << "Moto encontrada: " << moto->getId() << "    UTM: " << moto->getUTM().toCSV()<<endl;
 		cout << "Estado de la moto: " << moto->getEstado();
+		if (moto->getEstado() != estatus::sinbateria)
+			cout << "Porcentaje de batería restante: " << moto->getPorcentajeBateria() << endl;
 		try {
 			if (moto->getEstado() == estatus::activa)
 				cout << endl << moto->getDatosCliente();
@@ -472,6 +478,59 @@ void buscarMoto(EcoCityMoto& ecocity) {
 	}
 }
 
+void buscarSinBateria(EcoCityMoto& ecocity) {
+	int opcion = -1;
+	while (opcion < 0 || opcion > 2) {
+		cout << endl << "¿Quiere buscar una moto específica (1) o ver un listado completo (2)? (0 para volver)";
+		cin >> opcion;
+	}
+	switch (opcion)
+	{
+	case 0:
+	{
+		clearScreen();
+		cout << "Opción inválida";
+		return;
+	}
+
+	case 1:
+	{
+		clearScreen();
+		cout << "Introduzca el ID de la moto a buscar: ";
+		string idBusca;
+		cin >> idBusca;
+		vector<Moto*>* sinBateria = ecocity.localizaMotoSinBateria(ecocity.getLimiteBateria());
+		Moto* encontrada = 0;
+		for (vector<Moto*>::iterator it = sinBateria->begin(); it != sinBateria->end(); it++) {
+			if ((*it)->getId() == idBusca) {
+				encontrada = (*it);
+				break;
+			}
+		}
+		if (encontrada) {
+			cout << "Moto encontrada: " << encontrada->getId() << endl;
+			cout << "Posición: " << encontrada->getUTM().toCSV() << endl;
+		}
+		else
+			cout << "No se encontró la moto" << endl;
+		break;
+	}
+
+	case 2:
+	{
+		clearScreen();
+		vector<Moto*>* sinBateria = ecocity.localizaMotoSinBateria(ecocity.getLimiteBateria());
+		for (vector<Moto*>::iterator it = sinBateria->begin(); it != sinBateria->end(); it++) {
+			cout << "ID: " << (*it)->getId() << " Posición: " << (*it)->getUTM().toCSV() << endl;
+		}
+		delete sinBateria;
+		break;
+	}
+
+	default:
+		break;
+	}
+}
 
 /*
 *@Brief Submenu de motos
@@ -481,7 +540,8 @@ void menuMotos(EcoCityMoto& ecocity) {
 	cout << endl << endl << "Submenu de Motos" << endl << endl;
 	cout << "1 - Insertar moto" << endl;
 	cout << "2 - Buscar moto" << endl;
-	cout << "3 - Salir" << endl;
+	cout << "3 - Motos sin bateria" << endl;
+	cout << "4 - Salir" << endl;
 	cout << "¿Que desea hacer?: ";
 	cin >> opcion;
 	switch (opcion) {
@@ -497,6 +557,10 @@ void menuMotos(EcoCityMoto& ecocity) {
 
 	case 3:
 		clearScreen();
+		buscarSinBateria(ecocity);
+		break;
+	case 4:
+		clearScreen();
 		return;
 		break;
 
@@ -505,6 +569,7 @@ void menuMotos(EcoCityMoto& ecocity) {
 		cout << "Opción inválida";
 		break;
 	}
+	menuMotos(ecocity);
 }
 
 void mostrarEstado(EcoCityMoto& ecocity) {

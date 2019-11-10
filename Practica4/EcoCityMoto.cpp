@@ -130,7 +130,9 @@ Moto& EcoCityMoto::localizaMotoCercana(Cliente& cliente){
 	if (motos->size() <= 0) {
 		throw std::runtime_error("[Localiza moto cercana]: No hay ninguna moto en el sistema");
 	}
-	for (unsigned i = 0; i < motos->size(); i++){		
+	for (unsigned i = 0; i < motos->size(); i++){
+		if ((*motos)[i]->getEstado() != estatus::bloqueada)
+			continue;
 		distancia = (*motos)[i]->distanciaCliente(cliente);
 		if (menorDistancia > distancia) {
 			aux = true;
@@ -375,4 +377,9 @@ Moto* EcoCityMoto::getMotoAleatoria()
 		throw std::range_error("[EcoCityMoto::getMotoAleatoria] No hay motos cargadas");
 	}
 	return (*motos)[rand() % motos->size()];
+}
+
+int EcoCityMoto::getLimiteBateria()
+{
+	return limiteBateria;
 }

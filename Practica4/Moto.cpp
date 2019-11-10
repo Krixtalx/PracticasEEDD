@@ -5,16 +5,16 @@
 */
 Moto::Moto() : id("0") {
 	porcentajeBateria = rand() % 100;
-	if (porcentajeBateria < limiteBateria)
-		estado = estatus::sinbateria;
+	/*if (porcentajeBateria < limiteBateria)
+		estado = estatus::sinbateria;*/
 }
 
 /**
 	@brief Constructor parametrizado
 */
 Moto::Moto(std::string id, UTM posicion, estatus _estado, int porcentajeBateria): id(id), posicion(posicion), estado(_estado), porcentajeBateria(porcentajeBateria),usadoPor(0){
-	if (porcentajeBateria < limiteBateria)
-		estado = estatus::sinbateria;
+	/*if (porcentajeBateria < limiteBateria)
+		estado = estatus::sinbateria;*/
 }
 
 /**
@@ -57,6 +57,11 @@ std::string Moto::getId()
 UTM& Moto::getUTM()
 {
 	return posicion;
+}
+
+void Moto::setUTM(UTM& _posicion)
+{
+	posicion = _posicion;
 }
 
 /**
@@ -104,7 +109,7 @@ void Moto::seDesactiva(){
 		usadoPor = 0;
 	}
 }
-void Moto::setPorcentajeBateria(int porcentaje)
+void Moto::setPorcentajeBateria(int porcentaje, int limiteBateria)
 {
 	porcentajeBateria = porcentaje;
 	if (porcentajeBateria < limiteBateria)
@@ -114,18 +119,7 @@ int Moto::getPorcentajeBateria()
 {
 	return porcentajeBateria;
 }
-/**
-*@Brief Setter del campo sinBateria de estatus
-*/
-void Moto::setSinbateria(){
-	estado = estatus::sinbateria;
-}
-/**
-*@Brief Setter del campo Roto de estatus
-*/
-void Moto::setRoto(){
-	estado = estatus::rota;
-}
+
 /**
 *@Brief Calcula la distancia entre 2 motos
 */
@@ -143,4 +137,10 @@ double Moto::distanciaCliente(Cliente& cliente){
 		return sqrt(pow(this->posicion.latitud - cliente.getPosicion().latitud, 2) + pow(this->posicion.longitud - cliente.getPosicion().longitud, 2));
 	}
 	return 99999999.99;
+}
+
+void Moto::comprobarBateria(int limiteBateria)
+{
+	if (porcentajeBateria < limiteBateria)
+		estado = estatus::sinbateria;
 }

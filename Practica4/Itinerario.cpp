@@ -86,14 +86,20 @@ void Itinerario::setInicio(UTM& pos)
 	inicio = pos;
 }
 
+UTM& Itinerario::getFin()
+{
+	return fin;
+}
+
 void Itinerario::setVehiculo(Moto* m)
 {
 	vehiculo = m;
 }
 
-void Itinerario::setMinutos(int mins)
+void Itinerario::setMinutos(int mins, int limiteBateria)
 {
 	minutos = mins;
+	vehiculo->setPorcentajeBateria(vehiculo->getPorcentajeBateria() - mins, limiteBateria);
 }
 
 Moto* Itinerario::getVehiculo()

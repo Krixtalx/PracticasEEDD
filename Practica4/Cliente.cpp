@@ -209,11 +209,11 @@ void Cliente::desbloqueaMoto(Moto& m)
 */
 void Cliente::terminarTrayecto()
 {
-	
-		listaItinerarios->back()->setMinutos(rand() % 300);
-		if(listaItinerarios->size() == 0)
-			throw std::runtime_error("[Cliente::terminarTrayecto] El cliente no tiene itinerarios");
-		listaItinerarios->back()->getVehiculo()->seDesactiva();
+	if (listaItinerarios->size() == 0)
+		throw std::runtime_error("[Cliente::terminarTrayecto] El cliente no tiene itinerarios");
+	listaItinerarios->back()->setMinutos(rand() % listaItinerarios->back()->getVehiculo()->getPorcentajeBateria(), aplicacion->getLimiteBateria());
+	listaItinerarios->back()->getVehiculo()->setUTM(listaItinerarios->back()->getFin());
+	listaItinerarios->back()->getVehiculo()->seDesactiva();
 }
 
 /**

@@ -20,7 +20,6 @@ private:
 	std::string id;
 	UTM posicion;
 	estatus estado = estatus::bloqueada;
-	const static int limiteBateria = 15;
 	int porcentajeBateria = 50;
 	Cliente* usadoPor=0;
 	friend class EcoCityMoto;
@@ -32,17 +31,17 @@ public:
 	Moto& operator=(Moto& right);
 	std::string getId();
 	UTM& getUTM();
+	void setUTM(UTM& _posicion);
 	estatus getEstado();
 	void setEstado(estatus _estado);
 	std::string getDatosCliente();
 	void seActiva(Cliente& usuario);
 	void seDesactiva();
-	void setPorcentajeBateria(int porcentaje);
+	void setPorcentajeBateria(int porcentaje, int limiteBateria);
 	int getPorcentajeBateria();
-	void setSinbateria();
-	void setRoto();
 	double distanciaMoto(Moto& otro);
 	double distanciaCliente(Cliente& cliente);
+	void comprobarBateria(int limiteBateria);
 };
 
 #endif // !MOTO_H

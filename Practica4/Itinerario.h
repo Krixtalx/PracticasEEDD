@@ -22,8 +22,9 @@ public:
 	void generaUTM(const UTM &min, const UTM& max);
 	int getID();
 	void setInicio(UTM& pos);
+	UTM& getFin();
 	void setVehiculo(Moto* m);
-	void setMinutos(int mins);
+	void setMinutos(int mins, int limiteBateria);
 	Moto* getVehiculo();
 	std::string toCSV();
 };

@@ -15,6 +15,7 @@ class EcoCityMoto
 	std::vector<Moto*>* motos = 0;
 	std::map<std::string, Cliente>* clientes = 0;
 	void cargaEEDD(string fichCli, string fichMotos);
+	const static int limiteBateria = 15;
 
 public:
 	EcoCityMoto();
@@ -46,6 +47,7 @@ public:
 	unsigned getNumClientes();
 	unsigned getNumMotos();
 	Moto* getMotoAleatoria();
+	int getLimiteBateria();
 
 };
 
