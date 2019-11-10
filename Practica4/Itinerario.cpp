@@ -81,6 +81,11 @@ int Itinerario::getID(){
 	return id;
 }
 
+int Itinerario::getDuracion()
+{
+	return minutos;
+}
+
 void Itinerario::setInicio(UTM& pos)
 {
 	inicio = pos;

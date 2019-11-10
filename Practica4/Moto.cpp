@@ -103,10 +103,11 @@ void Moto::seActiva(Cliente& usuario){
 /**
 *@Brief Método encargado de desactivar la moto
 */
-void Moto::seDesactiva(){
+void Moto::seDesactiva(int duracion, int limiteBateria){
 	if (estado == estatus::activa) {
 		estado = estatus::bloqueada;
 		usadoPor = 0;
+		setPorcentajeBateria(porcentajeBateria-(duracion), limiteBateria);
 	}
 }
 void Moto::setPorcentajeBateria(int porcentaje, int limiteBateria)

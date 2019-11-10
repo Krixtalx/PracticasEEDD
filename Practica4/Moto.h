@@ -36,7 +36,7 @@ public:
 	void setEstado(estatus _estado);
 	std::string getDatosCliente();
 	void seActiva(Cliente& usuario);
-	void seDesactiva();
+	void seDesactiva(int duracion, int limiteBateria);
 	void setPorcentajeBateria(int porcentaje, int limiteBateria);
 	int getPorcentajeBateria();
 	double distanciaMoto(Moto& otro);

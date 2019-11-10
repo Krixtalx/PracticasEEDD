@@ -60,8 +60,13 @@ void leerFich::leeMotos(string fichMotos, EcoCityMoto* app) {
 				}
 
 				UTM utm(dlat, dlon);
-
-				Moto* moto = new Moto(matricula, utm, estadoMoto, 1 + (rand() % 100));
+				Moto* moto;
+				if (estadoMoto == estatus::sinbateria) {
+					moto = new Moto(matricula, utm, estadoMoto, 1 + (rand() % app->getLimiteBateria()));
+				}
+				else {
+					moto = new Moto(matricula, utm, estadoMoto, 15 + (rand() % 85));
+				}
 				app->insertaMoto(moto);
 			}
 		}

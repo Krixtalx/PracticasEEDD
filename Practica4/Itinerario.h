@@ -21,6 +21,7 @@ public:
 	Itinerario& operator= (Itinerario& right);
 	void generaUTM(const UTM &min, const UTM& max);
 	int getID();
+	int getDuracion();
 	void setInicio(UTM& pos);
 	UTM& getFin();
 	void setVehiculo(Moto* m);

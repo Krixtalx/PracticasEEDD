@@ -365,7 +365,6 @@ void bloquearMoto(EcoCityMoto& ecocity) {
 	clearScreen();
 	try {
 		clienteActivo->terminarTrayecto();
-		clienteActivo->getItinerarios().back()->getVehiculo()->seDesactiva();
 	}
 	catch (std::runtime_error & e) {
 		cerr << e.what();
@@ -533,9 +532,14 @@ void buscarMoto(EcoCityMoto& ecocity) {
 	Moto* moto = new Moto;
 	if (ecocity.buscaMoto(matricula, moto)) {
 		cout << "Moto encontrada: " << moto->getId() << "    UTM: " << moto->getUTM().toCSV()<<endl;
-		cout << "Estado de la moto: " << moto->getEstado();
+		cout << "Estado de la moto: " << moto->getEstado()<<endl;
 		if (moto->getEstado() != estatus::sinbateria)
-			cout << "Porcentaje de batería restante: " << moto->getPorcentajeBateria() << endl;
+			cout << "Porcentaje de batería restante: " << moto->getPorcentajeBateria() <<"%"<< endl;
+		else {
+			cout << "Sin bateria" << endl;
+			cout << "Porcentaje de batería restante: " << moto->getPorcentajeBateria() <<"%"<< endl;
+
+		}
 		try {
 			if (moto->getEstado() == estatus::activa)
 				cout << endl << moto->getDatosCliente();
@@ -552,7 +556,7 @@ void buscarMoto(EcoCityMoto& ecocity) {
 void buscarSinBateria(EcoCityMoto& ecocity) {
 	int opcion = -1;
 	while (opcion < 0 || opcion > 2) {
-		cout << endl << "¿Quiere buscar una moto específica (1) o ver un listado completo (2)? (0 para volver)";
+		cout << endl << "¿Quiere buscar una moto específica (1) o ver un listado completo (2)? (0 para volver): ";
 		cin >> opcion;
 	}
 	switch (opcion)
@@ -578,12 +582,12 @@ void buscarSinBateria(EcoCityMoto& ecocity) {
 				break;
 			}
 		}
-		if (encontrada) {
+		if (encontrada->getEstado()!=estatus::sinbateria) {
 			cout << "Moto encontrada: " << encontrada->getId() << endl;
 			cout << "Posición: " << encontrada->getUTM().toCSV() << endl;
 		}
 		else
-			cout << "No se encontró la moto" << endl;
+			cout << "No se encontró la moto sin bateria" << endl;
 		break;
 	}
 
@@ -592,7 +596,7 @@ void buscarSinBateria(EcoCityMoto& ecocity) {
 		clearScreen();
 		vector<Moto*>* sinBateria = ecocity.localizaMotoSinBateria(ecocity.getLimiteBateria());
 		for (vector<Moto*>::iterator it = sinBateria->begin(); it != sinBateria->end(); it++) {
-			cout << "ID: " << (*it)->getId() << " Posición: " << (*it)->getUTM().toCSV() << endl;
+			cout << "ID: " << (*it)->getId() << "     Posición: " << (*it)->getUTM().toCSV() <<"     Bateria: "<<(*it)->getPorcentajeBateria()<<"%"<< endl;
 		}
 		delete sinBateria;
 		break;

@@ -213,7 +213,7 @@ void Cliente::terminarTrayecto()
 		throw std::runtime_error("[Cliente::terminarTrayecto] El cliente no tiene itinerarios");
 	listaItinerarios->back()->setMinutos(rand() % listaItinerarios->back()->getVehiculo()->getPorcentajeBateria(), aplicacion->getLimiteBateria());
 	listaItinerarios->back()->getVehiculo()->setUTM(listaItinerarios->back()->getFin());
-	listaItinerarios->back()->getVehiculo()->seDesactiva();
+	listaItinerarios->back()->getVehiculo()->seDesactiva(this->getItinerarios().back()->getDuracion(), aplicacion->getLimiteBateria());
 }
 
 /**
