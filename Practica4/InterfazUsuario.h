@@ -392,6 +392,7 @@ void menuClientes(EcoCityMoto& ecocity) {
 		break;
 	case 8:
 		clearScreen();
+		delete clienteaux;
 		return;
 		break;
 

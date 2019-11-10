@@ -19,7 +19,7 @@ private:
 	string direccion = "";
 	string nombreCompleto = "";
 	UTM posicion;
-	std::list<Itinerario*>* listaItinerarios=new std::list<Itinerario*>;
+	std::list<Itinerario*>* listaItinerarios=0;
 	EcoCityMoto* aplicacion = 0;
 
 public:

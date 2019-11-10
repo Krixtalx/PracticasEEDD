@@ -58,8 +58,12 @@ EcoCityMoto::~EcoCityMoto()
 				archivoItis << "-" << it->second.toCSV() << endl;
 				archivoItis << verItinerario(it->second);
 			}
-			cout << "Itinerarios guardados satisfactoriamente!";
+			cout << "¡Itinerarios guardados satisfactoriamente!";
 		}
+	}
+	while (!motos->empty()) {
+		delete motos->back();
+		motos->pop_back();
 	}
 	delete motos;
 	delete clientes;
@@ -82,8 +86,16 @@ EcoCityMoto::EcoCityMoto(EcoCityMoto& orig) : idUltimo(orig.idUltimo)
 EcoCityMoto& EcoCityMoto::operator=(EcoCityMoto& right)
 {
 	idUltimo = right.idUltimo;
-	motos = right.motos;
-	clientes = right.clientes;
+
+	while (!motos->empty()) {
+		delete motos->back();
+		motos->pop_back();
+	}
+	delete motos;
+
+	motos = new vector<Moto*>(*(right.motos));
+	delete clientes;
+	clientes = new map<std::string, Cliente>(*(right.clientes));
 	return *this;
 }
 
@@ -325,6 +337,10 @@ vector<Moto*>* EcoCityMoto::localizaMotoSinBateria(float porctBateria) {
 
 void EcoCityMoto::borrarEEDD()
 {
+	while (!motos->empty()) {
+		delete motos->back();
+		motos->pop_back();
+	}
 	delete motos;
 	delete clientes;
 	motos = new vector<Moto*>;

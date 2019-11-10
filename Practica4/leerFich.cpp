@@ -72,7 +72,7 @@ void leerFich::leeMotos(string fichMotos, EcoCityMoto* app) {
 	else {
 		cerr << "No se puede abrir el fichero" << endl;
 	}
-	cout << "Lectura satisfactoria!" << endl;
+	cout << "¡Lectura satisfactoria!" << endl;
 }
 
 void leerFich::leeLineaCliente(string& csv, EcoCityMoto* ecocity, Cliente*& cliActivo) {
@@ -180,7 +180,7 @@ void leerFich::leeItinerariosYClientes(string archivo, EcoCityMoto* ecocity) {
 	else {
 		cerr << "No se pudo cargar los itinerarios" << endl;
 	}
-	cout << "Lectura satisfactoria!" << endl;
+	cout << "¡Lectura satisfactoria!" << endl;
 }
 
 void leerFich::leeClientes(string fileNameClientes, EcoCityMoto* ecocity) {

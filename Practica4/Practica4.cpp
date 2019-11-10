@@ -12,4 +12,5 @@ int main()
 	setlocale(LC_ALL, "spanish");
 	EcoCityMoto app;
 	menuPrincipal(app);
+	return 0;
 }
