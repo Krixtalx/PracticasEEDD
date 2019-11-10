@@ -146,7 +146,12 @@ void leerFich::leeItinerariosYClientes(string archivo, EcoCityMoto* ecocity) {
 			else {
 				if (!clienteActivo)
 					throw std::runtime_error("[leeItinerariosYClientes] Error al buscar cliente");
-				ss << linea;
+				try {
+					ss << linea;
+				}
+				catch (std::runtime_error & e) {
+					cerr << e.what();
+				}
 				string id, minutos;
 				string latInicio, lonInicio, latFinal, lonFinal;
 				string dia, mes, anio, hora, minuto;

@@ -708,6 +708,7 @@ void cargaUnica(EcoCityMoto& ecocity) {
 	cin >> opcionInicio;
 	if (opcionInicio != 'S' && opcionInicio != 's')
 		return;
+
 	int opcion;
 	cout << endl << endl << "Cargas desde fichero disponibles: " << endl;
 	cout << "1 - Clientes" << endl;
@@ -728,8 +729,14 @@ void cargaUnica(EcoCityMoto& ecocity) {
 		break;
 	case 3:
 		clearScreen();
-		if (ecocity.getNumMotos())
-			leerFich::leeItinerariosYClientes(archivoItinerarios, &ecocity);
+		if (ecocity.getNumMotos()) {
+			try {
+				leerFich::leeItinerariosYClientes(archivoItinerarios, &ecocity);
+			}
+			catch (std::runtime_error & e) {
+				cerr << e.what();
+			}
+		}
 		else
 			cout << "No hay motos cargadas, por favor, cargue primero las motos en la aplicación" << endl;
 		break;
