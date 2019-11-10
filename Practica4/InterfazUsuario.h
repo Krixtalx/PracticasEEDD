@@ -16,7 +16,7 @@ bool windows = true;
 string archivoClientes="clientes.csv";
 string archivoMotos = "motos.txt";
 string archivoItinerarios = "itinerarios.txt";
-Cliente* clienteaux= new Cliente;
+Cliente* clienteActivo = 0;
 
 /*
 *@Brief funcion encargada de limpiar la pantalla
@@ -105,23 +105,32 @@ void insertarCliente(EcoCityMoto& ecocity) {
 
 	Cliente cliente(dni, pass, nombre, apellidos, direccion, latitud, longitud);
 	cliente.setAplicacion(&ecocity);
-	ecocity.insertaCliente(cliente);
+	cout << "¿Quiere emplear el cliente recién insertado para operaciones futuras? [S/n] ";
+	char opcion = 'S';
+	cin >> opcion;
+	if(opcion == 'S' || opcion == 's')
+		clienteActivo = ecocity.insertaCliente(cliente);
+	else
+		ecocity.insertaCliente(cliente);
 	clearScreen();
 }
 
 /*
 *@Brief Busca un cliente en el sistema a partir de su DNI 
 */
-bool buscarCliente(EcoCityMoto& ecocity, Cliente* &clienteEncontrado){
+bool buscarCliente(EcoCityMoto& ecocity){
+	Cliente* antiguo = clienteActivo;
 	string dni;
 	cout << "Introduzca el DNI del cliente a buscar: ";
 	getline(cin >> ws, dni);
-	if (ecocity.buscaCliente(dni, clienteEncontrado)) {
-		cout << "Cliente encontrado: "<<clienteEncontrado->GetNombreCompleto()<< "    UTM: "<<clienteEncontrado->getPosicion().toCSV();
+	if (ecocity.buscaCliente(dni, clienteActivo)) {
+		cout << "Cliente encontrado: " << clienteActivo->GetNombreCompleto() << "    UTM: " << clienteActivo->getPosicion().toCSV();
 		return true;
 	}
-	else
+	else {
 		cout << "Cliente no encontrado";
+		clienteActivo = antiguo;
+	}
 	return false;
 }
 
@@ -130,7 +139,7 @@ bool buscarCliente(EcoCityMoto& ecocity, Cliente* &clienteEncontrado){
 */
 void recorridoInorden(EcoCityMoto& ecocity) {
 	char yon;
-	cout << "Este recorrido puede generar una salida muy grande" << endl << "¿Está seguro de que quiere hacerlo?   S/n"<<endl;
+	cout << "Este recorrido puede generar una salida muy grande" << endl << "¿Está seguro de que quiere hacerlo? [S/n] ";
 	cin >> yon;
 	if (yon == 'S') {
 		clearScreen();
@@ -216,6 +225,11 @@ void borrarItinerario(EcoCityMoto& ecocity, Cliente& cliente) {
 */
 void menuItinerarios(EcoCityMoto& ecocity, Cliente& cliente) {
 	int opcion;
+	if (clienteActivo) {
+		cout << "Cliente seleccionado: " << clienteActivo->getDni() << endl;
+	}
+	else
+		cout << "Actualmente no hay cliente seleccionado" << endl;
 	cout << endl << endl << "Submenu de Itinerario" << endl << endl;
 	cout << "1 - Ver itinerarios" << endl;
 	cout << "2 - Borrar último itinerario" << endl;
@@ -249,9 +263,21 @@ void menuItinerarios(EcoCityMoto& ecocity, Cliente& cliente) {
 *@Brief Función encargada de garantizar el acceso a los Itinerarios de un cliente
 */
 void accesoItinerarios(EcoCityMoto& ecocity) {
-	Cliente* cliente;
-	if(buscarCliente(ecocity, cliente))
-		menuItinerarios(ecocity, *cliente);
+	char opcion = 'n';
+	if (clienteActivo) {
+		cout << "¿Quiere usar el cliente activo? (DNI: " << clienteActivo->getDni() << ") [S/n]: ";
+		cin >> opcion;
+	}
+	if (opcion != 'S' && opcion != 's') {
+		if (buscarCliente(ecocity))
+			menuItinerarios(ecocity, *clienteActivo);
+		else
+			return;
+	}
+	else
+	{
+		menuItinerarios(ecocity, *clienteActivo);
+	}
 }
 
 /*
@@ -286,27 +312,33 @@ void generaItinerarios(EcoCityMoto& ecocity) {
 *@Brief Metodo encargado de asignar la motocicleta mas cercana al cliente introducido por DNI
 */
 void asignarMoto(EcoCityMoto& ecocity) {
-	string dni;
-	Moto* motoCercana;
-	cout << "Introduzca el DNI del cliente al que se le asignará la moto: ";
-	getline(cin >> ws, dni);
-	if (ecocity.buscaCliente(dni, clienteaux)){
-		clearScreen();
-		cout << "Buscando moto más cercana a "<<clienteaux->getPosicion().toCSV()<<" ..." << endl;
-		try {
-			motoCercana = &ecocity.localizaMotoCercana(*clienteaux);
-			motoCercana->seActiva(*clienteaux);
-			clienteaux->creaItinerario(*motoCercana);
-			cout  << "Moto encontrada y activada: " << motoCercana->getId() << "  -  " << motoCercana->getUTM().toCSV();
-		}
-		catch (std::runtime_error & e) {
-			cerr << e.what();
-		}
-		
+	char opcion = 'n';
+	if (clienteActivo) {
+		cout << "¿Quiere usar el cliente activo? (DNI: " << clienteActivo->getDni() << ") [S/n]: ";
+		cin >> opcion;
 	}
-	else {
-		clearScreen();
-		cout << "DNI no encontrado";
+	if (opcion != 'S' && opcion != 's') {
+		Cliente* antiguo = clienteActivo;
+		string dni;
+		cout << "Introduzca el DNI del cliente al que se le asignará la moto: ";
+		getline(cin >> ws, dni);
+		if (!ecocity.buscaCliente(dni, clienteActivo)) {
+			cout << "No se ha encontrado el cliente" << endl;
+			clienteActivo = antiguo;
+			return;
+		}
+	}
+	Moto* motoCercana;
+	clearScreen();
+	cout << "Buscando moto más cercana a " << clienteActivo->getPosicion().toCSV() << " ..." << endl;
+	try {
+		motoCercana = &ecocity.localizaMotoCercana(*clienteActivo);
+		motoCercana->seActiva(*clienteActivo);
+		clienteActivo->creaItinerario(*motoCercana);
+		cout << "Moto encontrada y activada: " << motoCercana->getId() << "  -  " << motoCercana->getUTM().toCSV();
+	}
+	catch (std::runtime_error & e) {
+		cerr << e.what();
 	}
 }
 
@@ -314,34 +346,44 @@ void asignarMoto(EcoCityMoto& ecocity) {
 *@Brief Metodo encargado de bloquear la motocicleta de un cliente introducido por DNI
 */
 void bloquearMoto(EcoCityMoto& ecocity) {
-	string dni;
-	Cliente* cliente;
-	cout << "Introduzca el DNI del cliente al que se le bloqueará la moto: ";
-	getline(cin >> ws, dni);
-	if (ecocity.buscaCliente(dni, cliente)) {
-		clearScreen();
-		try {
-			cliente->terminarTrayecto();
-			cliente->getItinerarios().back()->getVehiculo()->seDesactiva();
-		}
-		catch (std::runtime_error & e) {
-			cerr << e.what();
+	char opcion = 'n';
+	if (clienteActivo) {
+		cout << "¿Quiere usar el cliente activo? (DNI: " << clienteActivo->getDni() << ") [S/n]: ";
+		cin >> opcion;
+	}
+	if (opcion != 'S' && opcion != 's') {
+		Cliente* antiguo = clienteActivo;
+		string dni;
+		cout << "Introduzca el DNI del cliente al que se le bloqueará la moto: ";
+		getline(cin >> ws, dni);
+		if (!ecocity.buscaCliente(dni, clienteActivo)) {
+			cout << "No se encontró al cliente";
+			clienteActivo = antiguo;
 			return;
 		}
-		cout << "Moto bloqueada";
 	}
-	else {
-		clearScreen();
-		cout << "DNI no encontrado";
+	clearScreen();
+	try {
+		clienteActivo->terminarTrayecto();
+		clienteActivo->getItinerarios().back()->getVehiculo()->seDesactiva();
 	}
+	catch (std::runtime_error & e) {
+		cerr << e.what();
+		return;
+	}
+	cout << "Moto bloqueada";
 }
 
 /*
 *@Brief Submenu de Clientes
 */
 void menuClientes(EcoCityMoto& ecocity) {
+	if (clienteActivo) {
+		cout << "Cliente seleccionado: " << clienteActivo->getDni() << endl;
+	}
+	else
+		cout << "Actualmente no hay cliente seleccionado" << endl;
 	int opcion;
-	Cliente null;
 	cout << endl << endl << "Submenu de Clientes" << endl << endl;
 	cout << "1 - Insertar cliente" << endl;
 	cout << "2 - Buscar cliente" << endl;
@@ -362,8 +404,7 @@ void menuClientes(EcoCityMoto& ecocity) {
 
 	case 2:
 		clearScreen();
-		Cliente* temp;
-		buscarCliente(ecocity,temp);
+		buscarCliente(ecocity);
 		break;
 
 	case 3:
@@ -392,7 +433,6 @@ void menuClientes(EcoCityMoto& ecocity) {
 		break;
 	case 8:
 		clearScreen();
-		delete clienteaux;
 		return;
 		break;
 
