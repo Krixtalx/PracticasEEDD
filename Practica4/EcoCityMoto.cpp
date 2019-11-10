@@ -383,3 +383,8 @@ int EcoCityMoto::getLimiteBateria()
 {
 	return limiteBateria;
 }
+
+bool EcoCityMoto::eliminarCliente(std::string id)
+{
+	return clientes->erase(id);
+}

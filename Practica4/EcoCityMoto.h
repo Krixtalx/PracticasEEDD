@@ -48,6 +48,7 @@ public:
 	unsigned getNumMotos();
 	Moto* getMotoAleatoria();
 	int getLimiteBateria();
+	bool eliminarCliente(std::string id);
 
 };
 

@@ -374,6 +374,32 @@ void bloquearMoto(EcoCityMoto& ecocity) {
 	cout << "Moto bloqueada";
 }
 
+void borrarCliente(EcoCityMoto& ecocity) {
+	char opcion = 'n';
+	if (clienteActivo) {
+		cout << "¿Quiere usar el cliente activo? (DNI: " << clienteActivo->getDni() << ") [S/n]: ";
+		cin >> opcion;
+	}
+	if (opcion != 'S' && opcion != 's') {
+		Cliente* antiguo = clienteActivo;
+		string dni;
+		cout << "Introduzca el DNI del cliente a borrar: ";
+		getline(cin >> ws, dni);
+		if (!ecocity.buscaCliente(dni, clienteActivo)) {
+			cout << "No se encontró al cliente";
+			clienteActivo = antiguo;
+			return;
+		}
+	}
+	clearScreen();
+	if (ecocity.eliminarCliente(clienteActivo->getDni())) {
+		cout << "Cliente eliminado";
+		clienteActivo = 0;
+	}
+	else
+		cout << "No se pudo eliminar al cliente indicado";
+}
+
 /*
 *@Brief Submenu de Clientes
 */
@@ -387,12 +413,13 @@ void menuClientes(EcoCityMoto& ecocity) {
 	cout << endl << endl << "Submenu de Clientes" << endl << endl;
 	cout << "1 - Insertar cliente" << endl;
 	cout << "2 - Buscar cliente" << endl;
-	cout << "3 - Ajustes del mapa STL" << endl;
-	cout << "4 - Acceso a itinerarios de un cliente" << endl;
-	cout << "5 - Asignar moto más cercana" << endl;
-	cout << "6 - Bloquear moto de un cliente" << endl;
-	cout << "7 - Generar itinerarios aleatorios" << endl;
-	cout << "8 - Salir" << endl;
+	cout << "3 - Borrar cliente" << endl;
+	cout << "4 - Ajustes del mapa STL" << endl;
+	cout << "5 - Acceso a itinerarios de un cliente" << endl;
+	cout << "6 - Asignar moto más cercana" << endl;
+	cout << "7 - Bloquear moto de un cliente" << endl;
+	cout << "8 - Generar itinerarios aleatorios" << endl;
+	cout << "9 - Salir" << endl;
 	cout << "¿Que desea hacer?: ";
 	cin >> opcion;
 
@@ -409,29 +436,33 @@ void menuClientes(EcoCityMoto& ecocity) {
 
 	case 3:
 		clearScreen();
-		menuArbol(ecocity);
+		borrarCliente(ecocity);
 		break;
-
 	case 4:
 		clearScreen();
-		accesoItinerarios(ecocity);
+		menuArbol(ecocity);
 		break;
 
 	case 5:
 		clearScreen();
-		asignarMoto(ecocity);
+		accesoItinerarios(ecocity);
 		break;
 
 	case 6:
 		clearScreen();
-		bloquearMoto(ecocity);
+		asignarMoto(ecocity);
 		break;
 
 	case 7:
 		clearScreen();
+		bloquearMoto(ecocity);
+		break;
+
+	case 8:
+		clearScreen();
 		generaItinerarios(ecocity);
 		break;
-	case 8:
+	case 9:
 		clearScreen();
 		return;
 		break;
@@ -628,19 +659,6 @@ void mostrarEstado(EcoCityMoto& ecocity) {
 */
 void carga(EcoCityMoto& ecocity) {
 	char confMotos = 'S', confCli = 'S';
-	/*if (ecocity.getNumClientes()) {
-		cout << "¿Realmente quiere sobreescribir el estado actual? Se borrara toda la informacion almacenada sobre Motos y Clientes en la aplicacion actual [S/n]: ";
-		cin >> confirmar;
-	}
-	else
-		confirmar = 's';
-	if (confirmar == 'S' || confirmar == 's') {
-		cout << "Borrando informacion almacenada..." << endl;
-		ecocity.borrarEEDD();
-		cout << "Borrado completo" << endl;
-		leerFich::leeItinerariosYClientes(archivoItinerarios, &ecocity);
-		leerFich::leeMotos(archivoMotos, &ecocity);
-	}*/
 	if (ecocity.getNumMotos()) {
 		cout << "Se eliminará la información actual sobre motos de la aplicación y comenzará la carga desde fichero. ¿Quiere continuar la operación? [S/n]: ";
 		cin >> confMotos;
