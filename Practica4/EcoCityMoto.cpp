@@ -227,19 +227,6 @@ std::string& EcoCityMoto::verItinerario(Cliente& cliente){
 }
 
 /**
-	@brief Busca el cliente con el dni indicado y devuelve su nombre completo
-
-const std::string& EcoCityMoto::verCliente(std::string& dni){
-	Cliente* aux;
-	if (buscaCliente(dni, aux)) {
-		return aux->GetNombreCompleto();
-	}
-	else
-		throw std::runtime_error("[EcoCityMoto::verCliente] Cliente no encontrado");
-}
-*/
-
-/**
 	@brief Busca la moto cuya ID coincida con la indicada
 */
 bool EcoCityMoto::buscaMoto(std::string id, Moto* &motoEncontrada)
@@ -325,18 +312,22 @@ void EcoCityMoto::setIdUltimo(unsigned _id)
 	idUltimo = _id;
 }
 
-vector<Moto*>* EcoCityMoto::localizaMotoSinBateria(float porctBateria) {
+/**
+	@brief Devuelve un vector STL de punteros a las motos sin bateria
+*/
+vector<Moto*>* EcoCityMoto::localizaMotoSinBateria() {
 	vector<Moto*>* mSinBateria = new vector<Moto*>;
 	for(unsigned i = 0; i < motos->size(); i++){
-		if ((*motos)[i]->getEstado() == estatus::sinbateria || (*motos)[i]->getPorcentajeBateria() <= porctBateria) {
-			if ((*motos)[i]->getPorcentajeBateria() <= porctBateria)
-				(*motos)[i]->setEstado(estatus::sinbateria);
+		if ((*motos)[i]->getEstado() == estatus::sinbateria) {
 			mSinBateria->push_back((*motos)[i]);
 		}
 	}
 	return mSinBateria;
 }
 
+/**
+	@brief Elimina el contenido del vector de motos y el mapa de clientes
+*/
 void EcoCityMoto::borrarEEDD()
 {
 	while (!motos->empty()) {
@@ -349,12 +340,18 @@ void EcoCityMoto::borrarEEDD()
 	clientes = new map<std::string, Cliente>;
 }
 
+/**
+	@brief Elimina el contenido del mapa de clientes
+*/
 void EcoCityMoto::borraClientes()
 {
 	delete clientes;
 	clientes = new map<std::string, Cliente>;
 }
 
+/**
+	@brief Elimina el contenido del vector de motos
+*/
 void EcoCityMoto::borraMotos()
 {
 	delete motos;
@@ -371,6 +368,9 @@ unsigned EcoCityMoto::getNumMotos()
 	return motos->size();
 }
 
+/**
+	@brief Devuelve un puntero a una moto aleatoria del vector de motos
+*/
 Moto* EcoCityMoto::getMotoAleatoria()
 {
 	if (!motos->size()){
@@ -384,6 +384,9 @@ int EcoCityMoto::getLimiteBateria()
 	return limiteBateria;
 }
 
+/**
+	@brief Elimina el cliente con el ID indicado
+*/
 bool EcoCityMoto::eliminarCliente(std::string id)
 {
 	return clientes->erase(id);

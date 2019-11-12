@@ -574,7 +574,7 @@ void buscarSinBateria(EcoCityMoto& ecocity) {
 		cout << "Introduzca el ID de la moto a buscar: ";
 		string idBusca;
 		cin >> idBusca;
-		vector<Moto*>* sinBateria = ecocity.localizaMotoSinBateria(ecocity.getLimiteBateria());
+		vector<Moto*>* sinBateria = ecocity.localizaMotoSinBateria();
 		Moto* encontrada = 0;
 		for (vector<Moto*>::iterator it = sinBateria->begin(); it != sinBateria->end(); it++) {
 			if ((*it)->getId() == idBusca) {
@@ -594,7 +594,7 @@ void buscarSinBateria(EcoCityMoto& ecocity) {
 	case 2:
 	{
 		clearScreen();
-		vector<Moto*>* sinBateria = ecocity.localizaMotoSinBateria(ecocity.getLimiteBateria());
+		vector<Moto*>* sinBateria = ecocity.localizaMotoSinBateria();
 		for (vector<Moto*>::iterator it = sinBateria->begin(); it != sinBateria->end(); it++) {
 			cout << "ID: " << (*it)->getId() << "     Posición: " << (*it)->getUTM().toCSV() <<"     Bateria: "<<(*it)->getPorcentajeBateria()<<"%"<< endl;
 		}
@@ -787,7 +787,7 @@ void menuCarga(EcoCityMoto& ecocity) {
 
 void reiniciarApp(EcoCityMoto* ecocity) {
 	char opcion;
-	cout << "¿Desea eliminar toda la información actual? Se creará una nueva instancia de la aplicación, siendo necesario volver a cargar la información [S/n]: ";
+	cout << "¿Desea eliminar toda la información actual? Será necesario volver a cargar la información [S/n]: ";
 	cin >> opcion;
 	if (opcion == 'S' || opcion == 's') {
 		ecocity->borrarEEDD();

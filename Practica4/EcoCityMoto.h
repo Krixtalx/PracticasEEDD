@@ -32,7 +32,6 @@ public:
 	EcoCityMoto& insertaItinerario(Itinerario* itinerario, std::string dni);
 	EcoCityMoto& crearItinerarios(UTM& min, UTM& max);
 	std::string& verItinerario(Cliente& cliente);
-	//const std::string& verCliente(std::string& dni);
 	bool buscaMoto(std::string id, Moto* &motoEncontrada);
 	bool buscaCliente(std::string& dni, Cliente* &clienteEncontrado);
 	EcoCityMoto& borraMoto(int pos);
@@ -40,7 +39,7 @@ public:
 	EcoCityMoto& recorreMapa();
 	unsigned int idItinerario();
 	void setIdUltimo(unsigned _id);
-	vector<Moto*>* localizaMotoSinBateria(float porctBateria);
+	vector<Moto*>* localizaMotoSinBateria();
 	void borrarEEDD();
 	void borraClientes();
 	void borraMotos();

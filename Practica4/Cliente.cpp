@@ -154,6 +154,10 @@ void Cliente::setAplicacion(EcoCityMoto* app)
 	aplicacion = app;
 }
 
+/**
+	@brief Devuelve una referencia a la moto mas cercana
+	@post Realiza la operacion mediante el metodo de EcoCityMoto
+*/
 Moto& Cliente::buscaMotoCercana()
 {
 	return aplicacion->localizaMotoCercana(*this);
