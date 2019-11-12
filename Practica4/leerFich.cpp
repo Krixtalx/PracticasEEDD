@@ -142,11 +142,7 @@ void leerFich::leeItinerariosYClientes(string archivo, EcoCityMoto* ecocity) {
 				}
 				catch (std::runtime_error & e) {
 					cout << e.what() << endl;
-				}/*
-				if (!ecocity.buscaCliente(temp, clienteActivo)){
-					cerr << "Erorr al cargar datos del cliente " << temp << endl;
-					break;
-				}*/
+				}
 			}
 			else {
 				if (!clienteActivo)
