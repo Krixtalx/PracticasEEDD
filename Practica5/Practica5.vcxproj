@@ -158,6 +158,7 @@
     <ClCompile Include="leerFich.cpp" />
     <ClCompile Include="Moto.cpp" />
     <ClCompile Include="Practica5.cpp" />
+    <ClCompile Include="THashCliente.cpp" />
     <ClCompile Include="UTM.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +169,7 @@
     <ClInclude Include="Itinerario.h" />
     <ClInclude Include="leerFich.h" />
     <ClInclude Include="Moto.h" />
+    <ClInclude Include="THashCliente.h" />
     <ClInclude Include="UTM.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -39,6 +39,9 @@
     <ClCompile Include="UTM.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="THashCliente.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cliente.h">
@@ -63,6 +66,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UTM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="THashCliente.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

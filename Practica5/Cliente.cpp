@@ -218,6 +218,7 @@ void Cliente::terminarTrayecto()
 	listaItinerarios->back()->setMinutos(rand() % listaItinerarios->back()->getVehiculo()->getPorcentajeBateria(), aplicacion->getLimiteBateria());
 	listaItinerarios->back()->getVehiculo()->setUTM(listaItinerarios->back()->getFin());
 	listaItinerarios->back()->getVehiculo()->seDesactiva(this->getItinerarios().back()->getDuracion(), aplicacion->getLimiteBateria());
+	posicion = listaItinerarios->back()->getVehiculo()->getUTM();
 }
 
 /**
