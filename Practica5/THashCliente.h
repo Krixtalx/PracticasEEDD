@@ -8,19 +8,38 @@
 
 using namespace std;
 
+enum EstadoHash{libre, ocupado, borrado};
+
+class Entrada
+{
+	Cliente cliente;
+	long clave;
+	EstadoHash estado = EstadoHash::libre;
+	friend class THashCliente;
+public:
+	Entrada();
+	Entrada(Cliente& cli, unsigned long cla);
+	Entrada(Entrada& orig);
+	~Entrada();
+	Entrada& operator=(Entrada& right);
+};
+
 class THashCliente
 {
-	vector<Cliente>* buffer = 0;
+	vector<Entrada>* buffer = 0;
 
 	unsigned int numclientes = 0;
 	unsigned int tamatabla = 0;
-	unsigned int maxColisiones = 0;
-	unsigned int numColisiones = 0;
+	unsigned int maxCol = 0;
+	unsigned int numCol = 0;
 
 	int hash(unsigned long clave, int intento);
 
 public:
-	THashCliente(int tamTabla);
+	THashCliente();
+	THashCliente(int tamatabla);
+	THashCliente(THashCliente& orig);
+	THashCliente& operator=(THashCliente& right);
 	unsigned long djb2(string& palabra);
 	bool insertar(unsigned long clave, string& dni, Cliente& cliente);
 	bool buscar(unsigned long clave, string& dni, Cliente& cliente);
