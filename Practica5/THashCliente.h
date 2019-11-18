@@ -18,7 +18,7 @@ class Entrada
 	friend class THashCliente;
 public:
 	Entrada();
-	Entrada(Cliente& cli, unsigned long cla);
+	Entrada(Cliente& cli, unsigned long cla, EstadoHash _estado = libre);
 	Entrada(Entrada& orig);
 	~Entrada();
 	Entrada& operator=(Entrada& right);
@@ -33,7 +33,7 @@ class THashCliente
 	unsigned int maxCol = 0;
 	unsigned int numCol = 0;
 
-	int hash(unsigned long clave, int intento);
+	unsigned long hash(unsigned long clave, int intento);
 
 public:
 	THashCliente();
@@ -50,7 +50,7 @@ public:
 	unsigned int promedioColisiones();
 	float factorCarga();
 	unsigned int tamaTabla();
-
+	void verTabla();
 };
 
 #endif // !THASHCLIENTE_H

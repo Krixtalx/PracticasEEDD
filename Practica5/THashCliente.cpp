@@ -1,10 +1,13 @@
 #include "THashCliente.h"
+#include <iostream>
+
+//====================IMPLEMENTACIÓN DE LA CLASE ENTRADA====================
 
 Entrada::Entrada() : cliente(""), clave(0)
 {
 }
 
-Entrada::Entrada(Cliente& cli, unsigned long cla) : cliente(cli), clave(cla)
+Entrada::Entrada(Cliente& cli, unsigned long cla, EstadoHash _estado) : cliente(cli), clave(cla), estado(_estado)
 {
 }
 
@@ -26,9 +29,12 @@ Entrada& Entrada::operator=(Entrada& right)
 	return *this;
 }
 
-int THashCliente::hash(unsigned long clave, int intento)
+
+//====================IMPLEMENTACIÓN DE LA CLASE THASHCLIENTE====================
+
+unsigned long THashCliente::hash(unsigned long clave, int intento)
 {
-	return 0;
+	return (clave + intento*intento) % tamatabla;
 }
 
 THashCliente::THashCliente()
@@ -37,7 +43,7 @@ THashCliente::THashCliente()
 }
 
 THashCliente::THashCliente(int tamTabla) : tamatabla(tamTabla) {
-	buffer = new vector<Entrada>;
+	buffer = new vector<Entrada>(tamatabla);
 }
 
 THashCliente::THashCliente(THashCliente& orig) : numclientes(orig.numclientes), tamatabla(orig.tamatabla), maxCol(orig.maxCol), numCol(orig.numCol)
@@ -69,10 +75,36 @@ unsigned long THashCliente::djb2(string& palabra) {
 
 	return hash;
 }
-
+/**
+	@brief Inserta un cliente en la tabla
+	@param clave Clave asociada al dni del cliente
+	@param dni Atributo dni del cliente a insertar
+	@param cliente Cliente a insertar
+	@pre La clave debe coincidir con la codificacion djb2 del dni
+	@throws std::invalid_argument si la clave no coincide con djb2(dni)
+*/
 bool THashCliente::insertar(unsigned long clave, string& dni, Cliente& cliente) {
-
-	return false;
+	if (clave != djb2(dni))
+		throw std::invalid_argument("[THashCliente::insertar] La clave no coincide con el dni");
+	int intento = 0;
+	unsigned long key = hash(clave, intento);
+	while (intento < tamatabla && (*buffer)[key].estado == ocupado) {
+		intento++;
+		key = hash(clave, intento);
+	}
+	if (intento >= tamatabla) {
+		return false;
+	}
+	if ((*buffer)[key].estado == borrado) {
+		Entrada temp(cliente, clave, borrado);
+		(*buffer)[key] = temp;
+	}
+	else {
+		Entrada temp(cliente, clave, ocupado);
+		(*buffer)[key] = temp;
+	}
+	return true;
+	
 }
 
 bool THashCliente::buscar(unsigned long clave, string& dni, Cliente& cliente)
@@ -112,4 +144,17 @@ float THashCliente::factorCarga()
 unsigned int THashCliente::tamaTabla()
 {
 	return tamatabla;
+}
+
+//TODO: borrar esto cuando funcione la tabla
+void THashCliente::verTabla()
+{
+	for (size_t i = 0; i < tamatabla; i++) {
+		if ((*buffer)[i].estado != libre) {
+			std::cout << "Posicion " << i << ": " << (*buffer)[i].cliente.toCSV() << std::endl;
+		}
+		else {
+			std::cout << "Posicion " << i << ": Vacio" << std::endl;
+		}
+	}
 }

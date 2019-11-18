@@ -94,11 +94,13 @@ Cliente& Cliente::operator=(const Cliente& right) {
 	this->posicion = right.posicion;
 	this->nombreCompleto = right.nombreCompleto;
 
-	while (!listaItinerarios->empty()) {
-		delete listaItinerarios->front();
-		listaItinerarios->pop_front();
+	if (listaItinerarios) {
+		while (!listaItinerarios->empty()) {
+			delete listaItinerarios->front();
+			listaItinerarios->pop_front();
+		}
+		delete listaItinerarios;
 	}
-	delete listaItinerarios;
 
 	this->listaItinerarios = new std::list<Itinerario*>(*(right.listaItinerarios));
 	this->aplicacion = right.aplicacion;
