@@ -42,7 +42,7 @@ public:
 	THashCliente& operator=(THashCliente& right);
 	unsigned long djb2(string& palabra);
 	bool insertar(unsigned long clave, string& dni, Cliente& cliente);
-	bool buscar(unsigned long clave, string& dni, Cliente& cliente);
+	bool buscar(unsigned long clave, string& dni, Cliente*& cliente);
 	bool borrar(unsigned long clave, string& dni);
 	unsigned int numCliente();
 	void redispersar(unsigned tama);

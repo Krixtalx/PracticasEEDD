@@ -75,6 +75,7 @@ unsigned long THashCliente::djb2(string& palabra) {
 
 	return hash;
 }
+
 /**
 	@brief Inserta un cliente en la tabla
 	@param clave Clave asociada al dni del cliente
@@ -103,17 +104,46 @@ bool THashCliente::insertar(unsigned long clave, string& dni, Cliente& cliente) 
 		Entrada temp(cliente, clave, ocupado);
 		(*buffer)[key] = temp;
 	}
+	numclientes++;
 	return true;
-	
+	//TODO: actualizar stats
 }
 
-bool THashCliente::buscar(unsigned long clave, string& dni, Cliente& cliente)
+/**
+	@brief Busca un cliente en la tabla
+	@param clave Clave asociada al dni del cliente
+	@param dni Atributo dni del cliente a buscar
+	@param cliente Cliente a buscar
+	@pre La clave debe coincidir con la codificacion djb2 del dni
+	@throws std::invalid_argument si la clave no coincide con djb2(dni)
+*/
+bool THashCliente::buscar(unsigned long clave, string& dni, Cliente* &cliente)
 {
+	if (clave != djb2(dni))
+		throw std::invalid_argument("[THashCliente::buscar] La clave no coincide con el dni");
+	int intento = 0;
+	unsigned long key = hash(clave, intento);
+	while (intento < tamatabla && (*buffer)[key].estado != libre) {
+		if ((*buffer)[key].clave == clave) {
+			cliente = &((*buffer)[key].cliente);
+			return true;
+		}
+	}
 	return false;
+	//TODO: actualizar stats
 }
 
 bool THashCliente::borrar(unsigned long clave, string& dni)
 {
+	if (clave != djb2(dni))
+		throw std::invalid_argument("[THashCliente::borrar] La clave no coincide con el dni");
+	int intento = 0;
+	unsigned long key = hash(clave, intento);
+	while (intento < tamatabla && (*buffer)[key].estado != libre) {
+		if ((*buffer)[key].clave == clave) {
+			//TODO: terminar esto
+		}
+	}
 	return false;
 }
 
