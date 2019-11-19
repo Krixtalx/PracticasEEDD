@@ -6,31 +6,27 @@
 
 int main()
 {
-	Cliente test("100", "test", "Test", "xx", "yy", 5, 7);
-	string cliDNI = test.getDni();
-	THashCliente prueba(20);
-	if (!prueba.insertar(prueba.djb2(cliDNI), cliDNI, test))
-		std::cerr << "NO SE PUDO INSERTAR" << std::endl;
-	prueba.verTabla();
-
-	std::cout << std::endl << std::endl << std::endl;
-	prueba.redispersar(50);
-	prueba.verTabla();
-	std::cout << std::endl << std::endl << std::endl;
-
-	Cliente* buscado = 0;
-	if (!prueba.buscar(prueba.djb2(cliDNI), cliDNI, buscado))
-		std::cerr << "NO SE ENCONTRO EL CLIENTE" << std::endl;
-	else {
-		if (buscado)
-			std::cout << buscado->toCSV() << std::endl;
+	
+	Cliente testA("123A", "passA", "PacoA", "xAx", "yAy", 10, 1);
+	Cliente testB("231B", "passB", "PacoB", "xBx", "yBy", 11, 11);
+	Cliente testC("312C", "passC", "PacoC", "xCx", "yCy", 12, 21);
+	Cliente testD("213D", "passD", "PacoD", "xDx", "yDy", 13, 31);
+	Cliente testE("321E", "passE", "PacoE", "xEx", "yEy", 14, 41);
+	Cliente testF("132F", "passF", "PacoF", "xFx", "yFy", 15, 51);
+	Cliente tests[6] = { testA, testB, testC, testD, testE, testF };
+	char stop;
+	THashCliente tabla(10);
+	for (size_t i = 0; i < 6; i++)
+	{
+		cout << "Iteracion " << i << endl;
+		cin >> stop;
+		tabla.insertar(tabla.djb2(tests[i].getDni()), tests[i].getDni(), tests[i]);
 	}
-	if (!prueba.borrar(prueba.djb2(cliDNI), cliDNI))
-		std::cerr << "NO SE PUDO BORRAR" << std::endl;
-	prueba.verTabla();
-
-	prueba.redispersar(50);
-	prueba.verTabla();
+	tabla.verTabla();
+	cout << "Clientes: " << tabla.numCliente() << endl;
+	cout << "Maximo de colisiones: " << tabla.maxColisiones() << endl;
+	cout << "Promedio de colisiones: " << tabla.promedioColisiones() << endl;
+	cout << "Factor de carga: " << tabla.factorCarga() << endl;
 	/*srand(time(0));
 	setlocale(LC_ALL, "spanish");
 	EcoCityMoto app;

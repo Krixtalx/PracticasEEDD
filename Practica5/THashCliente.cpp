@@ -41,6 +41,34 @@ unsigned int THashCliente::hash(unsigned long clave, int intento)
 }
 
 /**
+*@brief Devuelve el primer número primo mayor que el valor indicado
+*/
+int THashCliente::siguientePrimo(int x) {
+	if (x <= 1)
+		return 2;
+	if (x == 2)
+		return 3;
+	if (x == 3)
+		return 5;
+	int primo = x + 1;
+	if (primo % 2 == 0)
+		primo++;
+	while (true) {
+		bool hayDivisor = false;
+		for (int i = 3; i <= floor(sqrt(primo)); i += 2) {
+			if (primo % i == 0) {
+				hayDivisor = true;
+				break;
+			}
+		}
+		if (!hayDivisor)
+			return primo;
+		else
+			primo += 2;
+	}
+}
+
+/**
 *@Brief Constructor por defecto
 */
 THashCliente::THashCliente()
@@ -114,48 +142,12 @@ unsigned long THashCliente::djb2(const string& palabra) {
 }
 
 /**
-	@brief Inserta un cliente en la tabla
-	@param clave Clave asociada al dni del cliente
-	@param dni Atributo dni del cliente a insertar
-	@param cliente Cliente a insertar
-	@pre La clave debe coincidir con la codificacion djb2 del dni
-	@throws std::invalid_argument si la clave no coincide con djb2(dni)
-*/
-bool THashCliente::insertar(unsigned long clave, string& dni, Cliente& cliente) {
-	if (clave != djb2(dni))
-		throw std::invalid_argument("[THashCliente::insertar] La clave no coincide con el dni");
-	unsigned int intento = 0;
-	unsigned int key = hash(clave, intento);
-	while (intento < tamatabla && (*buffer)[key].estado == ocupado) {
-		intento++;
-		key = hash(clave, intento);
-	}
-	if (intento >= tamatabla) {
-		return false;
-	}
-	if ((*buffer)[key].estado == borrado) {
-		Entrada temp(cliente, clave, borrado);
-		(*buffer)[key] = temp;
-	}
-	else {
-		Entrada temp(cliente, clave, ocupado);
-		(*buffer)[key] = temp;
-	}
-	numclientes++;
-	numCol += intento;
-	if (intento > maxCol)
-		maxCol = intento;
-	return true;
-	
-}
-
-/**
-	@brief Inserta un cliente en la tabla
-	@param clave Clave asociada al dni del cliente
-	@param dni Atributo dni del cliente a insertar 
-	@param cliente Cliente a insertar
-	@pre La clave debe coincidir con la codificacion djb2 del dni, el dni debe ser una constante
-	@throws std::invalid_argument si la clave no coincide con djb2(dni)
+*@brief Inserta un cliente en la tabla
+*@param clave Clave asociada al dni del cliente
+*@param dni Atributo dni del cliente a insertar
+*@param cliente Cliente a insertar
+*@pre La clave debe coincidir con la codificación djb2 del dni, el dni debe ser una constante
+*@throws std::invalid_argument si la clave no coincide con djb2(dni)
 */
 bool THashCliente::insertar(unsigned long clave, const string& dni, Cliente& cliente) {
 	if (clave != djb2(dni))
@@ -186,12 +178,12 @@ bool THashCliente::insertar(unsigned long clave, const string& dni, Cliente& cli
 }
 
 /**
-	@brief Busca un cliente en la tabla
-	@param clave Clave asociada al dni del cliente
-	@param dni Atributo dni del cliente a buscar
-	@param cliente Cliente a buscar
-	@pre La clave debe coincidir con la codificacion djb2 del dni
-	@throws std::invalid_argument si la clave no coincide con djb2(dni)
+*@brief Busca un cliente en la tabla
+*@param clave Clave asociada al dni del cliente
+*@param dni Atributo dni del cliente a buscar
+*@param cliente Cliente a buscar
+*@pre La clave debe coincidir con la codificación djb2 del dni
+*@throws std::invalid_argument si la clave no coincide con djb2(dni)
 */
 bool THashCliente::buscar(unsigned long clave, string& dni, Cliente* &cliente)
 {
@@ -206,11 +198,15 @@ bool THashCliente::buscar(unsigned long clave, string& dni, Cliente* &cliente)
 		}
 	}
 	return false;
-	//TODO: actualizar stats
 }
 
 /**
-*@Brief Función de borrado de un cliente
+*@Brief Borra un cliente de la tabla
+*@param clave Clave asociada al dni del cliente
+*@param dni Atributo dni del cliente a borrar
+*@pre La clave debe coincidir con la codificación djb2 del dni
+*@post La entrada correspodiente a la clave se marca como borrada
+*@throws std::invalid_argument si la clave no coincide con djb2(dni)
 */
 bool THashCliente::borrar(unsigned long clave, string& dni)
 {
@@ -221,6 +217,7 @@ bool THashCliente::borrar(unsigned long clave, string& dni)
 	while (intento < tamatabla && (*buffer)[key].estado != libre) {
 		if ((*buffer)[key].clave == clave) {
 			(*buffer)[key].estado = borrado;
+			numclientes--;
 			return true;
 		}
 	}
@@ -239,6 +236,8 @@ unsigned int THashCliente::numCliente()
 *@Brief Función encargada de redispersar la tabla cuando se supere el valor de carga
 */
 void THashCliente::redispersar(unsigned tama){
+	if (tama < tamatabla)
+		throw std::invalid_argument("[THashCliente::redispersar] Se ha intentado crear una tabla menor");
 	THashCliente* aux = new THashCliente(tama);
 	for (unsigned i = 0; i < this->tamatabla; i++) {
 		if ((*buffer)[i].estado == EstadoHash::ocupado) {

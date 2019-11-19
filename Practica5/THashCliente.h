@@ -30,10 +30,11 @@ class THashCliente
 
 	unsigned int numclientes = 0;
 	unsigned int tamatabla = 0;
-	unsigned int maxCol = 0;
-	unsigned int numCol = 0;
+	unsigned int maxCol = 0;		//Maximo de colision en una operacion de insercion
+	unsigned int numCol = 0;		//Numero total de colisiones de todas las inserciones
 
 	unsigned int hash(unsigned long clave, int intento);
+	int siguientePrimo(int x);
 
 public:
 	THashCliente();
