@@ -7,8 +7,7 @@ Cliente::Cliente() : dni(""), pass(""), nombre(""), apellido(""), direccion(""),
 	listaItinerarios = new std::list<Itinerario*>;
 }
 
-Cliente::Cliente(string dni) :
-	dni(dni) {
+Cliente::Cliente(string dni): dni(dni) {
 }
 
 
@@ -28,11 +27,13 @@ Cliente::Cliente(const Cliente& orig): dni(orig.dni), pass(orig.pass), nombre(or
 }
 
 Cliente::~Cliente() {
-	while (!listaItinerarios->empty()) {
-		delete listaItinerarios->front();
-		listaItinerarios->pop_front();
+	if (listaItinerarios != 0) {
+		while (!listaItinerarios->empty()) {
+			delete listaItinerarios->front();
+			listaItinerarios->pop_front();
+		}
+		delete listaItinerarios;
 	}
-	delete listaItinerarios;
 }
 
 UTM Cliente::getPosicion() const {

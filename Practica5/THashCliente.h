@@ -33,12 +33,13 @@ class THashCliente
 	unsigned int maxCol = 0;
 	unsigned int numCol = 0;
 
-	unsigned long hash(unsigned long clave, int intento);
+	unsigned int hash(unsigned long clave, int intento);
 
 public:
 	THashCliente();
 	THashCliente(int tamatabla);
 	THashCliente(THashCliente& orig);
+	~THashCliente();
 	THashCliente& operator=(THashCliente& right);
 	unsigned long djb2(string& palabra);
 	bool insertar(unsigned long clave, string& dni, Cliente& cliente);

@@ -8,7 +8,7 @@ int main()
 {
 	Cliente test("100", "test", "Test", "xx", "yy", 5, 7);
 	string cliDNI = test.getDni();
-	THashCliente prueba(5);
+	THashCliente prueba(20);
 	if (!prueba.insertar(prueba.djb2(cliDNI), cliDNI, test))
 		std::cerr << "NO SE PUDO INSERTAR" << std::endl;
 	prueba.verTabla();

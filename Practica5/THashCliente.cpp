@@ -32,25 +32,44 @@ Entrada& Entrada::operator=(Entrada& right)
 
 //====================IMPLEMENTACIÓN DE LA CLASE THASHCLIENTE====================
 
-unsigned long THashCliente::hash(unsigned long clave, int intento)
+/**
+*@Brief Calcula y devuelve el hash 
+*/
+unsigned int THashCliente::hash(unsigned long clave, int intento)
 {
 	return (clave + intento*intento) % tamatabla;
 }
 
+/**
+*@Brief Constructor por defecto
+*/
 THashCliente::THashCliente()
 {
 	buffer = new vector<Entrada>;
 }
 
+/**
+*@Brief Constructor parametrizado
+*/
 THashCliente::THashCliente(int tamTabla) : tamatabla(tamTabla) {
 	buffer = new vector<Entrada>(tamatabla);
 }
 
+/**
+*@Brief Constructor de copia
+*/
 THashCliente::THashCliente(THashCliente& orig) : numclientes(orig.numclientes), tamatabla(orig.tamatabla), maxCol(orig.maxCol), numCol(orig.numCol)
 {
 	buffer = new vector<Entrada>(*orig.buffer);
 }
 
+THashCliente::~THashCliente(){
+	delete buffer;
+}
+
+/**
+*@Brief Operador =
+*/
 THashCliente& THashCliente::operator=(THashCliente& right)
 {
 	if (this == &right)
@@ -64,6 +83,9 @@ THashCliente& THashCliente::operator=(THashCliente& right)
 	return *this;
 }
 
+/**
+*@Brief Implementación del algoritmo djb2 para el calculo del hash
+*/
 unsigned long THashCliente::djb2(string& palabra) {
 	unsigned long hash = 5381;
 	int c;
@@ -88,7 +110,7 @@ bool THashCliente::insertar(unsigned long clave, string& dni, Cliente& cliente) 
 	if (clave != djb2(dni))
 		throw std::invalid_argument("[THashCliente::insertar] La clave no coincide con el dni");
 	int intento = 0;
-	unsigned long key = hash(clave, intento);
+	unsigned int key = hash(clave, intento);
 	while (intento < tamatabla && (*buffer)[key].estado == ocupado) {
 		intento++;
 		key = hash(clave, intento);
@@ -105,8 +127,11 @@ bool THashCliente::insertar(unsigned long clave, string& dni, Cliente& cliente) 
 		(*buffer)[key] = temp;
 	}
 	numclientes++;
+	numCol += intento;
+	if (intento > maxCol)
+		maxCol = intento;
 	return true;
-	//TODO: actualizar stats
+	
 }
 
 /**
@@ -133,6 +158,9 @@ bool THashCliente::buscar(unsigned long clave, string& dni, Cliente* &cliente)
 	//TODO: actualizar stats
 }
 
+/**
+*@Brief Función de borrado de un cliente
+*/
 bool THashCliente::borrar(unsigned long clave, string& dni)
 {
 	if (clave != djb2(dni))
@@ -148,30 +176,48 @@ bool THashCliente::borrar(unsigned long clave, string& dni)
 	return false;
 }
 
+/**
+*@Brief Devuelve el nº de clientes en la tabla
+*/
 unsigned int THashCliente::numCliente()
 {
 	return numclientes;
 }
 
+/**
+*@Brief Función encargada de redispersar la tabla cuando se supere el valor de carga
+*/
 void THashCliente::redispersar(unsigned tama)
 {
 }
 
+/**
+*@Brief Devuelve el nº máximo de colisiones que se han tenido
+*/
 unsigned int THashCliente::maxColisiones()
 {
 	return maxCol;
 }
 
+/**
+*@Brief Devuelve la media de colisiones por inserción
+*/
 unsigned int THashCliente::promedioColisiones()
 {
-	return 0;
+	return numCol/numclientes;
 }
 
+/**
+*@Brief Devuelve el factor de carga de la tabla
+*/
 float THashCliente::factorCarga()
 {
 	return numclientes/tamatabla;
 }
 
+/**
+*@Brief Devuelve el tamaño de la tabla hash
+*/
 unsigned int THashCliente::tamaTabla()
 {
 	return tamatabla;
