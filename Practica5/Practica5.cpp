@@ -19,6 +19,9 @@ int main()
 		if (buscado)
 			std::cout << buscado->toCSV() << std::endl;
 	}
+	if (!prueba.borrar(prueba.djb2(cliDNI), cliDNI))
+		std::cerr << "NO SE PUDO BORRAR" << std::endl;
+	prueba.verTabla();
 	/*srand(time(0));
 	setlocale(LC_ALL, "spanish");
 	EcoCityMoto app;

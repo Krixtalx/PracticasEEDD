@@ -141,7 +141,8 @@ bool THashCliente::borrar(unsigned long clave, string& dni)
 	unsigned long key = hash(clave, intento);
 	while (intento < tamatabla && (*buffer)[key].estado != libre) {
 		if ((*buffer)[key].clave == clave) {
-			//TODO: terminar esto
+			(*buffer)[key].estado = borrado;
+			return true;
 		}
 	}
 	return false;
@@ -180,7 +181,7 @@ unsigned int THashCliente::tamaTabla()
 void THashCliente::verTabla()
 {
 	for (size_t i = 0; i < tamatabla; i++) {
-		if ((*buffer)[i].estado != libre) {
+		if ((*buffer)[i].estado == ocupado) {
 			std::cout << "Posicion " << i << ": " << (*buffer)[i].cliente.toCSV() << std::endl;
 		}
 		else {
