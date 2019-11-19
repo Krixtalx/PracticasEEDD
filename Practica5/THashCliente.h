@@ -12,11 +12,11 @@ enum EstadoHash{libre, ocupado, borrado};
 
 class Entrada
 {
+public:
 	Cliente cliente;
 	long clave;
 	EstadoHash estado = EstadoHash::libre;
-	friend class THashCliente;
-public:
+
 	Entrada();
 	Entrada(Cliente& cli, unsigned long cla, EstadoHash _estado = libre);
 	Entrada(Entrada& orig);
@@ -55,6 +55,8 @@ public:
 	float factorCarga();
 	unsigned int tamaTabla();
 	void verTabla();
+	vector<Entrada>::iterator iteradorInicio();
+	vector<Entrada>::iterator iteradorFinal();
 };
 
 #endif // !THASHCLIENTE_H

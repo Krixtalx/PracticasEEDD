@@ -13,7 +13,12 @@ void EcoCityMoto::cargaEEDD(string fichCli, string fichMotos)
 	cin >> entrada;
 	if (entrada == 'S') {
 		leerFich::leeMotos(fichMotos, this);
-		leerFich::leeItinerariosYClientes(fichCli, this);
+		try {
+			leerFich::leeItinerariosYClientes(fichCli, this);
+		}
+		catch (std::runtime_error & e) {
+			cerr << e.what() << endl;
+		}
 	}
 }
 
@@ -23,7 +28,8 @@ void EcoCityMoto::cargaEEDD(string fichCli, string fichMotos)
 EcoCityMoto::EcoCityMoto()
 {
 	motos = new vector<Moto*>;
-	clientes = new map<std::string, Cliente>;
+	//clientes = new map<std::string, Cliente>;
+	clientes = new THashCliente(1000);
 	cargaEEDD("itinerarios.txt", "motos.txt");
 }
 
@@ -34,7 +40,8 @@ EcoCityMoto::EcoCityMoto()
 EcoCityMoto::EcoCityMoto(unsigned _idUltimo) : idUltimo(_idUltimo)
 {
 	motos = new vector<Moto*>;
-	clientes = new map<std::string, Cliente>;
+	//clientes = new map<std::string, Cliente>;
+	clientes = new THashCliente(1000);
 	cargaEEDD("itinerarios.txt", "motos.txt");
 }
 
@@ -53,10 +60,15 @@ EcoCityMoto::~EcoCityMoto()
 			cout << "Error en el archivo itinerarios.txt" << endl;
 		else {
 			cout << endl << "Iniciando guardado de itinerarios en el fichero: itinerarios.txt" << endl;
-			for (std::map<string, Cliente>::iterator it = clientes->begin(); it != clientes->end(); it++)
+			/*for (std::map<string, Cliente>::iterator it = clientes->begin(); it != clientes->end(); it++)
 			{
 				archivoItis << "-" << it->second.toCSV() << endl;
 				archivoItis << verItinerario(it->second);
+			}
+			*/
+			for (std::vector<Entrada>::iterator it = clientes->iteradorInicio(); it != clientes->iteradorFinal(); it++) {
+				archivoItis << "-" << it->cliente.toCSV() << endl;
+				archivoItis << verItinerario(it->cliente);
 			}
 			cout << "¡Itinerarios guardados satisfactoriamente!";
 		}
@@ -76,7 +88,8 @@ EcoCityMoto::~EcoCityMoto()
 EcoCityMoto::EcoCityMoto(EcoCityMoto& orig) : idUltimo(orig.idUltimo)
 {
 	motos = new vector<Moto*>(*(orig.motos));
-	clientes = new map<std::string, Cliente>(*(orig.clientes));
+	//clientes = new map<std::string, Cliente>(*(orig.clientes));
+	clientes = new THashCliente(*(orig.clientes));
 }
 
 /**
@@ -95,7 +108,8 @@ EcoCityMoto& EcoCityMoto::operator=(EcoCityMoto& right)
 
 	motos = new vector<Moto*>(*(right.motos));
 	delete clientes;
-	clientes = new map<std::string, Cliente>(*(right.clientes));
+	//clientes = new map<std::string, Cliente>(*(right.clientes));
+	clientes = new THashCliente(*(right.clientes));
 	return *this;
 }
 
@@ -163,10 +177,15 @@ EcoCityMoto& EcoCityMoto::insertaMoto(Moto* moto)
 	return *this;
 }
 
+bool EcoCityMoto::nuevoCliente(Cliente& cliente)
+{
+	return clientes->insertar(clientes->djb2(cliente.getDni()), cliente.getDni(), cliente);
+}
+
 /**
 	@brief Inserta un cliente en el arbol de clientes
 	@return Puntero al cliente recien insertado
-*/
+
 Cliente* EcoCityMoto::insertaCliente(Cliente& cliente)
 {
 	std::map<std::string, Cliente>::iterator it;
@@ -176,15 +195,19 @@ Cliente* EcoCityMoto::insertaCliente(Cliente& cliente)
 		throw std::runtime_error("[EcoCityMoto::insertaCliente] No se pudo insertar");
 	return &(parInserta.first->second);
 }
-
+*/
 /**
 	@brief Inserta un itinerario a la lista del cliente indicado
 */
 EcoCityMoto& EcoCityMoto::insertaItinerario(Itinerario* itinerario, std::string dni)
 {
 	Cliente* encontrado;
-	buscaCliente(dni, encontrado);
-	encontrado->getItinerarios().push_back(itinerario);
+	//buscaCliente(dni, encontrado);
+	encontrado = buscarCliente(dni);
+	if (encontrado)
+		encontrado->getItinerarios().push_back(itinerario);
+	else
+		cout << "No se pudo encontrar al cliente indicado" << endl;
 	return *this;
 }
 
@@ -194,10 +217,12 @@ EcoCityMoto& EcoCityMoto::insertaItinerario(Itinerario* itinerario, std::string 
 */
 EcoCityMoto& EcoCityMoto::crearItinerarios(UTM& min, UTM& max)
 {
-	std::map<std::string, Cliente>::iterator it;
-	for (it = clientes->begin(); it != clientes->end(); it++) {
+	//std::map<std::string, Cliente>::iterator it;
+	//for (it = clientes->begin(); it != clientes->end(); it++) {
+	for(std::vector<Entrada>::iterator it = clientes->iteradorInicio(); it != clientes->iteradorFinal(); it++){
 		try {
-			it->second.crearItinerarios((rand() % 5) + 1, min, max);
+			//it->second.crearItinerarios((rand() % 5) + 1, min, max);
+			it->cliente.crearItinerarios((rand() % 5) + 1, min, max);
 		}
 		catch (std::range_error & e) {
 			string temp = e.what();
@@ -242,11 +267,21 @@ bool EcoCityMoto::buscaMoto(std::string id, Moto* &motoEncontrada)
 	return false;
 }
 
+Cliente* EcoCityMoto::buscarCliente(std::string& dni)
+{
+	Cliente* encontrado = 0;
+	if (!clientes->buscar(clientes->djb2(dni), dni, encontrado)) {
+		return nullptr;
+	}
+	return encontrado;
+}
+
 /**
 	@brief Busca el cliente cuyo DNI coicida con el indicado
-*/
+
 bool EcoCityMoto::buscaCliente(std::string& dni, Cliente* &clienteEncontrado)
 {
+
 	std::map<std::string, Cliente>::iterator it;
 	it = clientes->find(dni);
 	if (it != clientes->end()) {
@@ -257,7 +292,7 @@ bool EcoCityMoto::buscaCliente(std::string& dni, Cliente* &clienteEncontrado)
 		return false;
 	}
 }
-
+*/
 /**
 	@brief Elimina la moto de la posicion indicada
 */
@@ -277,7 +312,8 @@ EcoCityMoto& EcoCityMoto::borraMoto(int pos)
 EcoCityMoto& EcoCityMoto::borraItinerario(int pos, std::string dni)
 {
 	Cliente* encontrado;
-	buscaCliente(dni, encontrado);
+	//buscaCliente(dni, encontrado);
+	encontrado = buscarCliente(dni);
 	if (pos < 0 || encontrado->getItinerarios().size() < pos)
 		throw std::out_of_range("[EcoCityMoto::borraItinerario] Se ha intentado borrar en una posicion no valida");
 	std::list<Itinerario*>::iterator it = encontrado->getItinerarios().begin();
@@ -292,9 +328,11 @@ EcoCityMoto& EcoCityMoto::borraItinerario(int pos, std::string dni)
 */
 EcoCityMoto& EcoCityMoto::recorreMapa()
 {
-	std::map<std::string, Cliente>::iterator it;
-	for (it = clientes->begin(); it != clientes->end(); it++) {
-		std::cout << it->second;
+	//std::map<std::string, Cliente>::iterator it;
+	//for (it = clientes->begin(); it != clientes->end(); it++) {
+	for (std::vector<Entrada>::iterator it = clientes->iteradorInicio(); it != clientes->iteradorFinal(); it++){
+		//std::cout << it->second;
+		cout << it->cliente;
 	}
 	return *this;
 }
@@ -337,7 +375,8 @@ void EcoCityMoto::borrarEEDD()
 	delete motos;
 	delete clientes;
 	motos = new vector<Moto*>;
-	clientes = new map<std::string, Cliente>;
+	//clientes = new map<std::string, Cliente>;
+	clientes = new THashCliente(1000);
 }
 
 /**
@@ -346,7 +385,8 @@ void EcoCityMoto::borrarEEDD()
 void EcoCityMoto::borraClientes()
 {
 	delete clientes;
-	clientes = new map<std::string, Cliente>;
+	//clientes = new map<std::string, Cliente>;
+	clientes = new THashCliente(1000);
 }
 
 /**
@@ -360,7 +400,8 @@ void EcoCityMoto::borraMotos()
 
 unsigned EcoCityMoto::getNumClientes()
 {
-	return clientes->size();
+	//return clientes->size();
+	return clientes->numCliente();
 }
 
 unsigned EcoCityMoto::getNumMotos()
@@ -389,5 +430,12 @@ int EcoCityMoto::getLimiteBateria()
 */
 bool EcoCityMoto::eliminarCliente(std::string id)
 {
-	return clientes->erase(id);
+	//return clientes->erase(id);
+	return clientes->borrar(clientes->djb2(id), id);
+}
+
+//TODO: borrar esto cuando funcione
+void EcoCityMoto::verTabla()
+{
+	clientes->verTabla();
 }

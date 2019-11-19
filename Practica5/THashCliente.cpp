@@ -3,7 +3,7 @@
 
 //====================IMPLEMENTACIÓN DE LA CLASE ENTRADA====================
 
-Entrada::Entrada() : cliente(""), clave(0)
+Entrada::Entrada() : cliente(), clave(0)
 {
 }
 
@@ -102,7 +102,7 @@ THashCliente& THashCliente::operator=(THashCliente& right)
 {
 	if (this == &right)
 		return *this;
-	delete buffer;
+	delete buffer;//TODO: aqui peta
 	buffer = new vector<Entrada>(*right.buffer);
 	numclientes = right.numclientes;
 	tamatabla = right.tamatabla;
@@ -161,18 +161,23 @@ bool THashCliente::insertar(unsigned long clave, const string& dni, Cliente& cli
 	if (intento >= tamatabla) {
 		return false;
 	}
-	if ((*buffer)[key].estado == borrado) {
+	/*if ((*buffer)[key].estado == borrado) {
 		Entrada temp(cliente, clave, borrado);
 		(*buffer)[key] = temp;
 	}
 	else {
 		Entrada temp(cliente, clave, ocupado);
 		(*buffer)[key] = temp;
-	}
+	}*/
+	Entrada temp(cliente, clave, ocupado);
+	(*buffer)[key] = temp;
 	numclientes++;
 	numCol += intento;
 	if (intento > maxCol)
 		maxCol = intento;
+	float fCarga = 0.6 - factorCarga();
+	if (fCarga < 0)
+		redispersar(tamatabla * 2);
 	return true;
 
 }
@@ -192,10 +197,14 @@ bool THashCliente::buscar(unsigned long clave, string& dni, Cliente* &cliente)
 	unsigned int intento = 0;
 	unsigned long key = hash(clave, intento);
 	while (intento < tamatabla && (*buffer)[key].estado != libre) {
-		if ((*buffer)[key].clave == clave) {
-			cliente = &((*buffer)[key].cliente);
-			return true;
+		if ((*buffer)[key].estado != borrado) {
+			if ((*buffer)[key].clave == clave) {
+				cliente = &((*buffer)[key].cliente);
+				return true;
+			}
 		}
+		intento++;
+		key = hash(clave, intento);
 	}
 	return false;
 }
@@ -292,4 +301,14 @@ void THashCliente::verTabla()
 			std::cout << "Posicion " << i << ": Vacio" << std::endl;
 		}
 	}
+}
+
+vector<Entrada>::iterator THashCliente::iteradorInicio()
+{
+	return buffer->begin();
+}
+
+vector<Entrada>::iterator THashCliente::iteradorFinal()
+{
+	return buffer->end();
 }

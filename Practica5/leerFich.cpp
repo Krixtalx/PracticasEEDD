@@ -1,6 +1,6 @@
 #include "leerFich.h"
-
 void leerFich::leeMotos(string fichMotos, EcoCityMoto* app) {
+	
 	cout << "Comenzando lectura del fichero " << fichMotos << "..." << endl;
 	ifstream fe; //Flujo de entrada
 	string linea; //Cada línea tiene un clienete
@@ -78,9 +78,11 @@ void leerFich::leeMotos(string fichMotos, EcoCityMoto* app) {
 		cerr << "No se puede abrir el fichero" << endl;
 	}
 	cout << "¡Lectura satisfactoria!" << endl;
+	
 }
 
 void leerFich::leeLineaCliente(string& csv, EcoCityMoto* ecocity, Cliente*& cliActivo) {
+	
 	stringstream ss;
 	string dni, pass, nombre, apellido, direccion, latitud, longitud;
 	float dlat, dlon;
@@ -114,14 +116,19 @@ void leerFich::leeLineaCliente(string& csv, EcoCityMoto* ecocity, Cliente*& cliA
 	Cliente client(dni, pass, nombre, apellido, direccion, dlat, dlon);
 	client.setAplicacion(ecocity);
 	try {
-		cliActivo = ecocity->insertaCliente(client);
+		//cliActivo = ecocity->insertaCliente(client);
+		if (!ecocity->nuevoCliente(client))
+			throw std::runtime_error("Error al insertar");
+		cliActivo = ecocity->buscarCliente(dni);
 	}
 	catch (const std::runtime_error & e) {
 		std::cout << e.what() << '\n';
 	}
+	
 }
 
 void leerFich::leeItinerariosYClientes(string archivo, EcoCityMoto* ecocity) {
+	
 	cout << "Comenzando lectura del fichero " << archivo << "..." << endl;
 	ifstream fichero;
 	fichero.open(archivo);
@@ -130,6 +137,10 @@ void leerFich::leeItinerariosYClientes(string archivo, EcoCityMoto* ecocity) {
 		string linea;
 		Cliente* clienteActivo = 0;
 		while (!fichero.eof()) {
+			cout << totalCli << endl;
+			if (totalCli == 599) {
+				cout << "illo hermano que esta pasando" << endl;
+			}
 			stringstream ss;
 			getline(fichero, linea);
 			if (linea == "")
@@ -141,7 +152,7 @@ void leerFich::leeItinerariosYClientes(string archivo, EcoCityMoto* ecocity) {
 					totalCli++;
 				}
 				catch (std::runtime_error & e) {
-					cout << e.what() << endl;
+					throw std::runtime_error(e);
 				}
 			}
 			else {
@@ -187,9 +198,11 @@ void leerFich::leeItinerariosYClientes(string archivo, EcoCityMoto* ecocity) {
 		cerr << "No se pudo cargar los itinerarios" << endl;
 	}
 	cout << "¡Lectura satisfactoria!" << endl;
+	
 }
 
 void leerFich::leeClientes(string fileNameClientes, EcoCityMoto* ecocity) {
+	
 	cout << "Comenzando lectura del fichero " << fileNameClientes << "..." << endl;
 	ifstream fe; //Flujo de entrada
 	string linea; //Cada línea tiene un clienete
@@ -220,4 +233,5 @@ void leerFich::leeClientes(string fileNameClientes, EcoCityMoto* ecocity) {
 	else {
 		cerr << "No se puede abrir el fichero" << endl;
 	}
+	
 }

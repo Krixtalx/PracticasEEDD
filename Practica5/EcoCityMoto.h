@@ -4,16 +4,17 @@
 
 #include "Moto.h"
 #include "Cliente.h"
+#include "THashCliente.h"
 #include <map>
 #include <vector>
-
 #include <cmath>
 
 class EcoCityMoto
 {
 	unsigned idUltimo = 0;
 	std::vector<Moto*>* motos = 0;
-	std::map<std::string, Cliente>* clientes = 0;
+	//std::map<std::string, Cliente>* clientes = 0;
+	THashCliente* clientes = 0;
 	void cargaEEDD(string fichCli, string fichMotos);
 	const static int limiteBateria = 15;
 
@@ -28,12 +29,14 @@ public:
 	void desbloqueaMoto(Moto& m, Cliente& cli);
 
 	EcoCityMoto& insertaMoto(Moto* moto);
-	Cliente* insertaCliente(Cliente& cliente);
+	//Cliente* insertaCliente(Cliente& cliente);
+	bool nuevoCliente(Cliente& cliente);
 	EcoCityMoto& insertaItinerario(Itinerario* itinerario, std::string dni);
 	EcoCityMoto& crearItinerarios(UTM& min, UTM& max);
 	std::string& verItinerario(Cliente& cliente);
 	bool buscaMoto(std::string id, Moto* &motoEncontrada);
-	bool buscaCliente(std::string& dni, Cliente* &clienteEncontrado);
+	Cliente* buscarCliente(std::string& dni);
+	//bool buscaCliente(std::string& dni, Cliente* &clienteEncontrado);
 	EcoCityMoto& borraMoto(int pos);
 	EcoCityMoto& borraItinerario(int pos, std::string dni);
 	EcoCityMoto& recorreMapa();
@@ -48,7 +51,7 @@ public:
 	Moto* getMotoAleatoria();
 	int getLimiteBateria();
 	bool eliminarCliente(std::string id);
-
+	void verTabla();
 };
 
 

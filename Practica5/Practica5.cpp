@@ -1,6 +1,6 @@
 #include <iostream>
 #include <ctime>
-#include "InterfazUsuario.h"
+//#include "InterfazUsuario.h"
 #include "EcoCityMoto.h"
 #include "THashCliente.h"
 
@@ -15,19 +15,8 @@ int main()
 	Cliente testF("132F", "passF", "PacoF", "xFx", "yFy", 15, 51);
 	Cliente tests[6] = { testA, testB, testC, testD, testE, testF };
 	char stop;
-	THashCliente tabla(10);
-	for (size_t i = 0; i < 6; i++)
-	{
-		cout << "Cliente " << i << " " << tabla.djb2(tests[i].getDni()) << endl;
-		tabla.insertar(tabla.djb2(tests[i].getDni()), tests[i].getDni(), tests[i]);
-	}
-	tabla.verTabla();
-	cout << "Clientes: " << tabla.numCliente() << endl;
-	cout << "Maximo de colisiones: " << tabla.maxColisiones() << endl;
-	cout << "Promedio de colisiones: " << tabla.promedioColisiones() << endl;
-	cout << "Factor de carga: " << tabla.factorCarga() << endl;
-	tabla.redispersar(tabla.tamaTabla() * 2);
-	tabla.verTabla();
+	EcoCityMoto aLaVergaTodo;
+	aLaVergaTodo.verTabla();
 	/*srand(time(0));
 	setlocale(LC_ALL, "spanish");
 	EcoCityMoto app;
