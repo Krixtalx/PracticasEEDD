@@ -238,7 +238,8 @@ unsigned int THashCliente::numCliente()
 void THashCliente::redispersar(unsigned tama){
 	if (tama < tamatabla)
 		throw std::invalid_argument("[THashCliente::redispersar] Se ha intentado crear una tabla menor");
-	THashCliente* aux = new THashCliente(tama);
+	unsigned nuevoTam = siguientePrimo(tama);
+	THashCliente* aux = new THashCliente(nuevoTam);
 	for (unsigned i = 0; i < this->tamatabla; i++) {
 		if ((*buffer)[i].estado == EstadoHash::ocupado) {
 			aux->insertar((*buffer)[i].clave, (*buffer)[i].cliente.getDni(), (*buffer)[i].cliente);
@@ -259,9 +260,9 @@ unsigned int THashCliente::maxColisiones()
 /**
 *@Brief Devuelve la media de colisiones por inserción
 */
-unsigned int THashCliente::promedioColisiones()
+float THashCliente::promedioColisiones()
 {
-	return numCol/numclientes;
+	return (float)numCol/numclientes;
 }
 
 /**
@@ -285,7 +286,7 @@ void THashCliente::verTabla()
 {
 	for (size_t i = 0; i < tamatabla; i++) {
 		if ((*buffer)[i].estado == ocupado) {
-			std::cout << "Posicion " << i << ": " << (*buffer)[i].cliente.toCSV() << std::endl;
+			std::cout << "Posicion " << i << ": " << (*buffer)[i].clave << " " << (*buffer)[i].cliente.toCSV() << std::endl;
 		}
 		else {
 			std::cout << "Posicion " << i << ": Vacio" << std::endl;

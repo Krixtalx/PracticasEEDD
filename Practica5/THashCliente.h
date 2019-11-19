@@ -51,7 +51,7 @@ public:
 	unsigned int numCliente();
 	void redispersar(unsigned tama);
 	unsigned int maxColisiones();
-	unsigned int promedioColisiones();
+	float promedioColisiones();
 	float factorCarga();
 	unsigned int tamaTabla();
 	void verTabla();

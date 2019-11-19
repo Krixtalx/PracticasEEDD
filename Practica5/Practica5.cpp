@@ -18,8 +18,7 @@ int main()
 	THashCliente tabla(10);
 	for (size_t i = 0; i < 6; i++)
 	{
-		cout << "Iteracion " << i << endl;
-		cin >> stop;
+		cout << "Cliente " << i << " " << tabla.djb2(tests[i].getDni()) << endl;
 		tabla.insertar(tabla.djb2(tests[i].getDni()), tests[i].getDni(), tests[i]);
 	}
 	tabla.verTabla();
@@ -27,6 +26,8 @@ int main()
 	cout << "Maximo de colisiones: " << tabla.maxColisiones() << endl;
 	cout << "Promedio de colisiones: " << tabla.promedioColisiones() << endl;
 	cout << "Factor de carga: " << tabla.factorCarga() << endl;
+	tabla.redispersar(tabla.tamaTabla() * 2);
+	tabla.verTabla();
 	/*srand(time(0));
 	setlocale(LC_ALL, "spanish");
 	EcoCityMoto app;
