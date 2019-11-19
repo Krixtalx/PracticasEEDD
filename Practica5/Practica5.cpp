@@ -12,6 +12,12 @@ int main()
 	if (!prueba.insertar(prueba.djb2(cliDNI), cliDNI, test))
 		std::cerr << "NO SE PUDO INSERTAR" << std::endl;
 	prueba.verTabla();
+
+	std::cout << std::endl << std::endl << std::endl;
+	prueba.redispersar(50);
+	prueba.verTabla();
+	std::cout << std::endl << std::endl << std::endl;
+
 	Cliente* buscado = 0;
 	if (!prueba.buscar(prueba.djb2(cliDNI), cliDNI, buscado))
 		std::cerr << "NO SE ENCONTRO EL CLIENTE" << std::endl;
@@ -21,6 +27,9 @@ int main()
 	}
 	if (!prueba.borrar(prueba.djb2(cliDNI), cliDNI))
 		std::cerr << "NO SE PUDO BORRAR" << std::endl;
+	prueba.verTabla();
+
+	prueba.redispersar(50);
 	prueba.verTabla();
 	/*srand(time(0));
 	setlocale(LC_ALL, "spanish");

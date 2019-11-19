@@ -21,7 +21,8 @@ Cliente::Cliente(const Cliente& orig): dni(orig.dni), pass(orig.pass), nombre(or
 	nombreCompleto = orig.nombreCompleto;
 	posicion.latitud = orig.posicion.latitud;
 	posicion.longitud = orig.posicion.longitud;
-	this->listaItinerarios = new std::list<Itinerario*>(*(orig.listaItinerarios));
+	if(orig.listaItinerarios!=0)
+		this->listaItinerarios = new std::list<Itinerario*>(*(orig.listaItinerarios));
 	aplicacion = orig.aplicacion;
 	
 }
