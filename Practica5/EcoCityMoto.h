@@ -53,6 +53,10 @@ public:
 	bool eliminarCliente(std::string id);
 	void verTabla();
 	THashCliente* getTabla() { return clientes; };
+	void cargarClientes(string& archivo);
+	void cargarMotos(string& archivo);
+	void guardarClientesItinerarios(string& archivo);
+	vector<string&>* getDniClientes();
 };
 
 
