@@ -67,8 +67,10 @@ EcoCityMoto::~EcoCityMoto()
 			}
 			*/
 			for (std::vector<Entrada>::iterator it = clientes->iteradorInicio(); it != clientes->iteradorFinal(); it++) {
-				archivoItis << "-" << it->cliente.toCSV() << endl;
-				archivoItis << verItinerario(it->cliente);
+				if (it->estado == ocupado) {
+					archivoItis << "-" << it->cliente.toCSV() << endl;
+					archivoItis << verItinerario(it->cliente);
+				}
 			}
 			cout << "¡Itinerarios guardados satisfactoriamente!";
 		}

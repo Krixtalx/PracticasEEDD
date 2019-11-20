@@ -137,10 +137,6 @@ void leerFich::leeItinerariosYClientes(string archivo, EcoCityMoto* ecocity) {
 		string linea;
 		Cliente* clienteActivo = 0;
 		while (!fichero.eof()) {
-			cout << totalCli << endl;
-			if (totalCli == 599) {
-				cout << "illo hermano que esta pasando" << endl;
-			}
 			stringstream ss;
 			getline(fichero, linea);
 			if (linea == "")

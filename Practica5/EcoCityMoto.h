@@ -52,6 +52,7 @@ public:
 	int getLimiteBateria();
 	bool eliminarCliente(std::string id);
 	void verTabla();
+	THashCliente* getTabla() { return clientes; };
 };
 
 

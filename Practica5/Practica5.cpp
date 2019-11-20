@@ -16,7 +16,10 @@ int main()
 	Cliente tests[6] = { testA, testB, testC, testD, testE, testF };
 	char stop;
 	EcoCityMoto aLaVergaTodo;
-	aLaVergaTodo.verTabla();
+	//aLaVergaTodo.verTabla();
+	THashCliente* funciona = aLaVergaTodo.getTabla();
+	cout << "TAM: " << funciona->numCliente() << endl;
+	cout << "FCARGA: " << funciona->factorCarga() << endl;
 	/*srand(time(0));
 	setlocale(LC_ALL, "spanish");
 	EcoCityMoto app;

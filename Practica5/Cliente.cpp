@@ -22,7 +22,13 @@ Cliente::Cliente(const Cliente& orig): dni(orig.dni), pass(orig.pass), nombre(or
 	posicion.latitud = orig.posicion.latitud;
 	posicion.longitud = orig.posicion.longitud;
 	if(orig.listaItinerarios!=0)
-		this->listaItinerarios = new std::list<Itinerario*>(*(orig.listaItinerarios));
+		listaItinerarios = new list<Itinerario*>;
+		for (list<Itinerario*>::iterator it = orig.listaItinerarios->begin(); it != orig.listaItinerarios->end(); it++) {
+			Itinerario* temp = new Itinerario;
+			*temp = *(*it);
+			listaItinerarios->push_back(temp);
+		}
+		//this->listaItinerarios = new std::list<Itinerario*>(*(orig.listaItinerarios));
 	aplicacion = orig.aplicacion;
 	
 }
@@ -103,8 +109,13 @@ Cliente& Cliente::operator=(const Cliente& right) {
 		}
 		delete listaItinerarios;
 	}
-
-	this->listaItinerarios = new std::list<Itinerario*>(*(right.listaItinerarios));
+	listaItinerarios = new list<Itinerario*>;
+	for (list<Itinerario*>::iterator it = right.listaItinerarios->begin(); it != right.listaItinerarios->end(); it++) {
+		Itinerario* temp = new Itinerario;
+		*temp = **it;
+		listaItinerarios->push_back(temp);
+	}
+	//this->listaItinerarios = new std::list<Itinerario*>(*(right.listaItinerarios));
 	this->aplicacion = right.aplicacion;
 
 	return *this;
