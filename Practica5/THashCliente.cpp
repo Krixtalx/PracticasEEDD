@@ -175,9 +175,8 @@ bool THashCliente::insertar(unsigned long clave, const string& dni, Cliente& cli
 	numCol += intento;
 	if (intento > maxCol)
 		maxCol = intento;
-	float fCarga = 0.6 - factorCarga();
-	if (fCarga < 0)
-		redispersar(tamatabla * 2);
+	if (factorCarga() > 0.7)
+		redispersar(numclientes/0.63);
 	return true;
 
 }
@@ -223,12 +222,19 @@ bool THashCliente::borrar(unsigned long clave, string& dni)
 		throw std::invalid_argument("[THashCliente::borrar] La clave no coincide con el dni");
 	unsigned int intento = 0;
 	unsigned long key = hash(clave, intento);
+
 	while (intento < tamatabla && (*buffer)[key].estado != libre) {
-		if ((*buffer)[key].clave == clave) {
+		if ((*buffer)[key].estado == ocupado && (*buffer)[key].clave == clave) {
 			(*buffer)[key].estado = borrado;
 			numclientes--;
+			if (factorCarga() < 0.6) {
+				std::cout << "REDISPERSANDO EN BORRAR" << std::endl;
+				redispersar(numclientes / 0.63);
+			}
 			return true;
 		}
+		intento++;
+		key = hash(clave, intento);
 	}
 	return false;
 }
@@ -245,8 +251,8 @@ unsigned int THashCliente::numCliente()
 *@Brief Función encargada de redispersar la tabla cuando se supere el valor de carga
 */
 void THashCliente::redispersar(unsigned tama){
-	if (tama < tamatabla)
-		throw std::invalid_argument("[THashCliente::redispersar] Se ha intentado crear una tabla menor");
+	if (tama < 0)
+		throw std::invalid_argument("[THashCliente::redispersar] El tam no puede ser negativo");
 	unsigned nuevoTam = siguientePrimo(tama);
 	THashCliente* aux = new THashCliente(nuevoTam);
 	for (unsigned i = 0; i < this->tamatabla; i++) {

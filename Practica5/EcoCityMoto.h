@@ -56,7 +56,7 @@ public:
 	void cargarClientes(string& archivo);
 	void cargarMotos(string& archivo);
 	void guardarClientesItinerarios(string& archivo);
-	vector<string&>* getDniClientes();
+	vector<string>* getDniClientes();
 };
 
 

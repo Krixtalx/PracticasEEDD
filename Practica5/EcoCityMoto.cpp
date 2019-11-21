@@ -441,3 +441,16 @@ void EcoCityMoto::verTabla()
 {
 	clientes->verTabla();
 }
+
+/**
+* @Brief Devuelve un vector de strings con los DNIs de los clientes que hay en la tabla hash
+*/
+vector<string>* EcoCityMoto::getDniClientes() {
+	vector<string>* dnis = new vector<string>;
+	for (vector<Entrada>::iterator it = clientes->iteradorInicio(); it != clientes->iteradorFinal(); it++) {
+		if (it->estado == ocupado) {
+			dnis->push_back(it->cliente.getDni());
+		}
+	}
+	return dnis;
+}
