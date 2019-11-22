@@ -20,7 +20,7 @@ class EcoCityMoto
 
 public:
 	EcoCityMoto();
-	EcoCityMoto(unsigned _idUltimo);
+	EcoCityMoto(unsigned _idUltimo, size_t tamTabla);
 	~EcoCityMoto();
 	EcoCityMoto(EcoCityMoto& orig);
 	EcoCityMoto& operator=(EcoCityMoto& right);

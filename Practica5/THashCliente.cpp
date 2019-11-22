@@ -217,7 +217,7 @@ bool THashCliente::insertar(unsigned long clave, const string& dni, Cliente& cli
 	if (intento > maxCol)
 		maxCol = intento;
 	if (factorCarga() > 0.7)
-		redispersar(numclientes/0.63);
+		redispersar(numclientes/0.61);
 	return true;
 
 }
@@ -269,8 +269,7 @@ bool THashCliente::borrar(unsigned long clave, string& dni)
 			(*buffer)[key].estado = borrado;
 			numclientes--;
 			if (factorCarga() < 0.6) {
-				std::cout << "REDISPERSANDO EN BORRAR" << std::endl;
-				redispersar(numclientes / 0.63);
+				redispersar(numclientes / 0.61);
 			}
 			return true;
 		}
@@ -294,6 +293,7 @@ unsigned int THashCliente::numCliente()
 void THashCliente::redispersar(unsigned tama){
 	if (tama < 0)
 		throw std::invalid_argument("[THashCliente::redispersar] El tam no puede ser negativo");
+	cout << endl << "REDISPERSANDO A " << tama << endl;
 	unsigned nuevoTam = siguientePrimo(tama);
 	THashCliente* aux = new THashCliente(nuevoTam);
 	for (unsigned i = 0; i < this->tamatabla; i++) {

@@ -29,7 +29,7 @@ EcoCityMoto::EcoCityMoto()
 {
 	motos = new vector<Moto*>;
 	//clientes = new map<std::string, Cliente>;
-	clientes = new THashCliente(1000);
+	clientes = new THashCliente;
 	cargaEEDD("itinerarios.txt", "motos.txt");
 }
 
@@ -37,11 +37,11 @@ EcoCityMoto::EcoCityMoto()
 	@brief Constructor parametrizado
 	@param _idUltimo Id del ultimo itinerario
 */
-EcoCityMoto::EcoCityMoto(unsigned _idUltimo) : idUltimo(_idUltimo)
+EcoCityMoto::EcoCityMoto(unsigned _idUltimo, size_t tamTabla) : idUltimo(_idUltimo)
 {
 	motos = new vector<Moto*>;
 	//clientes = new map<std::string, Cliente>;
-	clientes = new THashCliente(1000);
+	clientes = new THashCliente(tamTabla);
 	cargaEEDD("itinerarios.txt", "motos.txt");
 }
 

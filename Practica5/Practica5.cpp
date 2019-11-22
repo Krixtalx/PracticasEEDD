@@ -17,7 +17,8 @@ int main()
 	Cliente testF("48387910F", "passF", "PacoF", "xFx", "yFy", 15, 51);
 	Cliente tests[6] = { testA, testB, testC, testD, testE, testF };
 	char stop;
-	EcoCityMoto aLaVergaTodo;
+	size_t tamtabla = 5000;
+	EcoCityMoto aLaVergaTodo(0, tamtabla);
 	//aLaVergaTodo.verTabla();
 	THashCliente* funciona = aLaVergaTodo.getTabla();
 	cout << "TAM: " << funciona->numCliente() << endl;
