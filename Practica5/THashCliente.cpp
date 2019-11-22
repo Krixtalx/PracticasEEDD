@@ -33,13 +33,52 @@ Entrada& Entrada::operator=(Entrada& right)
 //====================IMPLEMENTACIÓN DE LA CLASE THASHCLIENTE====================
 
 /**
-*@Brief Calcula y devuelve el hash 
+*@Brief Calcula y devuelve el hash base
 */
 unsigned int THashCliente::hash(unsigned long clave, int intento)
 {
 	return (clave + intento*intento) % tamatabla;
 }
 
+/**
+*@Brief Calcula y devuelve el hash 2
+*/
+unsigned int THashCliente::hash2(unsigned long clave, int intento)
+{
+	return (clave + ((intento * intento)*(clave/(intento+1)))) % tamatabla;
+}
+
+/**
+*@Brief Calcula y devuelve el hash 3
+*/
+unsigned int THashCliente::hash3(unsigned long clave, int intento)
+{
+	return (hash(clave,intento) + hash2(clave, intento)) % tamatabla;
+}
+
+/**
+*@Brief Calcula y devuelve el hash 4
+*/
+unsigned int THashCliente::hash4(unsigned long clave, int intento)
+{
+	return 0;
+}
+
+/**
+*@Brief Calcula y devuelve el hash 5
+*/
+unsigned int THashCliente::hash5(unsigned long clave, int intento)
+{
+	return 0;
+}
+
+/**
+*@Brief Calcula y devuelve el hash 6
+*/
+unsigned int THashCliente::hash6(unsigned long clave, int intento)
+{
+	return 0;
+}
 /**
 *@brief Devuelve el primer número primo mayor que el valor indicado
 */

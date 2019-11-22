@@ -24,7 +24,9 @@ int main()
 	cout << "FCARGA: " << funciona->factorCarga() << endl;
 	cout << "MAX COLISIONES: " << funciona->maxColisiones() << endl;
 	cout << "PROMEDIO COLISIONES: " << funciona->promedioColisiones() << endl;
+	
 	vector<string>* dnis = aLaVergaTodo.getDniClientes();
+		
 	size_t i;
 	for (i = dnis->size() - 1; i > dnis->size()-2000; i--) {
 		if (funciona->borrar(funciona->djb2((*dnis)[i]), (*dnis)[i]))
@@ -34,11 +36,15 @@ int main()
 			return 0;
 		}
 	}
+
+
 	cout << "DONE: " << i << endl;
 	cout << "TAM: " << funciona->numCliente() << endl;
 	cout << "FCARGA: " << funciona->factorCarga() << endl;
 	cout << "MAX COLISIONES: " << funciona->maxColisiones() << endl;
 	cout << "PROMEDIO COLISIONES: " << funciona->promedioColisiones() << endl;
+	
+
 	/*srand(time(0));
 	setlocale(LC_ALL, "spanish");
 	EcoCityMoto app;

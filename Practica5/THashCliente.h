@@ -34,6 +34,11 @@ class THashCliente
 	unsigned int numCol = 0;		//Numero total de colisiones de todas las inserciones
 
 	unsigned int hash(unsigned long clave, int intento);
+	unsigned int hash2(unsigned long clave, int intento);
+	unsigned int hash3(unsigned long clave, int intento);
+	unsigned int hash4(unsigned long clave, int intento);
+	unsigned int hash5(unsigned long clave, int intento);
+	unsigned int hash6(unsigned long clave, int intento);
 	int siguientePrimo(int x);
 
 public:
