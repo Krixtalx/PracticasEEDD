@@ -9,12 +9,12 @@ int main()
 {
 
 	setlocale(LC_ALL, "spanish");
-	Cliente testA("123A", "passA", "PacoA", "xAx", "yAy", 10, 1);
-	Cliente testB("231B", "passB", "PacoB", "xBx", "yBy", 11, 11);
-	Cliente testC("312C", "passC", "PacoC", "xCx", "yCy", 12, 21);
-	Cliente testD("213D", "passD", "PacoD", "xDx", "yDy", 13, 31);
-	Cliente testE("321E", "passE", "PacoE", "xEx", "yEy", 14, 41);
-	Cliente testF("132F", "passF", "PacoF", "xFx", "yFy", 15, 51);
+	Cliente testA("73581678A", "passA", "PacoA", "xAx", "yAy", 10, 1);
+	Cliente testB("98176284B", "passB", "PacoB", "xBx", "yBy", 11, 11);
+	Cliente testC("74621489C", "passC", "PacoC", "xCx", "yCy", 12, 21);
+	Cliente testD("10642085D", "passD", "PacoD", "xDx", "yDy", 13, 31);
+	Cliente testE("46984087E", "passE", "PacoE", "xEx", "yEy", 14, 41);
+	Cliente testF("48387910F", "passF", "PacoF", "xFx", "yFy", 15, 51);
 	Cliente tests[6] = { testA, testB, testC, testD, testE, testF };
 	char stop;
 	EcoCityMoto aLaVergaTodo;
@@ -24,7 +24,7 @@ int main()
 	cout << "FCARGA: " << funciona->factorCarga() << endl;
 	cout << "MAX COLISIONES: " << funciona->maxColisiones() << endl;
 	cout << "PROMEDIO COLISIONES: " << funciona->promedioColisiones() << endl;
-	
+	/*
 	vector<string>* dnis = aLaVergaTodo.getDniClientes();
 		
 	size_t i;
@@ -43,7 +43,7 @@ int main()
 	cout << "FCARGA: " << funciona->factorCarga() << endl;
 	cout << "MAX COLISIONES: " << funciona->maxColisiones() << endl;
 	cout << "PROMEDIO COLISIONES: " << funciona->promedioColisiones() << endl;
-	
+	*/
 
 	/*srand(time(0));
 	setlocale(LC_ALL, "spanish");

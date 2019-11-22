@@ -61,7 +61,8 @@ unsigned int THashCliente::hash3(unsigned long clave, int intento)
 */
 unsigned int THashCliente::hash4(unsigned long clave, int intento)
 {
-	return 0;
+	//Cuidado, esto es muy eficiente y puede explotar su CPU: ((((clave << 5 ^ intento * clave) / (intento + 7) % tamatabla) + intento * intento) >> 2) % tamatabla
+	return (((((clave << 5 ^ intento) * clave) / (intento + 7) ^ clave >> 3) + intento * intento) >> 2) % tamatabla;
 }
 
 /**
@@ -69,7 +70,7 @@ unsigned int THashCliente::hash4(unsigned long clave, int intento)
 */
 unsigned int THashCliente::hash5(unsigned long clave, int intento)
 {
-	return 0;
+	return (((clave << 3) * intento * intento) ^ (clave >> 2 / (intento + 1))) % tamatabla;
 }
 
 /**
@@ -77,7 +78,8 @@ unsigned int THashCliente::hash5(unsigned long clave, int intento)
 */
 unsigned int THashCliente::hash6(unsigned long clave, int intento)
 {
-	return 0;
+	//return (((hash5(clave, intento) ^ (clave << 2 * intento)) / (intento + 1 + hash4(clave, intento))) + intento * intento) % tamatabla;
+	return (((hash5(clave, intento) * (clave >> 1 * intento)<<2) ^ (intento + 1 + hash4(clave, intento))) + intento * intento) % tamatabla;
 }
 /**
 *@brief Devuelve el primer número primo mayor que el valor indicado
@@ -141,7 +143,7 @@ THashCliente& THashCliente::operator=(THashCliente& right)
 {
 	if (this == &right)
 		return *this;
-	delete buffer;//TODO: aqui peta
+	delete buffer;
 	buffer = new vector<Entrada>(*right.buffer);
 	numclientes = right.numclientes;
 	tamatabla = right.tamatabla;
@@ -192,10 +194,10 @@ bool THashCliente::insertar(unsigned long clave, const string& dni, Cliente& cli
 	if (clave != djb2(dni))
 		throw std::invalid_argument("[THashCliente::insertar] La clave no coincide con el dni");
 	unsigned int intento = 0;
-	unsigned int key = hash(clave, intento);
+	unsigned int key = hash6(clave, intento);
 	while (intento < tamatabla && (*buffer)[key].estado == ocupado) {
 		intento++;
-		key = hash(clave, intento);
+		key = hash6(clave, intento);
 	}
 	if (intento >= tamatabla) {
 		return false;
@@ -233,7 +235,7 @@ bool THashCliente::buscar(unsigned long clave, string& dni, Cliente* &cliente)
 	if (clave != djb2(dni))
 		throw std::invalid_argument("[THashCliente::buscar] La clave no coincide con el dni");
 	unsigned int intento = 0;
-	unsigned long key = hash(clave, intento);
+	unsigned long key = hash6(clave, intento);
 	while (intento < tamatabla && (*buffer)[key].estado != libre) {
 		if ((*buffer)[key].estado != borrado) {
 			if ((*buffer)[key].clave == clave) {
@@ -242,7 +244,7 @@ bool THashCliente::buscar(unsigned long clave, string& dni, Cliente* &cliente)
 			}
 		}
 		intento++;
-		key = hash(clave, intento);
+		key = hash6(clave, intento);
 	}
 	return false;
 }
@@ -260,7 +262,7 @@ bool THashCliente::borrar(unsigned long clave, string& dni)
 	if (clave != djb2(dni))
 		throw std::invalid_argument("[THashCliente::borrar] La clave no coincide con el dni");
 	unsigned int intento = 0;
-	unsigned long key = hash(clave, intento);
+	unsigned long key = hash6(clave, intento);
 
 	while (intento < tamatabla && (*buffer)[key].estado != libre) {
 		if ((*buffer)[key].estado == ocupado && (*buffer)[key].clave == clave) {
@@ -273,7 +275,7 @@ bool THashCliente::borrar(unsigned long clave, string& dni)
 			return true;
 		}
 		intento++;
-		key = hash(clave, intento);
+		key = hash6(clave, intento);
 	}
 	return false;
 }
