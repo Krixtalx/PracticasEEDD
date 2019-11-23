@@ -95,7 +95,13 @@ void IA(EcoCityMoto& ecocity) {
 				cout << "PRIMO: " << mejorPrimo << "                                                          PRIMO:" << tabla->primoHash2 << endl;
 				cout << "SUMA: " << mejorSum << "                                                               SUMA:" << tabla->sumHash2 << endl << endl;
 
-				tamInicial = tabla->siguientePrimo(tamInicial);
+				if (tamInicial < tabla->numCliente()) {
+					tamInicial = tabla->siguientePrimo(tamInicial * (0.75 + ((float)tamInicial / tabla->numCliente())));
+				}
+				else
+				{
+					tamInicial = tabla->siguientePrimo(tamInicial);
+				}
 			}
 			ecocity.getTabla()->sumHash2 = ecocity.getTabla()->siguientePrimo(ecocity.getTabla()->sumHash2);
 		}
