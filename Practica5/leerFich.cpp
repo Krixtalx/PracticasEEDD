@@ -231,9 +231,9 @@ void leerFich::leeClientes(string fileNameClientes, EcoCityMoto* ecocity) {
 	
 }
 
-std::vector<Cliente>* leerFich::ficheroaVector(string& fichero)
+std::vector<Cliente*>* leerFich::ficheroaVector(string& fichero)
 {
-	std::vector<Cliente>* v = new std::vector<Cliente>;
+	std::vector<Cliente*>* v = new std::vector<Cliente*>;
 	cout << "Comenzando lectura del fichero " << fichero << "..." << endl;
 	ifstream fe; //Flujo de entrada
 	string linea; //Cada línea tiene un clienete
@@ -263,7 +263,7 @@ std::vector<Cliente>* leerFich::ficheroaVector(string& fichero)
 	return v ;
 }
 
-void leerFich::vectorClientes(string& csv, std::vector<Cliente>* v)
+void leerFich::vectorClientes(string& csv, std::vector<Cliente*>* v)
 {
 	stringstream ss;
 	string dni, pass, nombre, apellido, direccion, latitud, longitud;
@@ -296,8 +296,8 @@ void leerFich::vectorClientes(string& csv, std::vector<Cliente>* v)
 	dlon = std::stod(longitud);
 	setlocale(LC_ALL, "spanish");
 	//con todos los atributos leídos, se crea el cliente
-	Cliente client(dni, pass, nombre, apellido, direccion, dlat, dlon);
-	client.setAplicacion(0);
+	Cliente* client=new Cliente(dni, pass, nombre, apellido, direccion, dlat, dlon);
+	client->setAplicacion(0);
 	v->push_back(client);
 
 }

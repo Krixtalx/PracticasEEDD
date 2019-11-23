@@ -52,7 +52,7 @@ public:
 	bool eliminarCliente(std::string id);
 	void verTabla();
 	THashCliente* getTabla() { return clientes; };
-	EcoCityMoto& vectorToTabla(std::vector<Cliente>* v);
+	EcoCityMoto& vectorToTabla(std::vector<Cliente*>* v);
 	void cargarClientes(string& archivo);
 	void cargarMotos(string& archivo);
 	void guardarClientesItinerarios(string& archivo);

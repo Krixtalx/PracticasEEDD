@@ -43,6 +43,6 @@ namespace leerFich {
 	*/
 	void leeClientes(string archivo, EcoCityMoto* ecocity);
 
-	std::vector<Cliente>* ficheroaVector(string& fichero);
-	void vectorClientes(string& archivo, std::vector<Cliente>* v);
+	std::vector<Cliente*>* ficheroaVector(string& fichero);
+	void vectorClientes(string& archivo, std::vector<Cliente*>* v);
 }

@@ -445,14 +445,14 @@ void EcoCityMoto::verTabla()
 /**
 *@Brief Crea la tabla Hash a partir de un vector de Clientes
 */
-EcoCityMoto& EcoCityMoto::vectorToTabla(std::vector<Cliente>* v)
+EcoCityMoto& EcoCityMoto::vectorToTabla(std::vector<Cliente*>* v)
 {
 	THashCliente* aux = clientes;
 	clientes = new THashCliente(5000);
 	clientes->primoHash2 = aux->primoHash2;
 	delete aux;
 	for (unsigned i = 0; i < v->size(); i++) {
-		clientes->insertar(clientes->djb2((*v)[i].getDni()), (*v)[i].getDni(), (*v)[i]);
+		clientes->insertar(clientes->djb2((*v)[i]->getDni()), (*v)[i]->getDni(), *((*v)[i]));
 	}
 	
 	return *this;

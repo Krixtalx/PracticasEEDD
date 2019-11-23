@@ -11,7 +11,7 @@ void IA(EcoCityMoto& ecocity) {
 	unsigned interacciones, maxCol=0, primo=0, sumHash, pNuevaTabla;
 	float  pCol = 20;
 	string archivo = "clientes.csv";
-	std::vector<Cliente>* v=leerFich::ficheroaVector(archivo);
+	std::vector<Cliente*>* v=leerFich::ficheroaVector(archivo);
 	
 	cout << "Introduzca el nº de interacciones: ";
 	cin >> interacciones;
@@ -20,6 +20,7 @@ void IA(EcoCityMoto& ecocity) {
 	{
 
 		ecocity.vectorToTabla(v);
+
 		if (pCol > ecocity.getTabla()->promedioColisiones()) {
 			maxCol = ecocity.getTabla()->maxColisiones();
 			pCol = ecocity.getTabla()->promedioColisiones();
@@ -40,6 +41,11 @@ void IA(EcoCityMoto& ecocity) {
 		ecocity.getTabla()->primoHash2 = ecocity.getTabla()->siguientePrimo(ecocity.getTabla()->primoHash2);
 
 	}
+
+	for (unsigned i = 0; i < v->size(); i++){
+		delete (*v)[i];
+	}
+	delete v;
 }
 
 
