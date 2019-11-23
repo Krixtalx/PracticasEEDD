@@ -122,6 +122,7 @@ THashCliente::THashCliente()
 */
 THashCliente::THashCliente(int tamTabla) : tamatabla(tamTabla) {
 	buffer = new vector<Entrada>(tamatabla);
+	tamInicial = tamTabla;
 }
 
 /**

@@ -46,6 +46,7 @@ public:
 	float pNuevaTabla = 0.61;
 	unsigned sumHash2 = 1;
 	unsigned primoHash2 = 1103;
+	unsigned tamInicial = 1000;
 	unsigned siguientePrimo(int x);
 
 	THashCliente();
