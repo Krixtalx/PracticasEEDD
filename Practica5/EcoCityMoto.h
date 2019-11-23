@@ -13,7 +13,6 @@ class EcoCityMoto
 {
 	unsigned idUltimo = 0;
 	std::vector<Moto*>* motos = 0;
-	//std::map<std::string, Cliente>* clientes = 0;
 	THashCliente* clientes = 0;
 	void cargaEEDD(string fichCli, string fichMotos);
 	const static int limiteBateria = 15;
@@ -53,6 +52,7 @@ public:
 	bool eliminarCliente(std::string id);
 	void verTabla();
 	THashCliente* getTabla() { return clientes; };
+	EcoCityMoto& vectorToTabla(std::vector<Cliente>* v);
 	void cargarClientes(string& archivo);
 	void cargarMotos(string& archivo);
 	void guardarClientesItinerarios(string& archivo);

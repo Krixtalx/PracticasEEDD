@@ -116,7 +116,6 @@ void leerFich::leeLineaCliente(string& csv, EcoCityMoto* ecocity, Cliente*& cliA
 	Cliente client(dni, pass, nombre, apellido, direccion, dlat, dlon);
 	client.setAplicacion(ecocity);
 	try {
-		//cliActivo = ecocity->insertaCliente(client);
 		if (!ecocity->nuevoCliente(client))
 			throw std::runtime_error("Error al insertar");
 		cliActivo = ecocity->buscarCliente(dni);
@@ -230,4 +229,75 @@ void leerFich::leeClientes(string fileNameClientes, EcoCityMoto* ecocity) {
 		cerr << "No se puede abrir el fichero" << endl;
 	}
 	
+}
+
+std::vector<Cliente>* leerFich::ficheroaVector(string& fichero)
+{
+	std::vector<Cliente>* v = new std::vector<Cliente>;
+	cout << "Comenzando lectura del fichero " << fichero << "..." << endl;
+	ifstream fe; //Flujo de entrada
+	string linea; //Cada línea tiene un clienete
+	int total = 1; //Contador de líneas o clientes
+
+	//Asociamos el flujo al fichero
+	fe.open(fichero);
+
+	if (fe.good()) {
+		//Mientras no se haya llegado al final del fichero
+		while (!fe.eof()) {
+			getline(fe, linea); //Toma una línea del fichero
+			if (linea == "" || linea[0] == 'N') {
+				continue;
+			}
+			Cliente* cli = 0;
+			vectorClientes(linea, v);
+			total++;
+		}
+
+		cout << "Total de Clientes cargados: " << total << endl;
+		fe.close(); //Cerramos el flujo de entrada
+	}
+	else {
+		cerr << "No se puede abrir el fichero" << endl;
+	}
+	return v ;
+}
+
+void leerFich::vectorClientes(string& csv, std::vector<Cliente>* v)
+{
+	stringstream ss;
+	string dni, pass, nombre, apellido, direccion, latitud, longitud;
+	float dlat, dlon;
+
+	//Inicializamos el contenido de ss
+	ss << csv;
+
+	//Leemos el NIF
+	getline(ss, dni, ';'); //El carácter ; se lee y se elimina de ss
+
+	//Leemos el pass
+	getline(ss, pass, ';'); //El caráter ; se lee y se elimina de ss
+
+	//Leemos el nombre
+	getline(ss, nombre, ' '); //El caráter ' ' se lee y se elimina de ss
+
+	//Leemos el apellido
+	getline(ss, apellido, ';'); //El carácter ; se lee y se elimina de ss
+
+	//Leemos la dirección
+	getline(ss, direccion, ';'); //El caráter ; se lee y se elimina de ss
+
+	//Leemos la latitud y longitud
+	getline(ss, latitud, ';'); //El caráter ; se lee y se elimina de ss
+	getline(ss, longitud, ';'); //El caráter ; se lee y se elimina de ss
+
+	setlocale(LC_ALL, "english");
+	dlat = std::stod(latitud);
+	dlon = std::stod(longitud);
+	setlocale(LC_ALL, "spanish");
+	//con todos los atributos leídos, se crea el cliente
+	Cliente client(dni, pass, nombre, apellido, direccion, dlat, dlon);
+	client.setAplicacion(0);
+	v->push_back(client);
+
 }

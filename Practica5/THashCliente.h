@@ -34,14 +34,20 @@ class THashCliente
 	unsigned int numCol = 0;		//Numero total de colisiones de todas las inserciones
 
 	unsigned int hash(unsigned long clave, int intento);
+	unsigned int hash1(unsigned long clave, int intento);
 	unsigned int hash2(unsigned long clave, int intento);
 	unsigned int hash3(unsigned long clave, int intento);
 	unsigned int hash4(unsigned long clave, int intento);
 	unsigned int hash5(unsigned long clave, int intento);
 	unsigned int hash6(unsigned long clave, int intento);
-	int siguientePrimo(int x);
+	
 
 public:
+	float pNuevaTabla = 0.61;
+	unsigned sumHash2 = 1;
+	unsigned primoHash2 = 1103;
+	unsigned siguientePrimo(int x);
+
 	THashCliente();
 	THashCliente(int tamatabla);
 	THashCliente(THashCliente& orig);
@@ -55,6 +61,7 @@ public:
 	bool borrar(unsigned long clave, string& dni);
 	unsigned int numCliente();
 	void redispersar(unsigned tama);
+	void recalcular();
 	unsigned int maxColisiones();
 	float promedioColisiones();
 	float factorCarga();

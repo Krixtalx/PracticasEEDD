@@ -42,4 +42,7 @@ namespace leerFich {
 		@pre El fichero debe estar en formato CSV (nif;clave;nombreyapellidos;direccion;latitud;longitud)
 	*/
 	void leeClientes(string archivo, EcoCityMoto* ecocity);
+
+	std::vector<Cliente>* ficheroaVector(string& fichero);
+	void vectorClientes(string& archivo, std::vector<Cliente>* v);
 }

@@ -388,7 +388,7 @@ void EcoCityMoto::borraClientes()
 {
 	delete clientes;
 	//clientes = new map<std::string, Cliente>;
-	clientes = new THashCliente(1000);
+	clientes = new THashCliente(5000);
 }
 
 /**
@@ -440,6 +440,35 @@ bool EcoCityMoto::eliminarCliente(std::string id)
 void EcoCityMoto::verTabla()
 {
 	clientes->verTabla();
+}
+
+/**
+*@Brief Crea la tabla Hash a partir de un vector de Clientes
+*/
+EcoCityMoto& EcoCityMoto::vectorToTabla(std::vector<Cliente>* v)
+{
+	THashCliente* aux = clientes;
+	clientes = new THashCliente(5000);
+	clientes->primoHash2 = aux->primoHash2;
+	delete aux;
+	for (unsigned i = 0; i < v->size(); i++) {
+		clientes->insertar(clientes->djb2((*v)[i].getDni()), (*v)[i].getDni(), (*v)[i]);
+	}
+	
+	return *this;
+}
+
+/**
+*@Brief Carga los clientes desde el archivo que se pasa como parametro
+*/
+void EcoCityMoto::cargarClientes(string& archivo)
+{
+	try {
+		leerFich::leeItinerariosYClientes(archivo, this);
+	}
+	catch (std::runtime_error & e) {
+		cerr << e.what() << endl;
+	}
 }
 
 /**
