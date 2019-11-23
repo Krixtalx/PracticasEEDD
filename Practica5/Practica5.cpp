@@ -50,7 +50,7 @@ void IA(EcoCityMoto& ecocity) {
 		for (size_t itSum = 0; itSum < interSum; itSum++) {
 
 			for (size_t itTam = 0; itTam < interTam; itTam++) {
-				if (itPrimos == 0) {
+				if (itPrimos == 0 && itSum == 0 && itTam == 0) {
 					ifstream ultimo;
 					string ultimoFich = "iaLast.txt";
 					ultimo.open(ultimoFich);
