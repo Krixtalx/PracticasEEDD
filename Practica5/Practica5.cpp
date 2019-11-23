@@ -9,7 +9,7 @@
 
 void IA(EcoCityMoto& ecocity) {
 	unsigned maxCol=0, primo=0, sumHash=0, pNuevaTabla;
-	unsigned mejorMax = 0, mejorPrimo = 0, mejorSum = 0, mejorTam = 5000, tamInicial = 5000, tamOriginal;
+	unsigned mejorMax = 0, mejorPrimo = 0, mejorSum = 0, mejorTam = 5000, tamInicial = 5000, tamOriginal=5000;
 	float  pCol = 20;
 	ifstream datosIA;
 	string archivoIA = "iaData.txt";
