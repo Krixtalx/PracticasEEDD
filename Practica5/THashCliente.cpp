@@ -294,7 +294,7 @@ unsigned int THashCliente::numCliente()
 void THashCliente::redispersar(unsigned tama){
 	if (tama < 0)
 		throw std::invalid_argument("[THashCliente::redispersar] El tam no puede ser negativo");
-	//cout << endl << "REDISPERSANDO A " << tama << endl;
+	cout << endl << "REDISPERSANDO A " << tama << endl;
 	unsigned nuevoTam = siguientePrimo(tama);
 	THashCliente* aux = new THashCliente(nuevoTam);
 	for (unsigned i = 0; i < this->tamatabla; i++) {

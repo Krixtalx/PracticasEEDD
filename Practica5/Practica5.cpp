@@ -9,7 +9,7 @@
 
 void IA(EcoCityMoto& ecocity) {
 	unsigned maxCol=0, primo=0, sumHash=0, pNuevaTabla;
-	unsigned mejorMax = 0, mejorPrimo = 0, mejorSum = 0, mejorTam = 5000, tamInicial = 5000;
+	unsigned mejorMax = 0, mejorPrimo = 0, mejorSum = 0, mejorTam = 5000, tamInicial = 5000, tamOriginal;
 	float  pCol = 20;
 	ifstream datosIA;
 	string archivoIA = "iaData.txt";
@@ -32,6 +32,7 @@ void IA(EcoCityMoto& ecocity) {
 		pCol = stof(colStr);
 		setlocale(LC_ALL, "spanish");
 		tamInicial = mejorTam;
+		tamOriginal = tamInicial;
 	}
 	datosIA.close();
 	unsigned interPrimo, interSum, interTam;
@@ -48,7 +49,7 @@ void IA(EcoCityMoto& ecocity) {
 	for (size_t itPrimos = 0; itPrimos < interPrimo; itPrimos++) {
 		
 		for (size_t itSum = 0; itSum < interSum; itSum++) {
-
+			tamInicial = tamOriginal;
 			for (size_t itTam = 0; itTam < interTam; itTam++) {
 				if (itPrimos == 0 && itSum == 0 && itTam == 0) {
 					ifstream ultimo;
