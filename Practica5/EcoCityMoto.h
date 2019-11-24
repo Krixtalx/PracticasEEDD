@@ -38,7 +38,6 @@ public:
 	bool buscaCliente(std::string& dni, Cliente* &clienteEncontrado);
 	EcoCityMoto& borraMoto(int pos);
 	EcoCityMoto& borraItinerario(int pos, std::string dni);
-	EcoCityMoto& recorreMapa();
 	unsigned int idItinerario();
 	void setIdUltimo(unsigned _id);
 	vector<Moto*>* localizaMotoSinBateria();
@@ -54,6 +53,7 @@ public:
 	THashCliente* getTabla() { return clientes; };
 	EcoCityMoto& vectorToTabla(std::vector<Cliente*>* v, unsigned tamInicio, unsigned primo, unsigned suma);
 	void cargarClientes(string& archivo);
+	//TODO: las dos de abajo
 	void cargarMotos(string& archivo);
 	void guardarClientesItinerarios(string& archivo);
 	vector<string>* getDniClientes();

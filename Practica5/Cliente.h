@@ -49,6 +49,7 @@ public:
 	void terminarTrayecto();
 	void addItinerario(Itinerario* iti);
 	string toCSV();
+	//TODO: mostrarMensaje
 };
 
 #endif /* CLIENTE_H */

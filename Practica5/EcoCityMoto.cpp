@@ -320,20 +320,6 @@ EcoCityMoto& EcoCityMoto::borraItinerario(int pos, std::string dni)
 }
 
 /**
-	@brief Muestra el mapa de clientes en inorden
-*/
-EcoCityMoto& EcoCityMoto::recorreMapa()
-{
-	//std::map<std::string, Cliente>::iterator it;
-	//for (it = clientes->begin(); it != clientes->end(); it++) {
-	for (std::vector<Entrada>::iterator it = clientes->iteradorInicio(); it != clientes->iteradorFinal(); it++){
-		//std::cout << it->second;
-		cout << it->cliente;
-	}
-	return *this;
-}
-
-/**
 	@brief Devuelve el id del siguiente itinerario a crear e incrementa en 1 el total
 */
 unsigned int EcoCityMoto::idItinerario(){

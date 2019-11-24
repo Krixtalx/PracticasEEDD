@@ -32,8 +32,8 @@ class THashCliente
 	unsigned int tamatabla = 0;
 	unsigned int maxCol = 0;		//Maximo de colision en una operacion de insercion
 	unsigned int numCol = 0;		//Numero total de colisiones de todas las inserciones
+	unsigned int colUltimo = 0;
 
-	unsigned int hash(unsigned long clave, int intento);
 	unsigned int hash1(unsigned long clave, int intento);
 	unsigned int hash2(unsigned long clave, int intento);
 	unsigned int hash3(unsigned long clave, int intento);
@@ -70,6 +70,7 @@ public:
 	void verTabla();
 	vector<Entrada>::iterator iteradorInicio();
 	vector<Entrada>::iterator iteradorFinal();
+	unsigned ultimasColisiones();
 };
 
 #endif // !THASHCLIENTE_H

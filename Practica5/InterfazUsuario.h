@@ -113,6 +113,7 @@ void insertarCliente(EcoCityMoto& ecocity) {
 	else
 		ecocity.insertaCliente(cliente);
 	clearScreen();
+	cout << "Inserción sin problemas (" << ecocity.getTabla()->ultimasColisiones() << " colisiones)" << endl;
 }
 
 /*
@@ -124,7 +125,18 @@ bool buscarCliente(EcoCityMoto& ecocity){
 	cout << "Introduzca el DNI del cliente a buscar: ";
 	getline(cin >> ws, dni);
 	if (ecocity.buscaCliente(dni, clienteActivo)) {
-		cout << "Cliente encontrado: " << clienteActivo->GetNombreCompleto() << "    UTM: " << clienteActivo->getPosicion().toCSV();
+		//cout << "Cliente encontrado: " << clienteActivo->GetNombreCompleto() << "    UTM: " << clienteActivo->getPosicion().toCSV();
+		cout << "Cliente encontrado" << endl;
+		stringstream ss;
+		ss << clienteActivo->toCSV();
+		string dniCli, passCli, nombreCli, dirCli, latCli, lonCli;
+		getline(ss, dniCli, ';');
+		getline(ss, passCli, ';');
+		getline(ss, nombreCli, ';');
+		getline(ss, dirCli, ';');
+		getline(ss, latCli, ';');
+		getline(ss, lonCli);
+		cout << "DNI: " << dniCli << endl << "Pass: " << passCli << endl << "Nombre: " << nombreCli << endl << "Direccion: " << dirCli << endl << "Posicion: " << latCli << " " << lonCli << endl;
 		return true;
 	}
 	else {
@@ -135,51 +147,15 @@ bool buscarCliente(EcoCityMoto& ecocity){
 }
 
 /*
-*@Brief Muestra por consola el recorrido en Inorden del Arbol AVL en el que se encuentran los clientes
+*@Brief Muestra las estadísticas de la tabla hash actual
 */
-void recorridoInorden(EcoCityMoto& ecocity) {
-	char yon;
-	cout << "Este recorrido puede generar una salida muy grande" << endl << "¿Está seguro de que quiere hacerlo? [S/n] ";
-	cin >> yon;
-	if (yon == 'S') {
-		clearScreen();
-		cout << "Comenzando recorrido en Inorden del árbol..." << endl;
-		ecocity.recorreMapa();
-	}
-	else {
-		clearScreen();
-	}
-}
-
-/*
-*@Brief Submenu de opciones del Arbol AVL de clientes
-*/
-void menuArbol(EcoCityMoto& ecocity) {
-	int opcion;
-	cout << endl << endl << "Submenu del mapa STL" << endl << endl;
-	cout << "1 - Recorrido en Inorden" << endl;
-	cout << "2 - Numero de elementos" << endl;
-	cout << "3 - Salir" << endl;
-	cout << "¿Que desea hacer?: ";
-	cin >> opcion;
-	switch (opcion) {
-	case 1:
-		clearScreen();
-		recorridoInorden(ecocity);
-		break;
-	case 2:
-		clearScreen();
-		cout << ecocity.getNumClientes() << " clientes almacenados" << endl;
-		break;
-	case 3:
-		clearScreen();
-		return;
-		break;
-	default:
-		clearScreen();
-		cout << "Opción invalida";
-		break;
-	}
+void estadisticas(EcoCityMoto& ecocity) {
+	cout << "Maximo de colisiones: " << ecocity.getTabla()->maxColisiones() << endl;
+	cout << "Promedio de colisiones: " << ecocity.getTabla()->promedioColisiones() << endl;
+	cout << "Tamaño de la tabla: " << ecocity.getTabla()->tamaTabla() << endl;
+	cout << "Numero de clientes: " << ecocity.getTabla()->numCliente() << endl;
+	cout << "Colisiones de la ultima insercion: " << ecocity.getTabla()->ultimasColisiones() << endl;
+	cout << "Factor de carga: " << ecocity.getTabla()->factorCarga() << endl;
 }
 
 /*
@@ -333,44 +309,35 @@ void asignarMoto(EcoCityMoto& ecocity) {
 	cout << "Buscando moto más cercana a " << clienteActivo->getPosicion().toCSV() << " ..." << endl;
 	try {
 		motoCercana = &ecocity.localizaMotoCercana(*clienteActivo);
-		motoCercana->seActiva(*clienteActivo);
-		clienteActivo->creaItinerario(*motoCercana);
-		cout << "Moto encontrada y activada: " << motoCercana->getId() << "  -  " << motoCercana->getUTM().toCSV();
-	}
-	catch (std::runtime_error & e) {
-		cerr << e.what();
-	}
-}
-
-/*
-*@Brief Metodo encargado de bloquear la motocicleta de un cliente introducido por DNI
-*/
-void bloquearMoto(EcoCityMoto& ecocity) {
-	char opcion = 'n';
-	if (clienteActivo) {
-		cout << "¿Quiere usar el cliente activo? (DNI: " << clienteActivo->getDni() << ") [S/n]: ";
-		cin >> opcion;
-	}
-	if (opcion != 'S' && opcion != 's') {
-		Cliente* antiguo = clienteActivo;
-		string dni;
-		cout << "Introduzca el DNI del cliente al que se le bloqueará la moto: ";
-		getline(cin >> ws, dni);
-		if (!ecocity.buscaCliente(dni, clienteActivo)) {
-			cout << "No se encontró al cliente";
-			clienteActivo = antiguo;
+		cout << "Moto encontrada: " << motoCercana->getId() << ", ";
+		switch (motoCercana->getEstado())
+		{
+		case estatus::activa:
+			cout << "activa (" << motoCercana->getPorcentajeBateria() << "% de batería restante)" << endl;
+			break;
+		case estatus::bloqueada:
+			cout << "bloqueada (" << motoCercana->getPorcentajeBateria() << "% de batería restante)" << endl;
+			break;
+		case estatus::rota:
+			cout << "rota (" << motoCercana->getPorcentajeBateria() << "% de batería restante)" << endl;
+			break;
+		default:
+			cout << "sin batería" << endl;
+		}
+		cout << "¿Quiere activar la moto encontrada? [S/n]: ";
+		string opcs;
+		cin >> opcs;
+		if (opcs[0] != 'S' && opcs[0] != 's') {
 			return;
 		}
-	}
-	clearScreen();
-	try {
+		motoCercana->seActiva(*clienteActivo);
+		clienteActivo->creaItinerario(*motoCercana);
 		clienteActivo->terminarTrayecto();
+		cout << "Se ha creado un nuevo itinerario con la moto" << endl;
 	}
 	catch (std::runtime_error & e) {
 		cerr << e.what();
-		return;
 	}
-	cout << "Moto bloqueada";
 }
 
 void borrarCliente(EcoCityMoto& ecocity) {
@@ -399,6 +366,27 @@ void borrarCliente(EcoCityMoto& ecocity) {
 		cout << "No se pudo eliminar al cliente indicado";
 }
 
+void eliminarClientes(EcoCityMoto& ecocity) {
+	string tam;
+	cout << "¿Cuantos clientes quiere eliminar? (Se eliminaran del inicio de la tabla hash): ";
+	cin >> tam;
+	if (stoi(tam) < 1 || ecocity.getNumClientes() < stoi(tam)) {
+		cout << "Tamaño no válido" << endl;
+		return;
+	}
+	vector<string>* dnis = ecocity.getDniClientes();
+	for (size_t i = 0; i < stoi(tam); i++) {
+		if (ecocity.getTabla()->borrar(ecocity.getTabla()->djb2((*dnis)[i]), (*dnis)[i]))
+			cout << "BORRAO " << (*dnis)[i] << endl;
+		else {
+			cout << "MENUDA F LOCO " << i << endl;
+			break;
+		}
+	}
+	delete dnis;
+	return;
+}
+
 /*
 *@Brief Submenu de Clientes
 */
@@ -413,11 +401,11 @@ void menuClientes(EcoCityMoto& ecocity) {
 	cout << "1 - Insertar cliente" << endl;
 	cout << "2 - Buscar cliente" << endl;
 	cout << "3 - Borrar cliente" << endl;
-	cout << "4 - Ajustes del mapa STL" << endl;
+	cout << "4 - Estado de la tabla hash" << endl;
 	cout << "5 - Acceso a itinerarios de un cliente" << endl;
 	cout << "6 - Asignar moto más cercana" << endl;
-	cout << "7 - Bloquear moto de un cliente" << endl;
-	cout << "8 - Generar itinerarios aleatorios" << endl;
+	cout << "7 - Generar itinerarios aleatorios" << endl;
+	cout << "8 - Eliminar varios clientes" << endl;
 	cout << "9 - Salir" << endl;
 	cout << "¿Que desea hacer?: ";
 	cin >> opcion;
@@ -439,7 +427,7 @@ void menuClientes(EcoCityMoto& ecocity) {
 		break;
 	case 4:
 		clearScreen();
-		menuArbol(ecocity);
+		estadisticas(ecocity);
 		break;
 
 	case 5:
@@ -454,12 +442,12 @@ void menuClientes(EcoCityMoto& ecocity) {
 
 	case 7:
 		clearScreen();
-		bloquearMoto(ecocity);
+		generaItinerarios(ecocity);
 		break;
 
 	case 8:
 		clearScreen();
-		generaItinerarios(ecocity);
+		eliminarClientes(ecocity);
 		break;
 	case 9:
 		clearScreen();
@@ -798,7 +786,6 @@ void reiniciarApp(EcoCityMoto* ecocity) {
 
 
 void IA(EcoCityMoto& ecocity) {
-	unsigned maxCol = 0, primo = 0, sumHash = 0, pNuevaTabla;
 	unsigned mejorMax = 0, mejorPrimo = 0, mejorSum = 0, mejorTam = 5000, tamInicial = 5000, tamOriginal = 5000;
 	float  pCol = 20;
 	ifstream datosIA;
@@ -910,33 +897,6 @@ void IA(EcoCityMoto& ecocity) {
 		iaUltimo << ecocity.getTabla()->primoHash2 << ";" << ecocity.getTabla()->sumHash2 << ";" << ecocity.getTabla()->tamInicial << ";" << ecocity.getTabla()->promedioColisiones();
 	}
 	iaUltimo.close();
-	/*for (unsigned i = 0; i < interacciones; i++)
-	{
-
-		ecocity.vectorToTabla(v);
-
-		if (pCol > ecocity.getTabla()->promedioColisiones()) {
-			maxCol = ecocity.getTabla()->maxColisiones();
-			pCol = ecocity.getTabla()->promedioColisiones();
-			primo = ecocity.getTabla()->primoHash2;
-			sumHash = ecocity.getTabla()->sumHash2;
-			pNuevaTabla = ecocity.getTabla()->pNuevaTabla;
-		}
-
-		system("cls");
-		cout << "                                     Interacción " << i+1<<endl<<endl;
-		cout << "                                     TAM " << ecocity.getTabla()->tamaTabla() << endl << endl;
-
-		cout << "ACTUAL MEJOR                                                    ULTIMO PROBADO" << endl;
-		cout << "MAX COLISIONES: " << maxCol<<"                                             MAX COLISIONES: "<< ecocity.getTabla()->maxColisiones() << endl;
-		cout << "PROMEDIO COLISIONES: " << pCol <<"                                 PROMEDIO COLISIONES: "<< ecocity.getTabla()->promedioColisiones() << endl;
-		cout << "PRIMO: " << primo<<"                                                          PRIMO:" << ecocity.getTabla()->primoHash2 << endl;
-		cout << "SUMA: " << sumHash << "                                                               SUMA:" << ecocity.getTabla()->sumHash2 << endl << endl;
-
-		ecocity.getTabla()->primoHash2 = ecocity.getTabla()->siguientePrimo(ecocity.getTabla()->primoHash2);
-		ecocity.getTabla()->sumHash2 = ecocity.getTabla()->siguientePrimo(ecocity.getTabla()->sumHash2);
-
-	}*/
 
 	for (unsigned i = 0; i < v->size(); i++) {
 		delete (*v)[i];
@@ -1084,7 +1044,7 @@ bool menuBasico(EcoCityMoto& ecocity, Cliente* cliente) {
 			clearScreen();
 			{
 				Moto* moto = cliente->getItinerarios().back()->getVehiculo();
-				cout << cliente << "     " << moto->getCliente();
+				//cout << cliente << "     " << moto->getCliente() << endl;
 				if (moto->getCliente() == cliente) {
 					cout << "Moto encontrada: " << moto->getId() << "    UTM: " << moto->getUTM().toCSV() << endl;
 					cout << "Estado de la moto: " << moto->getEstado() << endl;
@@ -1135,14 +1095,26 @@ bool login(EcoCityMoto& ecocity) {
 			cout << "Introduzca su contraseña: ";
 			cin >> pass;
 			if (aux->getPass() == pass) {
-				return menuBasico(ecocity, aux);
+				menuBasico(ecocity, aux);
+				cout << "¿Quiere salir de la aplicación? [S/n]: ";
+				string opcion;
+				cin >> opcion;
+				if (opcion[0] == 'S' || opcion[0] == 's')
+					return true;
+				continue;
 			}
 		}
 		else{
 			cout << "Introduzca su contraseña: ";
 			cin >> pass;
 			if (pass == "admin") {
-				return menuPrincipal(ecocity);
+				menuPrincipal(ecocity);
+				cout << "¿Quiere salir de la aplicación? [S/n]: ";
+				string opcion;
+				cin >> opcion;
+				if (opcion[0] == 'S' || opcion[0] == 's')
+					return true;
+				continue;
 			}
 		}
 		clearScreen();
