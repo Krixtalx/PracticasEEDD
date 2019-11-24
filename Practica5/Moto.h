@@ -35,6 +35,7 @@ public:
 	estatus getEstado();
 	void setEstado(estatus _estado);
 	std::string getDatosCliente();
+	Cliente* getCliente();
 	void seActiva(Cliente& usuario);
 	void seDesactiva(int duracion, int limiteBateria);
 	void setPorcentajeBateria(int porcentaje, int limiteBateria);

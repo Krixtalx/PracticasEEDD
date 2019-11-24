@@ -795,21 +795,173 @@ void reiniciarApp(EcoCityMoto* ecocity) {
 	}
 }
 
+
+
+void IA(EcoCityMoto& ecocity) {
+	unsigned maxCol = 0, primo = 0, sumHash = 0, pNuevaTabla;
+	unsigned mejorMax = 0, mejorPrimo = 0, mejorSum = 0, mejorTam = 5000, tamInicial = 5000, tamOriginal = 5000;
+	float  pCol = 20;
+	ifstream datosIA;
+	string archivoIA = "iaData.txt";
+	datosIA.open(archivoIA);
+	if (datosIA.good()) {
+		string linea, maxStr, primoStr, sumStr, tamStr, colStr;
+		getline(datosIA, linea);
+		stringstream ss;
+		ss << linea;
+		getline(ss, maxStr, ';');
+		getline(ss, primoStr, ';');
+		getline(ss, sumStr, ';');
+		getline(ss, tamStr, ';');
+		getline(ss, colStr);
+		mejorMax = stoi(maxStr);
+		mejorPrimo = stoi(primoStr);
+		mejorSum = stoi(sumStr);
+		mejorTam = stoi(tamStr);
+		setlocale(LC_ALL, "english");
+		pCol = stof(colStr);
+		setlocale(LC_ALL, "spanish");
+		tamInicial = mejorTam;
+		tamOriginal = tamInicial;
+	}
+	datosIA.close();
+	unsigned interPrimo, interSum, interTam;
+	string archivo = "clientes.csv";
+	std::vector<Cliente*>* v = leerFich::ficheroaVector(archivo);
+
+	cout << "Introduzca el nº de interacciones para primo: ";
+	cin >> interPrimo;
+	cout << "Introduzca el nº de interacciones para sum: ";
+	cin >> interSum;
+	cout << "Introduzca el nº de interacciones para tam: ";
+	cin >> interTam;
+	clearScreen();
+	for (size_t itPrimos = 0; itPrimos < interPrimo; itPrimos++) {
+
+		for (size_t itSum = 0; itSum < interSum; itSum++) {
+			tamInicial = tamOriginal;
+			for (size_t itTam = 0; itTam < interTam; itTam++) {
+				if (itPrimos == 0 && itSum == 0 && itTam == 0) {
+					ifstream ultimo;
+					string ultimoFich = "iaLast.txt";
+					ultimo.open(ultimoFich);
+					if (ultimo.good()) {
+						stringstream ss;
+						string lin, tama, prim, suma, promedio;
+						getline(ultimo, lin);
+						ss << lin;
+						getline(ss, prim, ';');
+						getline(ss, suma, ';');
+						getline(ss, tama, ';');
+						getline(ss, promedio, ';');
+						ecocity.vectorToTabla(v, stoi(tama), stoi(prim), stoi(suma));
+						setlocale(LC_ALL, "english");
+						pCol = stof(promedio);
+						setlocale(LC_ALL, "spanish");
+					}
+					else
+					{
+						ecocity.vectorToTabla(v, tamInicial, mejorPrimo, mejorSum);
+					}
+					ultimo.close();
+				}
+				else
+					ecocity.vectorToTabla(v, tamInicial, ecocity.getTabla()->primoHash2, ecocity.getTabla()->sumHash2);
+				THashCliente* tabla = ecocity.getTabla();
+				if (tabla->promedioColisiones() < pCol) {
+					mejorMax = tabla->maxColisiones();
+					mejorPrimo = tabla->primoHash2;
+					mejorSum = tabla->sumHash2;
+					mejorTam = tabla->tamInicial;
+					pCol = tabla->promedioColisiones();
+				}
+				clearScreen();
+				cout << "Interacciones: " << itPrimos + 1 << " primos, " << itSum + 1 << " suma, " << itTam + 1 << " tamTabla" << endl << endl;
+
+				cout << "ACTUAL MEJOR                                                    ULTIMO PROBADO" << endl;
+				cout << "MAX COLISIONES: " << mejorMax << "                                             MAX COLISIONES: " << tabla->maxColisiones() << endl;
+				cout << "PROMEDIO COLISIONES: " << pCol << "                                 PROMEDIO COLISIONES: " << tabla->promedioColisiones() << endl;
+				cout << "TAMTABLA: " << mejorTam << "                                                      TAM INICIAL: " << tabla->tamInicial << endl;
+				cout << "PRIMO: " << mejorPrimo << "                                                          PRIMO:" << tabla->primoHash2 << endl;
+				cout << "SUMA: " << mejorSum << "                                                               SUMA:" << tabla->sumHash2 << endl << endl;
+
+				if (tamInicial < tabla->numCliente()) {
+					tamInicial = tabla->siguientePrimo(tamInicial * (0.75 + ((float)tamInicial / tabla->numCliente())));
+				}
+				else
+				{
+					tamInicial = tabla->siguientePrimo(tamInicial);
+				}
+			}
+			ecocity.getTabla()->sumHash2 = ecocity.getTabla()->siguientePrimo(ecocity.getTabla()->sumHash2);
+		}
+		ecocity.getTabla()->primoHash2 = ecocity.getTabla()->siguientePrimo(ecocity.getTabla()->primoHash2);
+	}
+	ofstream iaOut;
+	iaOut.open(archivoIA);
+	if (iaOut.good()) {
+		iaOut << mejorMax << ";" << mejorPrimo << ";" << mejorSum << ";" << mejorTam << ";" << pCol;
+	}
+	iaOut.close();
+	ofstream iaUltimo;
+	string archivoUltimo = "iaLast.txt";
+	iaUltimo.open(archivoUltimo);
+	if (iaUltimo.good()) {
+		iaUltimo << ecocity.getTabla()->primoHash2 << ";" << ecocity.getTabla()->sumHash2 << ";" << ecocity.getTabla()->tamInicial << ";" << ecocity.getTabla()->promedioColisiones();
+	}
+	iaUltimo.close();
+	/*for (unsigned i = 0; i < interacciones; i++)
+	{
+
+		ecocity.vectorToTabla(v);
+
+		if (pCol > ecocity.getTabla()->promedioColisiones()) {
+			maxCol = ecocity.getTabla()->maxColisiones();
+			pCol = ecocity.getTabla()->promedioColisiones();
+			primo = ecocity.getTabla()->primoHash2;
+			sumHash = ecocity.getTabla()->sumHash2;
+			pNuevaTabla = ecocity.getTabla()->pNuevaTabla;
+		}
+
+		system("cls");
+		cout << "                                     Interacción " << i+1<<endl<<endl;
+		cout << "                                     TAM " << ecocity.getTabla()->tamaTabla() << endl << endl;
+
+		cout << "ACTUAL MEJOR                                                    ULTIMO PROBADO" << endl;
+		cout << "MAX COLISIONES: " << maxCol<<"                                             MAX COLISIONES: "<< ecocity.getTabla()->maxColisiones() << endl;
+		cout << "PROMEDIO COLISIONES: " << pCol <<"                                 PROMEDIO COLISIONES: "<< ecocity.getTabla()->promedioColisiones() << endl;
+		cout << "PRIMO: " << primo<<"                                                          PRIMO:" << ecocity.getTabla()->primoHash2 << endl;
+		cout << "SUMA: " << sumHash << "                                                               SUMA:" << ecocity.getTabla()->sumHash2 << endl << endl;
+
+		ecocity.getTabla()->primoHash2 = ecocity.getTabla()->siguientePrimo(ecocity.getTabla()->primoHash2);
+		ecocity.getTabla()->sumHash2 = ecocity.getTabla()->siguientePrimo(ecocity.getTabla()->sumHash2);
+
+	}*/
+
+	for (unsigned i = 0; i < v->size(); i++) {
+		delete (*v)[i];
+	}
+	delete v;
+}
+
+
+
 /*
 *@Brief Menu principal
 */
 bool menuPrincipal(EcoCityMoto& ecocity) {
 	int opcion=0;
-	while (opcion != 8) {
+	while (opcion != 9) {
 		cout << endl << endl << "Programa de Gestión de EcoCityMoto" << endl << endl;
 		cout << "1 - Instrucciones" << endl;
 		cout << "2 - Configuracion" << endl;
-		cout << "3 - Clientes (STL Map)" << endl;
+		cout << "3 - Clientes (Tabla Hash)" << endl;
 		cout << "4 - Motos (STL Vector)" << endl;
 		cout << "5 - Cargar datos" << endl;
 		cout << "6 - Estado actual" << endl;
 		cout << "7 - Reiniciar información" << endl;
-		cout << "8 - Salir" << endl;
+		cout << "8 - Entrenar IA" << endl;
+		cout << "9 - Salir" << endl;
 		cout << "¿Que desea hacer?: ";
 		cin >> opcion;
 		switch (opcion) {
@@ -851,6 +1003,11 @@ bool menuPrincipal(EcoCityMoto& ecocity) {
 
 		case 8:
 			clearScreen();
+			IA(ecocity);
+			break;
+
+		case 9:
+			clearScreen();
 			return true;
 			break;
 
@@ -862,4 +1019,133 @@ bool menuPrincipal(EcoCityMoto& ecocity) {
 	}
 	clearScreen();
 	return true;
+}
+
+/*
+*@Brief Menu principal
+*/
+bool menuBasico(EcoCityMoto& ecocity, Cliente* cliente) {
+	int opcion = 0;
+	clearScreen();
+	cout << "Bienvenido " << cliente->GetNombreCompleto()<<endl;
+	while (opcion != 7) {
+		cout << endl << endl << "Programa de EcoCityMoto" << endl << endl;
+		cout <<cliente->toCSV() << endl << endl;
+		cout << "1 - Instrucciones" << endl;
+		cout << "2 - Configuracion" << endl;
+		cout << "3 - Alquilar moto más cercana" << endl;
+		cout << "4 - Bloquear moto" << endl;
+		cout << "5 - Ver estado actual de la moto" << endl;
+		cout << "6 - Ver itinerarios anteriores" << endl;
+		cout << "7 - Salir" << endl;
+		cout << "¿Que desea hacer?: ";
+		cin >> opcion;
+		switch (opcion) {
+		case 1:
+			clearScreen();
+			cout << "Cada opcion lleva a un submenu donde habra nuevas opciones para realizar acciones relacionadas con el nombre del menu" << endl
+				<< "En concreto, el submenu de Configuracion permite seleccionar el sistema operativo en el que se encuentra para la limpieza de la consola y los archivos de carga CSV" << endl;
+			break;
+
+		case 2:
+			clearScreen();
+			configuracion(ecocity);
+			break;
+
+		case 3:
+			clearScreen();
+			Moto* motoCercana;
+			clearScreen();
+			cout << "Buscando moto más cercana a " << cliente->getPosicion().toCSV() << " ..." << endl;
+			try {
+				motoCercana = &ecocity.localizaMotoCercana(*cliente);
+				motoCercana->seActiva(*cliente);
+				cliente->creaItinerario(*motoCercana);
+				cout << "Moto encontrada y activada: " << motoCercana->getId() << "  -  " << motoCercana->getUTM().toCSV();
+			}
+			catch (std::runtime_error & e) {
+				cerr << e.what();
+			}
+			break;
+
+		case 4:
+			clearScreen();
+			try {
+				cliente->terminarTrayecto();
+			}
+			catch (std::runtime_error & e) {
+				cerr << e.what();
+				return false;
+			}
+			cout << "Moto bloqueada";
+			break;
+
+		case 5:
+			clearScreen();
+			{
+				Moto* moto = cliente->getItinerarios().back()->getVehiculo();
+				cout << cliente << "     " << moto->getCliente();
+				if (moto->getCliente() == cliente) {
+					cout << "Moto encontrada: " << moto->getId() << "    UTM: " << moto->getUTM().toCSV() << endl;
+					cout << "Estado de la moto: " << moto->getEstado() << endl;
+					if (moto->getEstado() != estatus::sinbateria)
+						cout << "Porcentaje de batería restante: " << moto->getPorcentajeBateria() << "%" << endl;
+					else {
+						cout << "Sin bateria" << endl;
+						cout << "Porcentaje de batería restante: " << moto->getPorcentajeBateria() << "%" << endl;
+
+					}
+				}
+				else {
+					cout << "El cliente no tiene ninguna moto asignada" << endl;
+				}
+			}
+			break;
+
+		case 6:
+			clearScreen();
+			verItinerario(ecocity, *cliente);
+			break;
+
+		case 7:
+			clearScreen();
+			return true;
+			break;
+
+		default:
+			clearScreen();
+			cout << "Opción invalida";
+			break;
+		}
+	}
+	clearScreen();
+	return true;
+}
+
+bool login(EcoCityMoto& ecocity) {
+	clearScreen();
+	string dni, pass;
+	Cliente* aux;
+	while (true) {
+		cout << "Introduzca su DNI: ";
+		cin >> dni;
+
+		if (dni != "admin" && ecocity.buscaCliente(dni, aux)) {
+			cout << aux->getPass() << endl;
+			cout << "Introduzca su contraseña: ";
+			cin >> pass;
+			if (aux->getPass() == pass) {
+				return menuBasico(ecocity, aux);
+			}
+		}
+		else{
+			cout << "Introduzca su contraseña: ";
+			cin >> pass;
+			if (pass == "admin") {
+				return menuPrincipal(ecocity);
+			}
+		}
+		clearScreen();
+		cout << "DNI o contraseña invalida" << endl;
+	}
 }

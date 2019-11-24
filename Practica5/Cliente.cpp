@@ -121,6 +121,11 @@ Cliente& Cliente::operator=(const Cliente& right) {
 	return *this;
 }
 
+string Cliente::getPass()
+{
+	return pass;
+}
+
 /**
  * @brief Getter del atributo apellido
  * @return string apellido
@@ -230,6 +235,7 @@ void Cliente::terminarTrayecto()
 {
 	if (listaItinerarios->size() == 0)
 		throw std::runtime_error("[Cliente::terminarTrayecto] El cliente no tiene itinerarios");
+
 	listaItinerarios->back()->setMinutos(rand() % listaItinerarios->back()->getVehiculo()->getPorcentajeBateria(), aplicacion->getLimiteBateria());
 	listaItinerarios->back()->getVehiculo()->setUTM(listaItinerarios->back()->getFin());
 	listaItinerarios->back()->getVehiculo()->seDesactiva(this->getItinerarios().back()->getDuracion(), aplicacion->getLimiteBateria());

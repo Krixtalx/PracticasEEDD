@@ -73,6 +73,11 @@ std::string Moto::getDatosCliente()
 	throw std::logic_error("[Moto::getDatosCliente] No hay cliente asociado");
 }
 
+Cliente* Moto::getCliente()
+{
+	return usadoPor;
+}
+
 /**
 	@brief Devuelve el estado actual de la moto
 */

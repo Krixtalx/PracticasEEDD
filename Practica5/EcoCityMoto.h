@@ -28,14 +28,14 @@ public:
 	void desbloqueaMoto(Moto& m, Cliente& cli);
 
 	EcoCityMoto& insertaMoto(Moto* moto);
-	//Cliente* insertaCliente(Cliente& cliente);
+	Cliente* insertaCliente(Cliente& cliente);
 	bool nuevoCliente(Cliente& cliente);
 	EcoCityMoto& insertaItinerario(Itinerario* itinerario, std::string dni);
 	EcoCityMoto& crearItinerarios(UTM& min, UTM& max);
 	std::string& verItinerario(Cliente& cliente);
 	bool buscaMoto(std::string id, Moto* &motoEncontrada);
 	Cliente* buscarCliente(std::string& dni);
-	//bool buscaCliente(std::string& dni, Cliente* &clienteEncontrado);
+	bool buscaCliente(std::string& dni, Cliente* &clienteEncontrado);
 	EcoCityMoto& borraMoto(int pos);
 	EcoCityMoto& borraItinerario(int pos, std::string dni);
 	EcoCityMoto& recorreMapa();

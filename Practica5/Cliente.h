@@ -32,6 +32,7 @@ public:
 	bool operator>(Cliente& otro);
 	bool menorQue(Cliente& otro);
 	Cliente& operator=(const Cliente& right);
+	string getPass();
 	string GetApellido() const;
 	string GetNombre() const;
 	string GetNombreCompleto() const;

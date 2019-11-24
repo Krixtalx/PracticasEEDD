@@ -187,17 +187,14 @@ bool EcoCityMoto::nuevoCliente(Cliente& cliente)
 /**
 	@brief Inserta un cliente en el arbol de clientes
 	@return Puntero al cliente recien insertado
-
+*/
 Cliente* EcoCityMoto::insertaCliente(Cliente& cliente)
 {
-	std::map<std::string, Cliente>::iterator it;
-	std::pair<std::map<std::string, Cliente>::iterator, bool> parInserta;
-	parInserta = clientes->insert(std::pair<const std::string, Cliente>(cliente.getDni(), cliente));
-	if (!parInserta.second)
-		throw std::runtime_error("[EcoCityMoto::insertaCliente] No se pudo insertar");
-	return &(parInserta.first->second);
+	Cliente* aux = new Cliente(cliente);
+	nuevoCliente(*aux);
+	return aux;
 }
-*/
+
 /**
 	@brief Inserta un itinerario a la lista del cliente indicado
 */
@@ -278,23 +275,20 @@ Cliente* EcoCityMoto::buscarCliente(std::string& dni)
 	return encontrado;
 }
 
-/**
-	@brief Busca el cliente cuyo DNI coicida con el indicado
-
+/*
+*@Brief Busca el cliente cuyo DNI coicida con el indicado
+*/
 bool EcoCityMoto::buscaCliente(std::string& dni, Cliente* &clienteEncontrado)
 {
-
-	std::map<std::string, Cliente>::iterator it;
-	it = clientes->find(dni);
-	if (it != clientes->end()) {
-		clienteEncontrado = &(it->second);
+	clienteEncontrado = buscarCliente(dni);
+	if (clienteEncontrado) {
 		return true;
 	}
 	else {
 		return false;
 	}
 }
-*/
+
 /**
 	@brief Elimina la moto de la posicion indicada
 */
