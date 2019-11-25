@@ -53,7 +53,7 @@ unsigned int THashCliente::hash2(unsigned long clave, int intento)
 */
 unsigned int THashCliente::hash3(unsigned long clave, int intento)
 {
-	return (hash1(clave,intento) + hash2(clave, intento)) % tamatabla;
+	return (hash1(clave,intento) + (intento * hash2(clave, intento)) ) % tamatabla;
 }
 
 /**

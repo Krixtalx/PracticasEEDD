@@ -833,7 +833,7 @@ void IA(EcoCityMoto& ecocity) {
 		tamOriginal = tamInicial;
 	}
 	datosIA.close();
-	unsigned interPrimo, interSum, interTam;
+	unsigned interPrimo, interSum, interTam=1;
 	string archivo = "clientes.csv";
 	std::vector<Cliente*>* v = leerFich::ficheroaVector(archivo);
 
@@ -841,11 +841,8 @@ void IA(EcoCityMoto& ecocity) {
 	cin >> interPrimo;
 	cout << "Introduzca el nº de interacciones para sum: ";
 	cin >> interSum;
-	cout << "Introduzca el nº de interacciones para tam: ";
-	cin >> interTam;
 	clearScreen();
 	for (size_t itPrimos = 0; itPrimos < interPrimo; itPrimos++) {
-
 		for (size_t itSum = 0; itSum < interSum; itSum++) {
 			tamInicial = tamOriginal;
 			for (size_t itTam = 0; itTam < interTam; itTam++) {
