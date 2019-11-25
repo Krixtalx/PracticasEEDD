@@ -50,13 +50,16 @@ public:
 	int getLimiteBateria();
 	bool eliminarCliente(std::string id);
 	void verTabla();
-	THashCliente* getTabla() { return clientes; };
+	string estadoTabla();
+	unsigned long claveString(string& dni);
 	EcoCityMoto& vectorToTabla(std::vector<Cliente*>* v, unsigned tamInicio, unsigned primo, unsigned suma);
 	void cargarClientes(string& archivo);
-	//TODO: las dos de abajo
 	void cargarMotos(string& archivo);
 	void guardarClientesItinerarios(string& archivo);
 	vector<string>* getDniClientes();
+	unsigned ultimasColisiones();
+	//TODO: borrar esto
+	THashCliente* getTabla() { return clientes; };
 };
 
 

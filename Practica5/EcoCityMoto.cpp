@@ -50,31 +50,8 @@ EcoCityMoto::EcoCityMoto(unsigned _idUltimo, size_t tamTabla) : idUltimo(_idUlti
 */
 EcoCityMoto::~EcoCityMoto()
 {
-	char guardar = '\0';
-	cout << "¿Quiere guardar el estado actual de los clientes? [S/n]: ";
-	cin >> guardar;
-	if (guardar == 'S' || guardar == 's') {
-		std::ofstream archivoItis;
-		archivoItis.open("itinerarios.txt");
-		if (!archivoItis.good())
-			cout << "Error en el archivo itinerarios.txt" << endl;
-		else {
-			cout << endl << "Iniciando guardado de itinerarios en el fichero: itinerarios.txt" << endl;
-			/*for (std::map<string, Cliente>::iterator it = clientes->begin(); it != clientes->end(); it++)
-			{
-				archivoItis << "-" << it->second.toCSV() << endl;
-				archivoItis << verItinerario(it->second);
-			}
-			*/
-			for (std::vector<Entrada>::iterator it = clientes->iteradorInicio(); it != clientes->iteradorFinal(); it++) {
-				if (it->estado == ocupado) {
-					archivoItis << "-" << it->cliente.toCSV() << endl;
-					archivoItis << verItinerario(it->cliente);
-				}
-			}
-			cout << "¡Itinerarios guardados satisfactoriamente!";
-		}
-	}
+	string archivo = "itinerarios.txt";
+	guardarClientesItinerarios(archivo);
 	while (!motos->empty()) {
 		delete motos->back();
 		motos->pop_back();
@@ -413,7 +390,6 @@ int EcoCityMoto::getLimiteBateria()
 */
 bool EcoCityMoto::eliminarCliente(std::string id)
 {
-	//return clientes->erase(id);
 	return clientes->borrar(clientes->djb2(id), id);
 }
 
@@ -421,6 +397,23 @@ bool EcoCityMoto::eliminarCliente(std::string id)
 void EcoCityMoto::verTabla()
 {
 	clientes->verTabla();
+}
+
+string EcoCityMoto::estadoTabla()
+{
+	stringstream estado;
+	estado << "Maximo de colisiones: " << clientes->maxColisiones() << endl
+		 << "Promedio de colisiones: " << clientes->promedioColisiones() << endl
+		 << "Tamaño de la tabla: " << clientes->tamaTabla() << endl
+		 << "Numero de clientes: " << clientes->numCliente() << endl
+		 << "Colisiones de la ultima insercion: " << clientes->ultimasColisiones() << endl
+		 << "Factor de carga: " << clientes->factorCarga() << endl;
+	return estado.str();
+}
+
+unsigned long EcoCityMoto::claveString(string& dni)
+{
+	return clientes->djb2(dni);
 }
 
 /**
@@ -446,10 +439,48 @@ EcoCityMoto& EcoCityMoto::vectorToTabla(std::vector<Cliente*>* v, unsigned tamIn
 void EcoCityMoto::cargarClientes(string& archivo)
 {
 	try {
-		leerFich::leeItinerariosYClientes(archivo, this);
+		if (clientes)
+			delete clientes;
+		leerFich::leeClientes(archivo, this);
 	}
 	catch (std::runtime_error & e) {
 		cerr << e.what() << endl;
+	}
+}
+
+void EcoCityMoto::cargarMotos(string& archivo)
+{
+	if (motos)
+		delete motos;
+	leerFich::leeMotos(archivo, this);
+}
+
+void EcoCityMoto::guardarClientesItinerarios(string& archivo)
+{
+	char guardar = '\0';
+	cout << "¿Quiere guardar el estado actual de los clientes? [S/n]: ";
+	cin >> guardar;
+	if (guardar == 'S' || guardar == 's') {
+		std::ofstream archivoItis;
+		archivoItis.open("itinerarios.txt");
+		if (!archivoItis.good())
+			cout << "Error en el archivo itinerarios.txt" << endl;
+		else {
+			cout << endl << "Iniciando guardado de itinerarios en el fichero: itinerarios.txt" << endl;
+			/*for (std::map<string, Cliente>::iterator it = clientes->begin(); it != clientes->end(); it++)
+			{
+				archivoItis << "-" << it->second.toCSV() << endl;
+				archivoItis << verItinerario(it->second);
+			}
+			*/
+			for (std::vector<Entrada>::iterator it = clientes->iteradorInicio(); it != clientes->iteradorFinal(); it++) {
+				if (it->estado == ocupado) {
+					archivoItis << "-" << it->cliente.toCSV() << endl;
+					archivoItis << verItinerario(it->cliente);
+				}
+			}
+			cout << "¡Itinerarios guardados satisfactoriamente!";
+		}
 	}
 }
 
@@ -464,4 +495,9 @@ vector<string>* EcoCityMoto::getDniClientes() {
 		}
 	}
 	return dnis;
+}
+
+unsigned EcoCityMoto::ultimasColisiones()
+{
+	return clientes->ultimasColisiones();
 }

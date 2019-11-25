@@ -10,9 +10,9 @@
 
 int main()
 {
-
+	
 	setlocale(LC_ALL, "spanish");
-
+	
 	size_t tamtabla = 5000;
 	srand(time(0));
 	EcoCityMoto app(0, tamtabla);

@@ -126,7 +126,7 @@ void insertarCliente(EcoCityMoto& ecocity) {
 		}
 	}
 	clearScreen();
-	cout << "Inserción sin problemas (" << ecocity.getTabla()->ultimasColisiones() << " colisiones)" << endl;
+	cout << "Inserción sin problemas (" << ecocity.ultimasColisiones() << " colisiones)" << endl;
 }
 
 /*
@@ -157,18 +157,6 @@ bool buscarCliente(EcoCityMoto& ecocity){
 		clienteActivo = antiguo;
 	}
 	return false;
-}
-
-/*
-*@Brief Muestra las estadísticas de la tabla hash actual
-*/
-void estadisticas(EcoCityMoto& ecocity) {
-	cout << "Maximo de colisiones: " << ecocity.getTabla()->maxColisiones() << endl;
-	cout << "Promedio de colisiones: " << ecocity.getTabla()->promedioColisiones() << endl;
-	cout << "Tamaño de la tabla: " << ecocity.getTabla()->tamaTabla() << endl;
-	cout << "Numero de clientes: " << ecocity.getTabla()->numCliente() << endl;
-	cout << "Colisiones de la ultima insercion: " << ecocity.getTabla()->ultimasColisiones() << endl;
-	cout << "Factor de carga: " << ecocity.getTabla()->factorCarga() << endl;
 }
 
 /*
@@ -322,7 +310,7 @@ void asignarMoto(EcoCityMoto& ecocity) {
 	cout << "Buscando moto más cercana a " << clienteActivo->getPosicion().toCSV() << " ..." << endl;
 	try {
 		motoCercana = &ecocity.localizaMotoCercana(*clienteActivo);
-		cout << "Moto encontrada: " << motoCercana->getId() << ", ";
+		cout << "Moto encontrada: " << motoCercana->getId() << " (" << motoCercana->getUTM().toCSV() << "), ";
 		switch (motoCercana->getEstado())
 		{
 		case estatus::activa:
@@ -389,7 +377,7 @@ void eliminarClientes(EcoCityMoto& ecocity) {
 	}
 	vector<string>* dnis = ecocity.getDniClientes();
 	for (size_t i = 0; i < stoi(tam); i++) {
-		if (!ecocity.getTabla()->borrar(ecocity.getTabla()->djb2((*dnis)[i]), (*dnis)[i]))
+		if (!ecocity.eliminarCliente((*dnis)[i]))
 		{
 			cerr << "Error durante el borrado (iteración " << i << ")" << endl;
 			break;
@@ -415,10 +403,11 @@ void menuClientes(EcoCityMoto& ecocity) {
 	cout << "3 - Borrar cliente" << endl;
 	cout << "4 - Estado de la tabla hash" << endl;
 	cout << "5 - Acceso a itinerarios de un cliente" << endl;
-	cout << "6 - Asignar moto más cercana" << endl;
+	cout << "6 - Nuevo itinerario con la moto más cercana" << endl;
 	cout << "7 - Generar itinerarios aleatorios" << endl;
 	cout << "8 - Eliminar varios clientes" << endl;
-	cout << "9 - Salir" << endl;
+	cout << "9 - Recorrido completo" << endl;
+	cout << "10 - Salir" << endl;
 	cout << "¿Que desea hacer?: ";
 	cin >> opcion;
 
@@ -439,7 +428,7 @@ void menuClientes(EcoCityMoto& ecocity) {
 		break;
 	case 4:
 		clearScreen();
-		estadisticas(ecocity);
+		cout << ecocity.estadoTabla();
 		break;
 
 	case 5:
@@ -461,7 +450,30 @@ void menuClientes(EcoCityMoto& ecocity) {
 		clearScreen();
 		eliminarClientes(ecocity);
 		break;
+
 	case 9:
+	{
+		clearScreen();
+		vector<string>* dnis = ecocity.getDniClientes();
+		for (size_t i = 0; i < dnis->size(); i++) {
+			Cliente* temp;
+			if (ecocity.buscaCliente((*dnis)[i], temp)) {
+				cout << "Cliente encontrado: " << temp->toCSV() << endl;
+			}
+			else {
+				cout << "No se encontró el cliente con DNI " << (*dnis)[i] << ". ¿Desea continuar? [S/n]: ";
+				string opc;
+				cin >> opc;
+				if (opc[0] != 'S' && opc[0] != 's'){
+					break;
+					delete dnis;
+				}
+			}
+		}
+		delete dnis;
+		break;
+	}
+	case 10:
 		clearScreen();
 		return;
 		break;
@@ -673,8 +685,7 @@ void carga(EcoCityMoto& ecocity) {
 	}
 	if (confMotos == 'S' || confMotos == 's') {
 		cout << "Borrando información de motos..." << endl;
-		ecocity.borraMotos();
-		leerFich::leeMotos(archivoMotos, &ecocity);
+		ecocity.cargarMotos(archivoMotos);
 	}
 	if (confCli == 'S' || confCli == 's') {
 		cout << "Borrando información de clientes e itinerarios..." << endl;
@@ -696,13 +707,11 @@ void cargaParcial(EcoCityMoto& ecocity) {
 	}
 	if (confMotos == 'S' || confMotos == 's') {
 		cout << "Borrando información de motos..." << endl;
-		ecocity.borraMotos();
-		leerFich::leeMotos(archivoMotos, &ecocity);
+		ecocity.cargarMotos(archivoMotos);
 	}
 	if (confCli == 'S' || confCli == 's') {
 		cout << "Borrando información de clientes..." << endl;
-		ecocity.borraClientes();
-		leerFich::leeClientes(archivoClientes, &ecocity);
+		ecocity.cargarClientes(archivoClientes);
 	}
 }
 
@@ -725,11 +734,11 @@ void cargaUnica(EcoCityMoto& ecocity) {
 	{
 	case 1:
 		clearScreen();
-		leerFich::leeClientes(archivoClientes, &ecocity);
+		ecocity.cargarClientes(archivoClientes);
 		break;
 	case 2:
 		clearScreen();
-		leerFich::leeMotos(archivoMotos, &ecocity);
+		ecocity.cargarMotos(archivoMotos);
 		break;
 	case 3:
 		clearScreen();
@@ -878,7 +887,7 @@ void IA(EcoCityMoto& ecocity) {
 				cout << "Interacciones: " << itPrimos + 1 << " primos, " << itSum + 1 << " suma, " << itTam + 1 << " tamTabla" << endl << endl;
 
 				cout << "ACTUAL MEJOR                                                    ULTIMO PROBADO" << endl;
-				cout << "MAX COLISIONES: " << mejorMax << "                                             MAX COLISIONES: " << tabla->maxColisiones() << endl;
+				cout << "MAX COLISIONES:" << mejorMax << "                                             MAX COLISIONES: " << tabla->maxColisiones() << endl;
 				cout << "PROMEDIO COLISIONES: " << pCol << "                                 PROMEDIO COLISIONES: " << tabla->promedioColisiones() << endl;
 				cout << "TAMTABLA: " << mejorTam << "                                                      TAM INICIAL: " << tabla->tamInicial << endl;
 				cout << "PRIMO: " << mejorPrimo << "                                                          PRIMO:" << tabla->primoHash2 << endl;
