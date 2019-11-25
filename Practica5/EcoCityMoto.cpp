@@ -191,7 +191,8 @@ bool EcoCityMoto::nuevoCliente(Cliente& cliente)
 Cliente* EcoCityMoto::insertaCliente(Cliente& cliente)
 {
 	Cliente* aux = new Cliente(cliente);
-	nuevoCliente(*aux);
+	if (!nuevoCliente(*aux))
+		return nullptr;
 	return aux;
 }
 

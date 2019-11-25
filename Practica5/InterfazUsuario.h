@@ -109,9 +109,22 @@ void insertarCliente(EcoCityMoto& ecocity) {
 	char opcion = 'S';
 	cin >> opcion;
 	if(opcion == 'S' || opcion == 's')
+	{
 		clienteActivo = ecocity.insertaCliente(cliente);
+		if (!clienteActivo) {
+			clearScreen();
+			cout << "No se pudo insertar" << endl;
+			return;
+		}
+	}
 	else
-		ecocity.insertaCliente(cliente);
+	{
+		if (!ecocity.insertaCliente(cliente)) {
+			clearScreen();
+			cout << "No se pudo insertar" << endl;
+			return;
+		}
+	}
 	clearScreen();
 	cout << "Inserción sin problemas (" << ecocity.getTabla()->ultimasColisiones() << " colisiones)" << endl;
 }
@@ -376,10 +389,9 @@ void eliminarClientes(EcoCityMoto& ecocity) {
 	}
 	vector<string>* dnis = ecocity.getDniClientes();
 	for (size_t i = 0; i < stoi(tam); i++) {
-		if (ecocity.getTabla()->borrar(ecocity.getTabla()->djb2((*dnis)[i]), (*dnis)[i]))
-			cout << "BORRAO " << (*dnis)[i] << endl;
-		else {
-			cout << "MENUDA F LOCO " << i << endl;
+		if (!ecocity.getTabla()->borrar(ecocity.getTabla()->djb2((*dnis)[i]), (*dnis)[i]))
+		{
+			cerr << "Error durante el borrado (iteración " << i << ")" << endl;
 			break;
 		}
 	}

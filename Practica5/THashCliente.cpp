@@ -197,6 +197,8 @@ bool THashCliente::insertar(unsigned long clave, const string& dni, Cliente& cli
 	unsigned int intento = 0;
 	unsigned int key = hash2(clave, intento);
 	while (intento < tamatabla && (*buffer)[key].estado == ocupado) {
+		if ((*buffer)[key].clave == clave)
+			return false;
 		intento++;
 		key = hash2(clave, intento);
 	}
@@ -271,7 +273,7 @@ bool THashCliente::borrar(unsigned long clave, string& dni)
 			(*buffer)[key].estado = borrado;
 			numclientes--;
 			if (factorCarga() < 0.6) {
-				redispersar(numclientes / 0.61);
+				redispersar(numclientes / 0.67);
 			}
 			return true;
 		}

@@ -109,7 +109,7 @@ void Moto::seDesactiva(int duracion, int limiteBateria){
 	if (estado == estatus::activa) {
 		estado = estatus::bloqueada;
 		usadoPor = 0;
-		setPorcentajeBateria(porcentajeBateria-(duracion), limiteBateria);
+		setPorcentajeBateria(porcentajeBateria-duracion, limiteBateria);
 	}
 }
 void Moto::setPorcentajeBateria(int porcentaje, int limiteBateria)
