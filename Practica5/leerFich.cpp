@@ -246,7 +246,7 @@ std::vector<Cliente*>* leerFich::ficheroaVector(string& fichero)
 		//Mientras no se haya llegado al final del fichero
 		while (!fe.eof()) {
 			getline(fe, linea); //Toma una línea del fichero
-			if (linea == "" || linea[0] == 'N') {
+			if (linea == "" || linea[0] != '-') {
 				continue;
 			}
 			Cliente* cli = 0;

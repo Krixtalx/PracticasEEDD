@@ -892,7 +892,7 @@ void IA(EcoCityMoto& ecocity) {
 	}
 	datosIA.close();
 	unsigned interPrimo, interSum, interTam=1;
-	string archivo = "clientes.csv";
+	string archivo = "itinerarios.txt";
 	std::vector<Cliente*>* v = leerFich::ficheroaVector(archivo);
 
 	cout << "Introduzca el nº de interacciones para primo: ";
