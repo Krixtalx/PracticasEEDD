@@ -44,8 +44,8 @@ class THashCliente
 
 public:
 	float pNuevaTabla = 0.61;
-	unsigned sumHash2 = 467;    //1 
-	unsigned primoHash2 = 103;//1103 
+	unsigned sumHash2 = 2;    //1   467
+	unsigned primoHash2 = 67;//1103     103
 	unsigned tamInicial = 1000;
 	unsigned siguientePrimo(int x);
 

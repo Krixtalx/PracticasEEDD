@@ -864,7 +864,7 @@ void reiniciarApp(EcoCityMoto* ecocity) {
 
 
 void IA(EcoCityMoto& ecocity) {
-	unsigned mejorMax = 0, mejorPrimo = 0, mejorSum = 0, mejorTam = 15991, tamInicial = 15991, tamOriginal = 15991, sumOriginal;
+	unsigned mejorMax = 1, mejorPrimo = 2, mejorSum = 1, mejorTam = 15991, tamInicial = 15991, tamOriginal = 15991, sumOriginal=1;
 	float  pCol = 20;
 	ifstream datosIA;
 	string archivoIA = "iaData.txt";
@@ -901,7 +901,7 @@ void IA(EcoCityMoto& ecocity) {
 	cin >> interSum;
 	clearScreen();
 	for (size_t itPrimos = 0; itPrimos < interPrimo; itPrimos++) {
-		mejorSum = sumOriginal;
+		ecocity.getTabla()->sumHash2 = sumOriginal;
 		for (size_t itSum = 0; itSum < interSum; itSum++) {
 			tamInicial = tamOriginal;
 			for (size_t itTam = 0; itTam < interTam; itTam++) {
@@ -940,7 +940,7 @@ void IA(EcoCityMoto& ecocity) {
 					pCol = tabla->promedioColisiones();
 				}
 				clearScreen();
-				cout << "Interacciones: " << itPrimos + 1 << " primos, " << itSum + 1 << " suma, " << itTam + 1 << " tamTabla" << endl << endl;
+				cout << "Interacciones: " << itPrimos + 1 << " primos, " << itSum + 1 << " suma "  << endl << endl;
 
 				cout << "ACTUAL MEJOR                                                    ULTIMO PROBADO" << endl;
 				cout << "MAX COLISIONES:" << mejorMax << "                                             MAX COLISIONES: " << tabla->maxColisiones() << endl;
