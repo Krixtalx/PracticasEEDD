@@ -249,6 +249,7 @@ std::vector<Cliente*>* leerFich::ficheroaVector(string& fichero)
 			if (linea == "" || linea[0] != '-') {
 				continue;
 			}
+			linea = linea.substr(1);
 			Cliente* cli = 0;
 			vectorClientes(linea, v);
 			total++;
