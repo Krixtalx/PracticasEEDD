@@ -864,7 +864,7 @@ void reiniciarApp(EcoCityMoto* ecocity) {
 
 
 void IA(EcoCityMoto& ecocity) {
-	unsigned mejorMax = 0, mejorPrimo = 0, mejorSum = 0, mejorTam = 5000, tamInicial = 5000, tamOriginal = 5000;
+	unsigned mejorMax = 0, mejorPrimo = 0, mejorSum = 0, mejorTam = 15991, tamInicial = 15991, tamOriginal = 15991, sumOriginal;
 	float  pCol = 20;
 	ifstream datosIA;
 	string archivoIA = "iaData.txt";
@@ -882,6 +882,7 @@ void IA(EcoCityMoto& ecocity) {
 		mejorMax = stoi(maxStr);
 		mejorPrimo = stoi(primoStr);
 		mejorSum = stoi(sumStr);
+		sumOriginal = mejorSum;
 		mejorTam = stoi(tamStr);
 		setlocale(LC_ALL, "english");
 		pCol = stof(colStr);
@@ -900,6 +901,7 @@ void IA(EcoCityMoto& ecocity) {
 	cin >> interSum;
 	clearScreen();
 	for (size_t itPrimos = 0; itPrimos < interPrimo; itPrimos++) {
+		mejorSum = sumOriginal;
 		for (size_t itSum = 0; itSum < interSum; itSum++) {
 			tamInicial = tamOriginal;
 			for (size_t itTam = 0; itTam < interTam; itTam++) {
