@@ -12,7 +12,7 @@ int main()
 {
 	
 	setlocale(LC_ALL, "spanish");
-	
+	//TODO: volver a crear itinerarios relacionando % de bateria y duracion
 	size_t tamtabla = 5000;
 	srand(time(0));
 	EcoCityMoto app(0, tamtabla);

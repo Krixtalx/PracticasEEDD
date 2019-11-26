@@ -101,7 +101,7 @@ void Itinerario::setVehiculo(Moto* m)
 	vehiculo = m;
 }
 
-void Itinerario::setMinutos(int mins, int limiteBateria)
+void Itinerario::setMinutos(int mins)
 {
 	minutos = mins;
 	//vehiculo->setPorcentajeBateria(vehiculo->getPorcentajeBateria() - mins, limiteBateria);

@@ -25,7 +25,7 @@ public:
 	void setInicio(UTM& pos);
 	UTM& getFin();
 	void setVehiculo(Moto* m);
-	void setMinutos(int mins, int limiteBateria);
+	void setMinutos(int mins);
 	Moto* getVehiculo();
 	std::string toCSV();
 };

@@ -363,6 +363,54 @@ void bloquearMoto(EcoCityMoto& ecocity) {
 	clienteActivo = antiguo;
 }
 
+void gestionItinerarios(EcoCityMoto& ecocity) {
+	if (clienteActivo) {
+		cout << "Cliente seleccionado: " << clienteActivo->getDni() << endl << clienteActivo->getDisplay() << endl;
+	}
+	else
+		cout << "Actualmente no hay cliente seleccionado" << endl;
+	int opcion;
+	cout << endl << endl << "Gestión de itinerarios" << endl << endl;
+	cout << "1 - Acceso a itinerarios de un cliente" << endl;
+	cout << "2 - Buscar y activar moto más cercana" << endl;
+	cout << "3 - Bloquear moto" << endl;
+	cout << "4 - Generar itinerarios aleatorios" << endl;
+	cout << "0 - Salir" << endl;
+	cout << "¿Que desea hacer?: ";
+	cin >> opcion;
+	switch (opcion)
+	{
+	case 1:
+		clearScreen();
+		accesoItinerarios(ecocity);
+		break;
+
+	case 2:
+		clearScreen();
+		asignarMoto(ecocity);
+		break;
+
+	case 3:
+		clearScreen();
+		bloquearMoto(ecocity);
+		break;
+
+	case 4:
+		clearScreen();
+		generaItinerarios(ecocity);
+		break;
+
+	case 0:
+		clearScreen();
+		break;
+
+	default:
+		clearScreen();
+		cout << "Opción inválida" << endl;
+		break;
+	}
+}
+
 void borrarCliente(EcoCityMoto& ecocity) {
 	char opcion = 'n';
 	if (clienteActivo) {
@@ -414,7 +462,7 @@ void eliminarClientes(EcoCityMoto& ecocity) {
 */
 void menuClientes(EcoCityMoto& ecocity) {
 	if (clienteActivo) {
-		cout << "Cliente seleccionado: " << clienteActivo->getDni() << endl;
+		cout << "Cliente seleccionado: " << clienteActivo->getDni() << endl << clienteActivo->getDisplay() << endl;
 	}
 	else
 		cout << "Actualmente no hay cliente seleccionado" << endl;
@@ -424,13 +472,10 @@ void menuClientes(EcoCityMoto& ecocity) {
 	cout << "2 - Buscar cliente" << endl;
 	cout << "3 - Borrar cliente" << endl;
 	cout << "4 - Estado de la tabla hash" << endl;
-	cout << "5 - Acceso a itinerarios de un cliente" << endl;
-	cout << "6 - Buscar y activar moto más cercana" << endl;
-	cout << "7 - Bloquear moto" << endl;
-	cout << "8 - Generar itinerarios aleatorios" << endl;
-	cout << "9 - Eliminar varios clientes" << endl;
-	cout << "10 - Recorrido completo" << endl;
-	cout << "11 - Salir" << endl;
+	cout << "5 - Gestionar itinerarios" << endl;
+	cout << "6 - Eliminar varios clientes" << endl;
+	cout << "7 - Recorrido completo" << endl;
+	cout << "0 - Salir" << endl;
 	cout << "¿Que desea hacer?: ";
 	cin >> opcion;
 
@@ -456,29 +501,15 @@ void menuClientes(EcoCityMoto& ecocity) {
 
 	case 5:
 		clearScreen();
-		accesoItinerarios(ecocity);
+		gestionItinerarios(ecocity);
 		break;
 
 	case 6:
 		clearScreen();
-		asignarMoto(ecocity);
-		break;
-
-	case 7:
-		clearScreen();
-		bloquearMoto(ecocity);
-		break;
-	case 8:
-		clearScreen();
-		generaItinerarios(ecocity);
-		break;
-
-	case 9:
-		clearScreen();
 		eliminarClientes(ecocity);
 		break;
 
-	case 10:
+	case 7:
 	{
 		clearScreen();
 		vector<string>* dnis = ecocity.getDniClientes();
@@ -500,7 +531,7 @@ void menuClientes(EcoCityMoto& ecocity) {
 		delete dnis;
 		break;
 	}
-	case 11:
+	case 0:
 		clearScreen();
 		return;
 		break;
@@ -655,7 +686,7 @@ void menuMotos(EcoCityMoto& ecocity) {
 	cout << "1 - Insertar moto" << endl;
 	cout << "2 - Buscar moto" << endl;
 	cout << "3 - Motos sin bateria" << endl;
-	cout << "4 - Salir" << endl;
+	cout << "0 - Salir" << endl;
 	cout << "¿Que desea hacer?: ";
 	cin >> opcion;
 	switch (opcion) {
@@ -673,7 +704,7 @@ void menuMotos(EcoCityMoto& ecocity) {
 		clearScreen();
 		buscarSinBateria(ecocity);
 		break;
-	case 4:
+	case 0:
 		clearScreen();
 		return;
 		break;
@@ -683,7 +714,6 @@ void menuMotos(EcoCityMoto& ecocity) {
 		cout << "Opción inválida";
 		break;
 	}
-	menuMotos(ecocity);
 }
 
 void mostrarEstado(EcoCityMoto& ecocity) {
@@ -754,7 +784,7 @@ void cargaUnica(EcoCityMoto& ecocity) {
 	cout << "1 - Clientes" << endl;
 	cout << "2 - Motos" << endl;
 	cout << "3 - Clientes + Itinerarios" << endl;
-	cout << "4 - Salir" << endl;
+	cout << "0 - Salir" << endl;
 	cout << "¿Qué desea hacer?: ";
 	cin >> opcion;
 	switch (opcion)
@@ -780,7 +810,7 @@ void cargaUnica(EcoCityMoto& ecocity) {
 		else
 			cout << "No hay motos cargadas, por favor, cargue primero las motos en la aplicación" << endl;
 		break;
-	case 4:
+	case 0:
 		clearScreen();
 		return;
 	default:
@@ -795,7 +825,7 @@ void menuCarga(EcoCityMoto& ecocity) {
 	cout << "1 - Carga completa (Clientes, itinerarios y motos)" << endl;
 	cout << "2 - Carga parcial (Clientes y motos)" << endl;
 	cout << "3 - Carga unica" << endl;
-	cout << "4 - Salir" << endl;
+	cout << "0 - Salir" << endl;
 	cout << "¿Que desea hacer?: ";
 	cin >> opcion;
 	switch (opcion)
@@ -812,7 +842,7 @@ void menuCarga(EcoCityMoto& ecocity) {
 		clearScreen();
 		cargaUnica(ecocity);
 		break;
-	case 4:
+	case 0:
 		clearScreen();
 		return;
 	default:
@@ -955,8 +985,8 @@ void IA(EcoCityMoto& ecocity) {
 *@Brief Menu principal
 */
 bool menuPrincipal(EcoCityMoto& ecocity) {
-	int opcion=0;
-	while (opcion != 9) {
+	int opcion=-1;
+	while (opcion != 0) {
 		cout << endl << endl << "Programa de Gestión de EcoCityMoto" << endl << endl;
 		cout << "1 - Instrucciones" << endl;
 		cout << "2 - Configuracion" << endl;
@@ -967,7 +997,7 @@ bool menuPrincipal(EcoCityMoto& ecocity) {
 		cout << "7 - Estado actual" << endl;
 		cout << "8 - Reiniciar información" << endl;
 		cout << "9 - Entrenar IA" << endl;
-		cout << "10 - Salir" << endl;
+		cout << "0 - Salir" << endl;
 		cout << "¿Que desea hacer?: ";
 		cin >> opcion;
 		switch (opcion) {
@@ -1016,7 +1046,7 @@ bool menuPrincipal(EcoCityMoto& ecocity) {
 			IA(ecocity);
 			break;
 
-		case 10:
+		case 0:
 			clearScreen();
 			return true;
 			break;
@@ -1047,7 +1077,7 @@ bool menuBasico(EcoCityMoto& ecocity, Cliente* cliente) {
 		cout << "4 - Bloquear moto" << endl;
 		cout << "5 - Ver estado actual de la moto" << endl;
 		cout << "6 - Ver itinerarios anteriores" << endl;
-		cout << "7 - Salir" << endl;
+		cout << "0 - Salir" << endl;
 		cout << "¿Que desea hacer?: ";
 		cin >> opcion;
 		switch (opcion) {
@@ -1093,6 +1123,9 @@ bool menuBasico(EcoCityMoto& ecocity, Cliente* cliente) {
 		case 5:
 			clearScreen();
 			{
+				//TODO: cambiar esto para que use getDisplay()
+				cout << cliente->getDisplay() << endl;
+				/*
 				Moto* moto = cliente->getItinerarios().back()->getVehiculo();
 				//cout << cliente << "     " << moto->getCliente() << endl;
 				if (moto->getCliente() == cliente) {
@@ -1109,6 +1142,7 @@ bool menuBasico(EcoCityMoto& ecocity, Cliente* cliente) {
 				else {
 					cout << "El cliente no tiene ninguna moto asignada" << endl;
 				}
+				*/
 			}
 			break;
 
@@ -1117,7 +1151,7 @@ bool menuBasico(EcoCityMoto& ecocity, Cliente* cliente) {
 			verItinerario(ecocity, *cliente);
 			break;
 
-		case 7:
+		case 0:
 			clearScreen();
 			return true;
 			break;

@@ -3,7 +3,7 @@
 #include <cmath>
 #include <complex>
 
-Cliente::Cliente() : dni(""), pass(""), nombre(""), apellido(""), direccion(""), nombreCompleto("") {
+Cliente::Cliente() : dni(""), pass(""), nombre(""), apellido(""), direccion(""), nombreCompleto(""), display("No hay moto en uso") {
 	listaItinerarios = new std::list<Itinerario*>;
 }
 
@@ -12,12 +12,12 @@ Cliente::Cliente(string dni): dni(dni) {
 
 
 Cliente::Cliente(string _dni, string _pass, string _nombre, string _apellido, string _direccion, double _latitud, double _longitud) :
-	dni(_dni), pass(_pass), nombre(_nombre), apellido(_apellido), direccion(_direccion), posicion(_latitud, _longitud) {
+	dni(_dni), pass(_pass), nombre(_nombre), apellido(_apellido), direccion(_direccion), posicion(_latitud, _longitud), display("No hay moto en uso") {
 	nombreCompleto = nombre + " " + apellido;
 	listaItinerarios = new std::list<Itinerario*>;
 }
 
-Cliente::Cliente(const Cliente& orig): dni(orig.dni), pass(orig.pass), nombre(orig.nombre), apellido(orig.apellido), direccion(orig.direccion){
+Cliente::Cliente(const Cliente& orig): dni(orig.dni), pass(orig.pass), nombre(orig.nombre), apellido(orig.apellido), direccion(orig.direccion), display(orig.display){
 	nombreCompleto = orig.nombreCompleto;
 	posicion.latitud = orig.posicion.latitud;
 	posicion.longitud = orig.posicion.longitud;
@@ -28,7 +28,6 @@ Cliente::Cliente(const Cliente& orig): dni(orig.dni), pass(orig.pass), nombre(or
 			*temp = *(*it);
 			listaItinerarios->push_back(temp);
 		}
-		//this->listaItinerarios = new std::list<Itinerario*>(*(orig.listaItinerarios));
 	aplicacion = orig.aplicacion;
 	
 }
@@ -94,13 +93,14 @@ Cliente& Cliente::operator=(const Cliente& right) {
 	if (this == &right)
 		return *this;
 
-	this->direccion = right.direccion;
-	this->dni = right.dni;
-	this->nombre = right.nombre;
-	this->apellido = right.apellido;
-	this->pass = right.pass;
-	this->posicion = right.posicion;
-	this->nombreCompleto = right.nombreCompleto;
+	direccion = right.direccion;
+	dni = right.dni;
+	nombre = right.nombre;
+	apellido = right.apellido;
+	pass = right.pass;
+	posicion = right.posicion;
+	nombreCompleto = right.nombreCompleto;
+	display = right.display;
 
 	if (listaItinerarios) {
 		while (!listaItinerarios->empty()) {
@@ -116,7 +116,7 @@ Cliente& Cliente::operator=(const Cliente& right) {
 		listaItinerarios->push_back(temp);
 	}
 	//this->listaItinerarios = new std::list<Itinerario*>(*(right.listaItinerarios));
-	this->aplicacion = right.aplicacion;
+	aplicacion = right.aplicacion;
 
 	return *this;
 }
@@ -215,9 +215,25 @@ void Cliente::creaItinerario(Moto& m)
 	tempMax.latitud = 38;
 	tempMax.longitud = 4;
 	Itinerario* nuevo = new Itinerario(aplicacion->idItinerario(), tempMin, tempMax);
+	nuevo->setMinutos(0);
 	nuevo->setInicio(m.getUTM());
 	nuevo->setVehiculo(&m);
 	listaItinerarios->push_back(nuevo);
+	display = "Moto en uso: " + nuevo->getVehiculo()->getId() + " ";
+	switch (nuevo->getVehiculo()->getEstado())
+	{
+	case estatus::activa:
+		display += "activa (" + to_string(nuevo->getVehiculo()->getPorcentajeBateria()) + "% de batería restante)";
+		break;
+	case estatus::bloqueada:
+		display += "bloqueada (" + to_string(nuevo->getVehiculo()->getPorcentajeBateria()) + "% de batería restante)";
+		break;
+	case estatus::rota:
+		display += "rota (" + to_string(nuevo->getVehiculo()->getPorcentajeBateria()) + "% de batería restante)";
+		break;
+	default:
+		display += "sin batería";
+	}
 }
 
 /**
@@ -236,10 +252,11 @@ void Cliente::terminarTrayecto()
 	if (listaItinerarios->size() == 0)
 		throw std::runtime_error("[Cliente::terminarTrayecto] El cliente no tiene itinerarios");
 
-	listaItinerarios->back()->setMinutos(rand() % listaItinerarios->back()->getVehiculo()->getPorcentajeBateria(), aplicacion->getLimiteBateria());
+	listaItinerarios->back()->setMinutos(rand() % listaItinerarios->back()->getVehiculo()->getPorcentajeBateria());
 	listaItinerarios->back()->getVehiculo()->setUTM(listaItinerarios->back()->getFin());
 	listaItinerarios->back()->getVehiculo()->seDesactiva(this->getItinerarios().back()->getDuracion(), aplicacion->getLimiteBateria());
 	posicion = listaItinerarios->back()->getVehiculo()->getUTM();
+	display = "No hay moto en uso";
 }
 
 /**
@@ -258,3 +275,12 @@ string Cliente::toCSV()
 	return (dni + ";" + pass + ";" + nombreCompleto + ";" + direccion + ";" + std::to_string(posicion.latitud) + ";" + std::to_string(posicion.longitud));
 }
 
+void Cliente::mostrarMensaje(string texto)
+{
+	display = texto;
+}
+
+string& Cliente::getDisplay()
+{
+	return display;
+}

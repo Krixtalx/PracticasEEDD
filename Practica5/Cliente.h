@@ -18,6 +18,7 @@ private:
 	string apellido = "";
 	string direccion = "";
 	string nombreCompleto = "";
+	string display = "";
 	UTM posicion;
 	std::list<Itinerario*>* listaItinerarios=0;
 	EcoCityMoto* aplicacion = 0;
@@ -49,7 +50,8 @@ public:
 	void terminarTrayecto();
 	void addItinerario(Itinerario* iti);
 	string toCSV();
-	//TODO: mostrarMensaje
+	void mostrarMensaje(string texto);
+	string& getDisplay();
 };
 
 #endif /* CLIENTE_H */
