@@ -333,12 +333,34 @@ void asignarMoto(EcoCityMoto& ecocity) {
 		}
 		motoCercana->seActiva(*clienteActivo);
 		clienteActivo->creaItinerario(*motoCercana);
-		clienteActivo->terminarTrayecto();
+		//clienteActivo->terminarTrayecto();
 		cout << "Se ha creado un nuevo itinerario con la moto" << endl;
 	}
 	catch (std::runtime_error & e) {
 		cerr << e.what();
 	}
+}
+
+void bloquearMoto(EcoCityMoto& ecocity) {
+	string opcion = "n";
+	Cliente* antiguo = clienteActivo;
+	if (clienteActivo) {
+		cout << "¿Quiere usar el cliente activo? (DNI: " << clienteActivo->getDni() << ") [S/n]: ";
+		cin >> opcion;
+	}
+	if (opcion[0] != 'S' && opcion[0] != 's') {
+		string dni;
+		cout << "Introduzca el DNI del cliente al que se bloqueará la moto: ";
+		cin >> dni;
+		if (!ecocity.buscaCliente(dni, clienteActivo)) {
+			cout << "No se encontró al cliente" << endl;
+			clienteActivo = antiguo;
+			return;
+		}
+	}
+	clienteActivo->terminarTrayecto();
+	cout << "Se ha bloqueado la moto " << clienteActivo->getItinerarios().back()->getVehiculo()->getId() << endl;
+	clienteActivo = antiguo;
 }
 
 void borrarCliente(EcoCityMoto& ecocity) {
@@ -403,11 +425,12 @@ void menuClientes(EcoCityMoto& ecocity) {
 	cout << "3 - Borrar cliente" << endl;
 	cout << "4 - Estado de la tabla hash" << endl;
 	cout << "5 - Acceso a itinerarios de un cliente" << endl;
-	cout << "6 - Nuevo itinerario con la moto más cercana" << endl;
-	cout << "7 - Generar itinerarios aleatorios" << endl;
-	cout << "8 - Eliminar varios clientes" << endl;
-	cout << "9 - Recorrido completo" << endl;
-	cout << "10 - Salir" << endl;
+	cout << "6 - Buscar y activar moto más cercana" << endl;
+	cout << "7 - Bloquear moto" << endl;
+	cout << "8 - Generar itinerarios aleatorios" << endl;
+	cout << "9 - Eliminar varios clientes" << endl;
+	cout << "10 - Recorrido completo" << endl;
+	cout << "11 - Salir" << endl;
 	cout << "¿Que desea hacer?: ";
 	cin >> opcion;
 
@@ -443,15 +466,19 @@ void menuClientes(EcoCityMoto& ecocity) {
 
 	case 7:
 		clearScreen();
+		bloquearMoto(ecocity);
+		break;
+	case 8:
+		clearScreen();
 		generaItinerarios(ecocity);
 		break;
 
-	case 8:
+	case 9:
 		clearScreen();
 		eliminarClientes(ecocity);
 		break;
 
-	case 9:
+	case 10:
 	{
 		clearScreen();
 		vector<string>* dnis = ecocity.getDniClientes();
@@ -473,7 +500,7 @@ void menuClientes(EcoCityMoto& ecocity) {
 		delete dnis;
 		break;
 	}
-	case 10:
+	case 11:
 		clearScreen();
 		return;
 		break;
@@ -936,10 +963,11 @@ bool menuPrincipal(EcoCityMoto& ecocity) {
 		cout << "3 - Clientes (Tabla Hash)" << endl;
 		cout << "4 - Motos (STL Vector)" << endl;
 		cout << "5 - Cargar datos" << endl;
-		cout << "6 - Estado actual" << endl;
-		cout << "7 - Reiniciar información" << endl;
-		cout << "8 - Entrenar IA" << endl;
-		cout << "9 - Salir" << endl;
+		cout << "6 - Guardar clientes e itinerarios" << endl;
+		cout << "7 - Estado actual" << endl;
+		cout << "8 - Reiniciar información" << endl;
+		cout << "9 - Entrenar IA" << endl;
+		cout << "10 - Salir" << endl;
 		cout << "¿Que desea hacer?: ";
 		cin >> opcion;
 		switch (opcion) {
@@ -971,20 +999,24 @@ bool menuPrincipal(EcoCityMoto& ecocity) {
 
 		case 6:
 			clearScreen();
-			mostrarEstado(ecocity);
+			ecocity.guardarClientesItinerarios(archivoItinerarios);
 			break;
-
 		case 7:
 			clearScreen();
-			reiniciarApp(&ecocity);
+			mostrarEstado(ecocity);
 			break;
 
 		case 8:
 			clearScreen();
-			IA(ecocity);
+			reiniciarApp(&ecocity);
 			break;
 
 		case 9:
+			clearScreen();
+			IA(ecocity);
+			break;
+
+		case 10:
 			clearScreen();
 			return true;
 			break;
