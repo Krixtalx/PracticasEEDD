@@ -10,7 +10,6 @@
 
 int main()
 {
-	
 	setlocale(LC_ALL, "spanish");
 	//TODO: volver a crear itinerarios relacionando % de bateria y duracion
 	size_t tamtabla = 5413;
