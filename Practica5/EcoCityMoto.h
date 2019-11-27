@@ -58,8 +58,7 @@ public:
 	void guardarClientesItinerarios(string& archivo);
 	vector<string>* getDniClientes();
 	unsigned ultimasColisiones();
-	//TODO: borrar esto
-	THashCliente* getTabla() { return clientes; };
+	THashCliente* getTabla();
 };
 
 

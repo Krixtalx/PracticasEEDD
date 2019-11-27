@@ -352,29 +352,25 @@ unsigned int THashCliente::tamaTabla()
 	return tamatabla;
 }
 
-//TODO: borrar esto cuando funcione la tabla
-void THashCliente::verTabla()
-{
-	for (size_t i = 0; i < tamatabla; i++) {
-		if ((*buffer)[i].estado == ocupado) {
-			std::cout << "Posicion " << i << ": " << (*buffer)[i].clave << " " << (*buffer)[i].cliente.toCSV() << std::endl;
-		}
-		else {
-			std::cout << "Posicion " << i << ": Vacio" << std::endl;
-		}
-	}
-}
-
+/**
+*@Brief Devuelve un iterador apuntando al inicio del vector de entradas
+*/
 vector<Entrada>::iterator THashCliente::iteradorInicio()
 {
 	return buffer->begin();
 }
 
+/**
+*@Brief Devuelve un iterador apuntando al final del vector de entradas
+*/
 vector<Entrada>::iterator THashCliente::iteradorFinal()
 {
 	return buffer->end();
 }
 
+/**
+*@Brief Devuelve el numero de colisiones en la ultima insercion
+*/
 unsigned THashCliente::ultimasColisiones()
 {
 	return colUltimo;

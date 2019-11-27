@@ -6,9 +6,12 @@
 #include <fstream>
 #include <sstream>
 
+/**
+*@Brief Método encargado de cargar la información desde fichero mediante las funciones del espacio de nombres leerFich
+*/
 void EcoCityMoto::cargaEEDD(string fichCli, string fichMotos)
 {
-	cout << "¿Quiere iniciar la lectura desde los ficheros por defecto? [S/n]: " << endl;
+	cout << "¿Quiere iniciar la lectura desde los ficheros por defecto? [S/n]: ";
 	char entrada;
 	cin >> entrada;
 	if (entrada == 'S') {
@@ -152,18 +155,21 @@ void EcoCityMoto::desbloqueaMoto(Moto& m, Cliente& cli)
 */
 EcoCityMoto& EcoCityMoto::insertaMoto(Moto* moto)
 {
-	//TODO: ARREGLAR ESTO
 	motos->push_back(moto);
 	return *this;
 }
 
+/**
+*@Brief Inserta un cliente en la tabla hash
+*@return True si se ha insertado correctamente, false en otro caso
+*/
 bool EcoCityMoto::nuevoCliente(Cliente& cliente)
 {
 	return clientes->insertar(clientes->djb2(cliente.getDni()), cliente.getDni(), cliente);
 }
 
 /**
-	@brief Inserta un cliente en el arbol de clientes
+	@brief Inserta un cliente en la tabla hash
 	@return Puntero al cliente recien insertado
 */
 Cliente* EcoCityMoto::insertaCliente(Cliente& cliente)
@@ -199,8 +205,9 @@ EcoCityMoto& EcoCityMoto::crearItinerarios(UTM& min, UTM& max)
 	//for (it = clientes->begin(); it != clientes->end(); it++) {
 	for(std::vector<Entrada>::iterator it = clientes->iteradorInicio(); it != clientes->iteradorFinal(); it++){
 		try {
-			//it->second.crearItinerarios((rand() % 5) + 1, min, max);
-			it->cliente.crearItinerarios((rand() % 5) + 1, min, max);
+			if (it->estado == EstadoHash::ocupado) {
+				it->cliente.crearItinerarios((rand() % 5) + 1, min, max);
+			}
 		}
 		catch (std::range_error & e) {
 			string temp = e.what();
@@ -231,6 +238,7 @@ std::string& EcoCityMoto::verItinerario(Cliente& cliente){
 
 /**
 	@brief Busca la moto cuya ID coincida con la indicada
+	@post el parametro motoEncontrada se iguala a un puntero a la moto encontrada
 */
 bool EcoCityMoto::buscaMoto(std::string id, Moto* &motoEncontrada)
 {
@@ -245,6 +253,10 @@ bool EcoCityMoto::buscaMoto(std::string id, Moto* &motoEncontrada)
 	return false;
 }
 
+/**
+*@Brief Busca el cliente cuyo DNI coincida con el indicado
+*@Return Puntero al cliente encontrado, nullptr si no se encuentra
+*/
 Cliente* EcoCityMoto::buscarCliente(std::string& dni)
 {
 	Cliente* encontrado = 0;
@@ -256,6 +268,8 @@ Cliente* EcoCityMoto::buscarCliente(std::string& dni)
 
 /*
 *@Brief Busca el cliente cuyo DNI coicida con el indicado
+*@Post el parametro clienteEncontrado se iguala a un puntero al cliente encontrado
+*@Return true si se ha encontrado, false en otro caso
 */
 bool EcoCityMoto::buscaCliente(std::string& dni, Cliente* &clienteEncontrado)
 {
@@ -306,6 +320,9 @@ unsigned int EcoCityMoto::idItinerario(){
 	return idUltimo - 1;
 }
 
+/**
+*@Brief Setter del atributo idUltimo
+*/
 void EcoCityMoto::setIdUltimo(unsigned _id)
 {
 	idUltimo = _id;
@@ -337,7 +354,7 @@ void EcoCityMoto::borrarEEDD()
 	delete clientes;
 	motos = new vector<Moto*>;
 	//clientes = new map<std::string, Cliente>;
-	clientes = new THashCliente(1000);
+	clientes = new THashCliente(15991);
 }
 
 /**
@@ -346,8 +363,7 @@ void EcoCityMoto::borrarEEDD()
 void EcoCityMoto::borraClientes()
 {
 	delete clientes;
-	//clientes = new map<std::string, Cliente>;
-	clientes = new THashCliente(5000);
+	clientes = new THashCliente(15991);
 }
 
 /**
@@ -359,12 +375,18 @@ void EcoCityMoto::borraMotos()
 	motos = new vector<Moto*>;
 }
 
+/**
+*@Brief Devuelve el numero de clientes en la tabla hash
+*/
 unsigned EcoCityMoto::getNumClientes()
 {
 	//return clientes->size();
 	return clientes->numCliente();
 }
 
+/**
+*@Brief Devuelve el numero de motos almacenadas
+*/
 unsigned EcoCityMoto::getNumMotos()
 {
 	return motos->size();
@@ -381,6 +403,9 @@ Moto* EcoCityMoto::getMotoAleatoria()
 	return (*motos)[rand() % motos->size()];
 }
 
+/**
+*@Brief Devuelve el limite de bateria para considerar una moto como sin bateria
+*/
 int EcoCityMoto::getLimiteBateria()
 {
 	return limiteBateria;
@@ -394,12 +419,9 @@ bool EcoCityMoto::eliminarCliente(std::string id)
 	return clientes->borrar(clientes->djb2(id), id);
 }
 
-//TODO: borrar esto cuando funcione
-void EcoCityMoto::verTabla()
-{
-	clientes->verTabla();
-}
-
+/**
+*@Brief Devuelve un string con la informacion de la tabla
+*/
 string EcoCityMoto::estadoTabla()
 {
 	stringstream estado;
@@ -412,6 +434,9 @@ string EcoCityMoto::estadoTabla()
 	return estado.str();
 }
 
+/**
+*@Brief Devuelve la codificacion djb2 del dni indicado
+*/
 unsigned long EcoCityMoto::claveString(string& dni)
 {
 	return clientes->djb2(dni);
@@ -451,6 +476,10 @@ void EcoCityMoto::cargarClientes(string& archivo)
 	}
 }
 
+/**
+*@Brief Carga el vector de motos desde un fichero
+*@Post Se elimina el vector anterior para ser sustuido
+*/
 void EcoCityMoto::cargarMotos(string& archivo)
 {
 	if (motos)
@@ -459,6 +488,10 @@ void EcoCityMoto::cargarMotos(string& archivo)
 	leerFich::leeMotos(archivo, this);
 }
 
+/**
+*@Brief Almacena el estado de los clientes y sus itinerarios en fichero
+*@Param archivo Nombre del fichero donde se guardara el estado
+*/
 void EcoCityMoto::guardarClientesItinerarios(string& archivo)
 {
 	char guardar = '\0';
@@ -466,7 +499,7 @@ void EcoCityMoto::guardarClientesItinerarios(string& archivo)
 	cin >> guardar;
 	if (guardar == 'S' || guardar == 's') {
 		std::ofstream archivoItis;
-		archivoItis.open("itinerarios.txt");
+		archivoItis.open(archivo);
 		if (!archivoItis.good())
 			cout << "Error en el archivo itinerarios.txt" << endl;
 		else {
@@ -501,7 +534,18 @@ vector<string>* EcoCityMoto::getDniClientes() {
 	return dnis;
 }
 
+/**
+*@Brief Devuelve el numero de colisiones en la ultima operacion de insercion de cliente
+*/
 unsigned EcoCityMoto::ultimasColisiones()
 {
 	return clientes->ultimasColisiones();
+}
+
+/**
+*@Brief Devuelve un puntero a la tabla hash de clientes
+*/
+THashCliente* EcoCityMoto::getTabla()
+{
+	return clientes;
 }

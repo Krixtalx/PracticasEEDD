@@ -3,20 +3,31 @@
 #include <cmath>
 #include <complex>
 
+/**
+*@Brief Constructor por defecto
+*/
 Cliente::Cliente() : dni(""), pass(""), nombre(""), apellido(""), direccion(""), nombreCompleto(""), display("No hay moto en uso") {
 	listaItinerarios = new std::list<Itinerario*>;
 }
 
+/**
+*@Brief Constructor parametrizado
+*/
 Cliente::Cliente(string dni): dni(dni) {
 }
 
-
+/**
+*@Brief Constructor parametrizado
+*/
 Cliente::Cliente(string _dni, string _pass, string _nombre, string _apellido, string _direccion, double _latitud, double _longitud) :
 	dni(_dni), pass(_pass), nombre(_nombre), apellido(_apellido), direccion(_direccion), posicion(_latitud, _longitud), display("No hay moto en uso") {
 	nombreCompleto = nombre + " " + apellido;
 	listaItinerarios = new std::list<Itinerario*>;
 }
 
+/**
+*@Brief Constructor de copia
+*/
 Cliente::Cliente(const Cliente& orig): dni(orig.dni), pass(orig.pass), nombre(orig.nombre), apellido(orig.apellido), direccion(orig.direccion), display(orig.display){
 	nombreCompleto = orig.nombreCompleto;
 	posicion.latitud = orig.posicion.latitud;
@@ -32,6 +43,9 @@ Cliente::Cliente(const Cliente& orig): dni(orig.dni), pass(orig.pass), nombre(or
 	
 }
 
+/**
+*@Brief Destructor
+*/
 Cliente::~Cliente() {
 	if (listaItinerarios != 0) {
 		while (!listaItinerarios->empty()) {
@@ -58,9 +72,9 @@ list<Itinerario*>& Cliente::getItinerarios()
 }
 
 /**
- * @brief Compara dos clientes por su nombre
+ * @brief Compara dos clientes por su DNI
  * @param otro Cliente a comparar
- * @return True si el nombre del cliente *this es menor alfabeticamente que el de otro
+ * @return True si el DNI del cliente *this es menor alfabeticamente que el de otro
  */
 bool Cliente::operator<(Cliente& otro) {
 	if (this->dni < otro.dni)
@@ -68,6 +82,11 @@ bool Cliente::operator<(Cliente& otro) {
 	return false;
 }
 
+/**
+ * @brief Compara dos clientes por su DNI
+ * @param otro Cliente a comparar
+ * @return True si el DNI del cliente *this es mayor alfabeticamente que el de otro
+ */
 bool Cliente::operator>(Cliente& otro){
 	return dni>otro.dni;
 }
@@ -82,7 +101,6 @@ bool Cliente::menorQue(Cliente& otro) {
 		return true;
 	return false;
 }
-
 
 /**
  * @brief Operador de asignación
@@ -121,6 +139,10 @@ Cliente& Cliente::operator=(const Cliente& right) {
 	return *this;
 }
 
+/**
+*@Brief Getter del atributo pass
+*@Return string pass
+*/
 string Cliente::getPass()
 {
 	return pass;
@@ -150,6 +172,10 @@ string Cliente::GetNombreCompleto() const {
 	return nombreCompleto;
 }
 
+/**
+ * @brief Getter del atributo DNI
+ * @return string dni
+ */
 string Cliente::getDni() const
 {
 	return dni;
@@ -169,6 +195,9 @@ ostream& operator<<(ostream& os, const Cliente& cliente){
 	return os;
 }
 
+/**
+ * @brief Setter del atributo aplicacion
+ */
 void Cliente::setAplicacion(EcoCityMoto* app)
 {
 	aplicacion = app;
@@ -193,7 +222,7 @@ void Cliente::crearItinerarios(int num, UTM& minimo, UTM& maximo) {
 		Itinerario* aux = new Itinerario(aplicacion->idItinerario(), minimo, maximo);
 		try {
 			aux->setVehiculo(aplicacion->getMotoAleatoria());
-			aux->setMinutos((rand() % aux->getVehiculo()->getPorcentajeBateria()) + 1);
+			aux->setMinutos((rand() % (100-aux->getVehiculo()->getPorcentajeBateria())) + 1);
 		}
 		catch (std::range_error &e) {
 			string temp = e.what();
@@ -276,11 +305,18 @@ string Cliente::toCSV()
 	return (dni + ";" + pass + ";" + nombreCompleto + ";" + direccion + ";" + std::to_string(posicion.latitud) + ";" + std::to_string(posicion.longitud));
 }
 
+/**
+ * @brief Actualiza el mensaje almacenado en el atributo display
+ */
 void Cliente::mostrarMensaje(string texto)
 {
 	display = texto;
 }
 
+/**
+ * @brief Getter del atributo display
+ * @return string display
+ */
 string& Cliente::getDisplay()
 {
 	return display;

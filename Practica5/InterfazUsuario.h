@@ -34,11 +34,11 @@ void clearScreen() {
 *@Brief Submenú encargado de manejar la configuracion modificando las variables globales
 */
 void configuracion(EcoCityMoto& ecocity) {
-	int opt = 0;
+	int opt = -1;
 	cout << "1 - Modificar archivo CSV de Clientes" << endl;
 	cout << "2 - Modificar archivo CSV de Motos" << endl;
 	cout << "3 - Modificar configuración de Sistema Operativo" << endl;
-	cout << "4 - Salir" << endl;
+	cout << "0 - Salir" << endl;
 	cout << "Introduzca la opción: ";
 	cin >> opt;
 	
@@ -67,7 +67,7 @@ void configuracion(EcoCityMoto& ecocity) {
 			clearScreen();
 			break;
 
-		case 4:
+		case 0:
 			clearScreen();
 			return;
 			break;
@@ -445,6 +445,7 @@ void eliminarClientes(EcoCityMoto& ecocity) {
 		cout << "Tamaño no válido" << endl;
 		return;
 	}
+	clienteActivo = nullptr;
 	vector<string>* dnis = ecocity.getDniClientes();
 	for (size_t i = 0; i < stoi(tam); i++) {
 		if (!ecocity.eliminarCliente((*dnis)[i]))
@@ -631,12 +632,6 @@ void buscarSinBateria(EcoCityMoto& ecocity) {
 	}
 	switch (opcion)
 	{
-	case 0:
-	{
-		clearScreen();
-		cout << "Opción inválida";
-		return;
-	}
 
 	case 1:
 	{
@@ -652,7 +647,7 @@ void buscarSinBateria(EcoCityMoto& ecocity) {
 				break;
 			}
 		}
-		if (encontrada->getEstado()!=estatus::sinbateria) {
+		if (encontrada && encontrada->getEstado()!=estatus::sinbateria) {
 			cout << "Moto encontrada: " << encontrada->getId() << endl;
 			cout << "Posición: " << encontrada->getUTM().toCSV() << endl;
 		}
@@ -673,7 +668,11 @@ void buscarSinBateria(EcoCityMoto& ecocity) {
 	}
 
 	default:
-		break;
+	{
+		clearScreen();
+		cout << "Opción inválida";
+		return;
+	}
 	}
 }
 
@@ -1124,27 +1123,7 @@ bool menuBasico(EcoCityMoto& ecocity, Cliente* cliente) {
 
 		case 5:
 			clearScreen();
-			{
-				cout << cliente->getDisplay() << endl;
-				/*
-				Moto* moto = cliente->getItinerarios().back()->getVehiculo();
-				//cout << cliente << "     " << moto->getCliente() << endl;
-				if (moto->getCliente() == cliente) {
-					cout << "Moto encontrada: " << moto->getId() << "    UTM: " << moto->getUTM().toCSV() << endl;
-					cout << "Estado de la moto: " << moto->getEstado() << endl;
-					if (moto->getEstado() != estatus::sinbateria)
-						cout << "Porcentaje de batería restante: " << moto->getPorcentajeBateria() << "%" << endl;
-					else {
-						cout << "Sin bateria" << endl;
-						cout << "Porcentaje de batería restante: " << moto->getPorcentajeBateria() << "%" << endl;
-
-					}
-				}
-				else {
-					cout << "El cliente no tiene ninguna moto asignada" << endl;
-				}
-				*/
-			}
+			cout << cliente->getDisplay() << endl;
 			break;
 
 		case 6:
@@ -1172,28 +1151,26 @@ bool login(EcoCityMoto& ecocity) {
 	string dni, pass;
 	Cliente* aux;
 	while (true) {
+		cout << "¿Quiere entrar a la aplicación como administrador? [S/n]: ";
+		cin >> dni;
+		if (dni[0] == 'S' || dni[0] == 's') {
+			menuPrincipal(ecocity);
+			cout << "¿Quiere salir de la aplicación? [S/n]: ";
+			string opcion;
+			cin >> opcion;
+			if (opcion[0] == 'S' || opcion[0] == 's')
+				return true;
+			continue;
+		}
 		cout << "Introduzca su DNI: ";
 		cin >> dni;
 
-		if (dni != "admin" && ecocity.buscaCliente(dni, aux)) {
+		if (ecocity.buscaCliente(dni, aux)) {
 			cout << aux->getPass() << endl;
 			cout << "Introduzca su contraseña: ";
 			cin >> pass;
 			if (aux->getPass() == pass) {
 				menuBasico(ecocity, aux);
-				cout << "¿Quiere salir de la aplicación? [S/n]: ";
-				string opcion;
-				cin >> opcion;
-				if (opcion[0] == 'S' || opcion[0] == 's')
-					return true;
-				continue;
-			}
-		}
-		else{
-			cout << "Introduzca su contraseña: ";
-			cin >> pass;
-			if (pass == "admin") {
-				menuPrincipal(ecocity);
 				cout << "¿Quiere salir de la aplicación? [S/n]: ";
 				string opcion;
 				cin >> opcion;
