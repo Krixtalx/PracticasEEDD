@@ -193,6 +193,7 @@ void Cliente::crearItinerarios(int num, UTM& minimo, UTM& maximo) {
 		Itinerario* aux = new Itinerario(aplicacion->idItinerario(), minimo, maximo);
 		try {
 			aux->setVehiculo(aplicacion->getMotoAleatoria());
+			aux->setMinutos((rand() % aux->getVehiculo()->getPorcentajeBateria()) + 1);
 		}
 		catch (std::range_error &e) {
 			string temp = e.what();

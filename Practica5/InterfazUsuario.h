@@ -1125,7 +1125,6 @@ bool menuBasico(EcoCityMoto& ecocity, Cliente* cliente) {
 		case 5:
 			clearScreen();
 			{
-				//TODO: cambiar esto para que use getDisplay()
 				cout << cliente->getDisplay() << endl;
 				/*
 				Moto* moto = cliente->getItinerarios().back()->getVehiculo();

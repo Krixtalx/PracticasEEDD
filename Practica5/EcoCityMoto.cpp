@@ -152,6 +152,7 @@ void EcoCityMoto::desbloqueaMoto(Moto& m, Cliente& cli)
 */
 EcoCityMoto& EcoCityMoto::insertaMoto(Moto* moto)
 {
+	//TODO: ARREGLAR ESTO
 	motos->push_back(moto);
 	return *this;
 }
@@ -439,8 +440,10 @@ EcoCityMoto& EcoCityMoto::vectorToTabla(std::vector<Cliente*>* v, unsigned tamIn
 void EcoCityMoto::cargarClientes(string& archivo)
 {
 	try {
+		unsigned tam = clientes->tamaTabla();
 		if (clientes)
 			delete clientes;
+		clientes = new THashCliente(tam);
 		leerFich::leeClientes(archivo, this);
 	}
 	catch (std::runtime_error & e) {
@@ -452,6 +455,7 @@ void EcoCityMoto::cargarMotos(string& archivo)
 {
 	if (motos)
 		delete motos;
+	motos = new vector<Moto*>;
 	leerFich::leeMotos(archivo, this);
 }
 
