@@ -18,6 +18,7 @@ struct UTM {
 	std::string toCSV();
 	bool operator<(UTM& right);
 	UTM operator-(UTM& right);
+	double distancia(UTM& otro);
 };
 
 

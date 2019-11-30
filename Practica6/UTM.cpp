@@ -25,3 +25,8 @@ UTM UTM::operator-(UTM& right)
 	resta.longitud = longitud - right.longitud;
 	return resta;
 }
+
+double UTM::distancia(UTM& otro)
+{
+	return sqrt(pow(latitud - otro.latitud, 2) + pow(longitud - otro.longitud, 2));
+}
