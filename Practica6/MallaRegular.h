@@ -20,7 +20,8 @@ T& Celda<T>::masCercano(UTM coor)
 	T* aux;
 	double distancia=9999;
 	if (lista.size() > 0) {
-		for (std::list<T>::iterator it=lista.begin(); it != lista.end(); it++){
+		typename std::list<T>::iterator it;
+		for (it=lista.begin(); it != lista.end(); it++){
 			if (coor.distancia((*it).getUTM()) < distancia) {
 				distancia = coor.distancia((*it).getUTM());
 				aux = &(*it);
