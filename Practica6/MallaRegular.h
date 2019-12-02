@@ -120,7 +120,7 @@ T& MallaRegular<T>::buscarCercano(float x, float y)
 	}
 	else {
 		iniciobucleY = posY - 1;
-		finbucleY = (YMax / interY);
+		finbucleY = (yMax / interY);
 	}
 	while (!aux) {
 		for (unsigned i = iniciobucleX; i <= finbucleX; i++) {
