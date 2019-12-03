@@ -8,6 +8,11 @@ PuntoRecarga::PuntoRecarga(string _id, UTM _posicion) : id(_id), posicion(_posic
 {
 }
 
+PuntoRecarga::PuntoRecarga(string _id, double x, double y): id(_id){
+	UTM aux(x, y);
+	posicion = aux;
+}
+
 PuntoRecarga::~PuntoRecarga()
 {
 	//NO HAY NADA AQUI ES IMPOSIBLE QUE PETE ESTO, O SI

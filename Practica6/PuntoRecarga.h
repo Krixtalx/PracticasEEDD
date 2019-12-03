@@ -14,12 +14,12 @@ class PuntoRecarga
 public:
 	PuntoRecarga();
 	PuntoRecarga(string _id, UTM _posicion);
+	PuntoRecarga(string _id, double x, double y);
 	~PuntoRecarga();
 	PuntoRecarga(PuntoRecarga& orig);
 	PuntoRecarga& operator=(PuntoRecarga& right);
 	float getX();
 	float getY();
-	
 };
 
 

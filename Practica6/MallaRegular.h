@@ -59,13 +59,14 @@ class MallaRegular
 	//TODO: atributos
 	vector<vector<Celda<T>>> buffer;
 	float xMin, xMax, yMin, yMax, interX, interY;
+	unsigned nDivX, nDivY;
 public:
 	MallaRegular(float aXMin, float aYMin, float aXMax, float aYMax, int nDivX, int nDivY);
 	T& buscarCercano(float x, float y);
 	bool fueraAmbito(float x, float y);
 	MallaRegular<T>& insertar(T dato);
 	unsigned maxElementosPorCelda();
-	unsigned mediaElementosPorCelda();
+	float mediaElementosPorCelda();
 };
 
 
@@ -75,7 +76,7 @@ public:
 * @Brief Constructor parametrizado de Malla Regular
 */
 template<class T>
-MallaRegular<T>::MallaRegular(float aXMin, float aYMin, float aXMax, float aYMax, int nDivX, int nDivY): xMin(aXMin), xMax(aXMax), yMin(aYMin), yMax(aYMax){
+MallaRegular<T>::MallaRegular(float aXMin, float aYMin, float aXMax, float aYMax, int nDivX, int nDivY): xMin(aXMin), xMax(aXMax), yMin(aYMin), yMax(aYMax), nDivX(nDivX), nDivY(nDivY){
 	buffer.resize(nDivX);
 	for (unsigned i = 0; i < buffer.size(); i++){
 		buffer[i].resize(nDivY);
@@ -157,5 +158,20 @@ MallaRegular<T>& MallaRegular<T>::insertar(T dato){
 	int posX = (dato.getUTM().latitud - xMin) / interX;
 	int posY = (yMax - dato.getUTM().longitud) / interY;
 	buffer[posX][posY].insertar(dato);
+}
+
+/**
+*@Brief Devuelve el mayor nº de elementos que hay en las celdas 
+*/
+template<class T>
+unsigned MallaRegular<T>::maxElementosPorCelda(){
+	unsigned max = 0;
+	for (unsigned i = 0; i < nDivX; i++){
+		for (unsigned j = 0; j < nDivY; j++){
+			if (buffer[i][j].getNumElem() > max)
+				max = buffer[i][j].getNumElem();
+		}
+	}
+	return max;
 }
 
