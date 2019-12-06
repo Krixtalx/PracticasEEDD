@@ -39,5 +39,5 @@ float PuntoRecarga::getX()
 
 float PuntoRecarga::getY()
 {
-	return posicion.latitud;
+	return posicion.longitud;
 }

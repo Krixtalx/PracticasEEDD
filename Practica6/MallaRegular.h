@@ -3,6 +3,7 @@
 #include <vector>
 #include <list>
 #include "UTM.h"
+#include "unaPosicion.h"
 
 template <class T>
 class Celda {
@@ -27,13 +28,14 @@ unsigned Celda<T>::getNumEle()
 template<class T>
 T& Celda<T>::masCercano(UTM coor)
 {
-	T* aux;
+	T* aux = 0;
 	double distancia=9999;
 	if (lista.size() > 0) {
 		typename std::list<T>::iterator it;
 		for (it=lista.begin(); it != lista.end(); it++){
-			if (coor.distancia((*it).getUTM()) < distancia) {
-				distancia = coor.distancia((*it).getUTM());
+			UTM utmCercano((*it).getX(), (*it).getY());
+			if (coor.distancia(utmCercano) < distancia) {
+				distancia = coor.distancia(utmCercano);
 				aux = &(*it);
 			}
 		}
@@ -58,9 +60,10 @@ class MallaRegular
 {
 	//TODO: atributos
 	vector<vector<Celda<T>>> buffer;
+public:
 	float xMin, xMax, yMin, yMax, interX, interY;
 	unsigned nDivX, nDivY;
-public:
+
 	MallaRegular(float aXMin, float aYMin, float aXMax, float aYMax, int nDivX, int nDivY);
 	T& buscarCercano(float x, float y);
 	bool fueraAmbito(float x, float y);
@@ -91,46 +94,69 @@ MallaRegular<T>::MallaRegular(float aXMin, float aYMin, float aXMax, float aYMax
 template<class T>
 T& MallaRegular<T>::buscarCercano(float x, float y)
 {
+	//TODO: excepciones si x, y no estan en rango
 	UTM coordenadas(x, y);
 	int posX = (x - xMin) / interX;
-	int posY = (yMax - y) / interY;
+	//int posY = (yMax - y) / interY;
+	int posY = (y - yMin) / interY;
 	int iniciobucleX, iniciobucleY, finbucleX, finbucleY;
 	double distancia=9999;
-	T* aux, aux2;
+	T* aux = 0;
+	T* aux2 = 0;
 
-	if (posX != 0 && posX != (xMax / interX)) {
-		iniciobucleX = posX - 1;
-		finbucleX = posX + 1;
-	}
-	else if (posX == 0) {
-		iniciobucleX = 0;
-		finbucleX = posX + 1;
-	}
-	else {
-		iniciobucleX = posX - 1;
-		finbucleX = (xMax/interX);
-	}
-	
-	if (posY != 0 && posY != (yMax / interY)) {
-		iniciobucleY = posY - 1;
-		finbucleY = posY + 1;
-	}
-	else if (posY == 0) {
-		iniciobucleY = 0;
-		finbucleY = posY + 1;
-	}
-	else {
-		iniciobucleY = posY - 1;
-		finbucleY = (yMax / interY);
-	}
+	iniciobucleX = posX-1;
+	finbucleX = posX+1;
+	iniciobucleY = posY-1;
+	finbucleY = posY+1;
+	if (iniciobucleX < 0)
+		iniciobucleX++;
+	if (finbucleX >= (xMax / interX))
+		finbucleX--;
+	if (iniciobucleY < 0)
+		iniciobucleY++;
+	if (finbucleY >= (yMax / interY))
+		finbucleY--;
+
+	//if (posX != 0 && posX != (xMax / interX)) {
+	//	iniciobucleX = posX - 1;
+	//	finbucleX = posX + 1;
+	//	if (finbucleX >= nDivX)
+	//		finbucleX--;
+	//}
+	//else if (posX == 0) {
+	//	iniciobucleX = 0;
+	//	finbucleX = posX + 1;
+	//	
+	//}
+	//else {
+	//	iniciobucleX = posX - 1;
+	//	finbucleX = (xMax/interX);
+	//}
+	//
+	//if (posY != 0 && posY != (yMax / interY)) {
+	//	iniciobucleY = posY - 1;
+	//	finbucleY = posY + 1;
+	//}
+	//else if (posY == 0) {
+	//	iniciobucleY = 0;
+	//	finbucleY = posY + 1;
+	//}
+	//else {
+	//	iniciobucleY = posY - 1;
+	//	finbucleY = (yMax / interY);
+	//}
 	while (!aux) {
 		for (unsigned i = iniciobucleX; i <= finbucleX; i++) {
 			for (unsigned j = iniciobucleY; j <= finbucleY; j++) {
 				aux2 = &(buffer[i][j].masCercano(coordenadas));
-				if (coordenadas.distancia(aux2->getUTM()) < distancia) {
-					distancia = coordenadas.distancia(aux2->getUTM());
-					aux = aux2;
+				if (aux2) {
+					UTM utmCercano(aux2->getX(), aux2->getY());
+					if (coordenadas.distancia(utmCercano) < distancia) {
+						distancia = coordenadas.distancia(utmCercano);
+						aux = aux2;
+					}
 				}
+				
 			}
 		}
 		if (iniciobucleX-- < 0) {
@@ -139,10 +165,10 @@ T& MallaRegular<T>::buscarCercano(float x, float y)
 		if (iniciobucleY-- < 0) {
 			iniciobucleY++;
 		}
-		if (finbucleX++ > (xMax/interX)) {
+		if (finbucleX++ >= (xMax/interX)) {
 			finbucleX--;
 		}
-		if (finbucleY++ > (yMax / interY)) {
+		if (finbucleY++ >= (yMax / interY)) {
 			finbucleY--;
 		}
 	}
@@ -151,13 +177,16 @@ T& MallaRegular<T>::buscarCercano(float x, float y)
 
 /**
 * @Brief Inserta el dato en la celda correspondiente
-* @pre Es necesario que la clase T tenga implementado el método UTM GetUTM()
+* @pre Es necesario que la clase T tenga implementados los métodos getX() y getY()
 */
 template<class T>
 MallaRegular<T>& MallaRegular<T>::insertar(T dato){
-	int posX = (dato.getUTM().latitud - xMin) / interX;
-	int posY = (yMax - dato.getUTM().longitud) / interY;
+	//int posX = (dato.getUTM().latitud - xMin) / interX;
+	//int posY = (yMax - dato.getUTM().longitud) / interY;
+	int posX = (dato.getX() - xMin) / interX;
+	int posY = (dato.getY() - yMin) / interY;
 	buffer[posX][posY].insertar(dato);
+	return *this;
 }
 
 /**
@@ -168,8 +197,8 @@ unsigned MallaRegular<T>::maxElementosPorCelda(){
 	unsigned max = 0;
 	for (unsigned i = 0; i < nDivX; i++){
 		for (unsigned j = 0; j < nDivY; j++){
-			if (buffer[i][j].getNumElem() > max)
-				max = buffer[i][j].getNumElem();
+			if (buffer[i][j].getNumEle() > max)
+				max = buffer[i][j].getNumEle();
 		}
 	}
 	return max;

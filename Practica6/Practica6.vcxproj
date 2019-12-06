@@ -173,6 +173,7 @@
     <ClInclude Include="Moto.h" />
     <ClInclude Include="PuntoRecarga.h" />
     <ClInclude Include="THashCliente.h" />
+    <ClInclude Include="unaPosicion.h" />
     <ClInclude Include="UTM.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
