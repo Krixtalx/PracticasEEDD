@@ -22,6 +22,7 @@ private:
 	UTM posicion;
 	std::list<Itinerario*>* listaItinerarios=0;
 	EcoCityMoto* aplicacion = 0;
+	int puntos = 10;
 
 public:
 	Cliente();
@@ -52,6 +53,8 @@ public:
 	string toCSV();
 	void mostrarMensaje(string texto);
 	string& getDisplay();
+	int getPuntos();
+	void setPuntos(int nuevosPuntos);
 };
 
 #endif /* CLIENTE_H */

@@ -360,6 +360,24 @@ void bloquearMoto(EcoCityMoto& ecocity) {
 	}
 	clienteActivo->terminarTrayecto();
 	cout << "Se ha bloqueado la moto " << clienteActivo->getItinerarios().back()->getVehiculo()->getId() << endl;
+	if (clienteActivo->getItinerarios().back()->getVehiculo()->getPorcentajeBateria() < ecocity.getLimiteBateria()) {
+		cout << "Es necesario recargar la moto, ¿buscar el punto de recarga más cercano? [S/n]: ";
+		string opcionRecarga;
+		cin >> opcionRecarga;
+		if (opcionRecarga[0] == 'S' || opcionRecarga[0] == 's') {
+			cout << "hacer cosas de mallas" << endl
+		}
+		else {
+			cout << "Decrementando puntos del cliente..." << endl;
+			clienteActivo->setPuntos(clienteActivo->getPuntos() - 1);
+			if (clienteActivo->getPuntos() == 0) {
+				cout << "matar al cliente" << endl;
+			}
+			else {
+				cout << "Al cliente " << clienteActivo->getDni() << " le quedan " << clienteActivo->getPuntos() << " puntos." << endl;
+			}
+		}
+	}
 	clienteActivo = antiguo;
 }
 

@@ -58,7 +58,6 @@ void Celda<T>::insertar(T dato){
 template <class T>
 class MallaRegular
 {
-	//TODO: atributos
 	vector<vector<Celda<T>>> buffer;
 public:
 	float xMin, xMax, yMin, yMax, interX, interY;
@@ -176,6 +175,43 @@ T& MallaRegular<T>::buscarCercano(float x, float y)
 }
 
 /**
+*@Brief Comprueba si existe un punto fijo a menos de una celda de distancia de la posición
+*@Return true si no hay punto fijo a menos de una celda, false en otro caso
+*/
+template<class T>
+bool MallaRegular<T>::fueraAmbito(float x, float y)
+{
+	//TODO: excepciones si x, y no estan en rango
+	UTM coordenadas(x, y);
+	int posX = (x - xMin) / interX;
+	int posY = (y - yMin) / interY;
+	int iniciobucleX, iniciobucleY, finbucleX, finbucleY;
+	T* aux = 0;
+
+	iniciobucleX = posX - 1;
+	finbucleX = posX + 1;
+	iniciobucleY = posY - 1;
+	finbucleY = posY + 1;
+	if (iniciobucleX < 0)
+		iniciobucleX++;
+	if (finbucleX >= (xMax / interX))
+		finbucleX--;
+	if (iniciobucleY < 0)
+		iniciobucleY++;
+	if (finbucleY >= (yMax / interY))
+		finbucleY--;
+	for (unsigned i = iniciobucleX; i <= finbucleX; i++) {
+		for (unsigned j = iniciobucleY; j <= finbucleY; j++) {
+			aux = &(buffer[i][j].masCercano(coordenadas));
+			if (aux) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+/**
 * @Brief Inserta el dato en la celda correspondiente
 * @pre Es necesario que la clase T tenga implementados los métodos getX() y getY()
 */
@@ -202,5 +238,20 @@ unsigned MallaRegular<T>::maxElementosPorCelda(){
 		}
 	}
 	return max;
+}
+
+/**
+*@Brief Devuelve el número medio de elementos por celda
+*/
+template<class T>
+float MallaRegular<T>::mediaElementosPorCelda()
+{
+	float totalElem = 0;
+	for (unsigned i = 0; i < nDivX; i++) {
+		for (unsigned j = 0; j < nDivY; j++) {
+			totalElem += buffer[i][j].getNumEle();
+		}
+	}
+	return totalElem/(nDivX*nDivY);
 }
 

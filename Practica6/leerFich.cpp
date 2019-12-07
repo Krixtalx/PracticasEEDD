@@ -115,6 +115,7 @@ void leerFich::leeLineaCliente(string& csv, EcoCityMoto* ecocity, Cliente*& cliA
 	//con todos los atributos leídos, se crea el cliente
 	Cliente client(dni, pass, nombre, apellido, direccion, dlat, dlon);
 	client.setAplicacion(ecocity);
+	client.setPuntos((rand() % 10) + 1);
 	try {
 		if (!ecocity->nuevoCliente(client))
 			throw std::runtime_error("Error al insertar");

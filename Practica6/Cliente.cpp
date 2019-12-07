@@ -321,3 +321,13 @@ string& Cliente::getDisplay()
 {
 	return display;
 }
+
+int Cliente::getPuntos()
+{
+	return puntos;
+}
+
+void Cliente::setPuntos(int nuevosPuntos)
+{
+	puntos = nuevosPuntos;
+}
