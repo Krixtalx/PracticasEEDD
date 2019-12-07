@@ -28,7 +28,8 @@ Cliente::Cliente(string _dni, string _pass, string _nombre, string _apellido, st
 /**
 *@Brief Constructor de copia
 */
-Cliente::Cliente(const Cliente& orig): dni(orig.dni), pass(orig.pass), nombre(orig.nombre), apellido(orig.apellido), direccion(orig.direccion), display(orig.display){
+Cliente::Cliente(const Cliente& orig): dni(orig.dni), pass(orig.pass), nombre(orig.nombre), apellido(orig.apellido), direccion(orig.direccion), display(orig.display), puntos(orig.puntos)
+{
 	nombreCompleto = orig.nombreCompleto;
 	posicion.latitud = orig.posicion.latitud;
 	posicion.longitud = orig.posicion.longitud;
@@ -119,6 +120,7 @@ Cliente& Cliente::operator=(const Cliente& right) {
 	posicion = right.posicion;
 	nombreCompleto = right.nombreCompleto;
 	display = right.display;
+	puntos = right.puntos;
 
 	if (listaItinerarios) {
 		while (!listaItinerarios->empty()) {

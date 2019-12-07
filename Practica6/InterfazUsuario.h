@@ -397,7 +397,7 @@ void bloquearMoto(EcoCityMoto& ecocity) {
 				else {
 					cerr << "[bloquearMoto]No se pudo borrar" << endl;
 				}
-				clienteActivo = 0;
+				antiguo = 0;
 			}
 			else {
 				cout << "El cliente " << clienteActivo->getDni() << " tiene " << clienteActivo->getPuntos() << " puntos." << endl;
