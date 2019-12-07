@@ -302,7 +302,7 @@ void Cliente::addItinerario(Itinerario* iti)
 */
 string Cliente::toCSV()
 {
-	return (dni + ";" + pass + ";" + nombreCompleto + ";" + direccion + ";" + std::to_string(posicion.latitud) + ";" + std::to_string(posicion.longitud));
+	return (dni + ";" + pass + ";" + nombreCompleto + ";" + direccion + ";" + std::to_string(posicion.latitud) + ";" + std::to_string(posicion.longitud) + ";" + std::to_string(puntos));
 }
 
 /**

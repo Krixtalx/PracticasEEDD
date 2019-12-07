@@ -5,6 +5,8 @@
 #include "Moto.h"
 #include "Cliente.h"
 #include "THashCliente.h"
+#include "MallaRegular.h"
+#include "PuntoRecarga.h"
 #include <map>
 #include <vector>
 #include <cmath>
@@ -14,6 +16,7 @@ class EcoCityMoto
 	unsigned idUltimo = 0;
 	std::vector<Moto*>* motos = 0;
 	THashCliente* clientes = 0;
+	MallaRegular<PuntoRecarga> recargas;
 	void cargaEEDD(string fichCli, string fichMotos);
 	const static int limiteBateria = 15;
 
@@ -49,7 +52,6 @@ public:
 	Moto* getMotoAleatoria();
 	int getLimiteBateria();
 	bool eliminarCliente(std::string id);
-	void verTabla();
 	string estadoTabla();
 	unsigned long claveString(string& dni);
 	EcoCityMoto& vectorToTabla(std::vector<Cliente*>* v, unsigned tamInicio, unsigned primo, unsigned suma);

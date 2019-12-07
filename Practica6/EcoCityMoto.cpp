@@ -72,6 +72,7 @@ EcoCityMoto::EcoCityMoto(EcoCityMoto& orig) : idUltimo(orig.idUltimo)
 	motos = new vector<Moto*>(*(orig.motos));
 	//clientes = new map<std::string, Cliente>(*(orig.clientes));
 	clientes = new THashCliente(*(orig.clientes));
+	recargas = orig.recargas;
 }
 
 /**
@@ -92,6 +93,7 @@ EcoCityMoto& EcoCityMoto::operator=(EcoCityMoto& right)
 	delete clientes;
 	//clientes = new map<std::string, Cliente>(*(right.clientes));
 	clientes = new THashCliente(*(right.clientes));
+	recargas = right.recargas;
 	return *this;
 }
 

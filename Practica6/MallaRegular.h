@@ -3,7 +3,6 @@
 #include <vector>
 #include <list>
 #include "UTM.h"
-#include "unaPosicion.h"
 
 template <class T>
 class Celda {
@@ -59,11 +58,14 @@ template <class T>
 class MallaRegular
 {
 	vector<vector<Celda<T>>> buffer;
+	float xMin = 0, xMax = 0, yMin = 0, yMax = 0, interX = 0, interY = 0;
+	unsigned nDivX = 0, nDivY = 0;
 public:
-	float xMin, xMax, yMin, yMax, interX, interY;
-	unsigned nDivX, nDivY;
-
+	MallaRegular();
 	MallaRegular(float aXMin, float aYMin, float aXMax, float aYMax, int nDivX, int nDivY);
+	MallaRegular(MallaRegular& orig);
+	~MallaRegular();
+	MallaRegular<T>& operator=(MallaRegular& right);
 	T& buscarCercano(float x, float y);
 	bool fueraAmbito(float x, float y);
 	MallaRegular<T>& insertar(T dato);
@@ -73,6 +75,11 @@ public:
 
 
 // ---------------------- IMPLEMENTACIONES --------------------------------------------------------
+
+template<class T>
+MallaRegular<T>::MallaRegular()
+{
+}
 
 /**
 * @Brief Constructor parametrizado de Malla Regular
@@ -86,6 +93,35 @@ MallaRegular<T>::MallaRegular(float aXMin, float aYMin, float aXMax, float aYMax
 	interX = (xMax - xMin) / nDivX;
 	interY = (yMax - yMin) / nDivY;
 }
+
+template<class T>
+MallaRegular<T>::MallaRegular(MallaRegular& orig) : xMin(orig.xMin), xMax(orig.xMax), yMin(orig.yMin), yMax(orig.yMax), nDivX(orig.nDivX), nDivY(orig.nDivY)
+{
+	buffer = orig.buffer;
+}
+
+template<class T>
+MallaRegular<T>::~MallaRegular()
+{
+}
+
+template<class T>
+MallaRegular<T>& MallaRegular<T>::operator=(MallaRegular& right)
+{
+	if (this == &right) {
+		return *this;
+	}
+	xMin = right.xMin;
+	xMax = right.xMax;
+	yMin = right.yMin;
+	yMax = right.yMax;
+	nDivX = right.nDivX;
+	nDivY = right.nDivY;
+	buffer = right.buffer;
+	return *this;
+}
+
+
 
 /**
 *@Brief Busca el dato más cercano a la posicion que se indica mediantes los parametros x, y

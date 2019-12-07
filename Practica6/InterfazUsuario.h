@@ -142,14 +142,15 @@ bool buscarCliente(EcoCityMoto& ecocity){
 		cout << "Cliente encontrado" << endl;
 		stringstream ss;
 		ss << clienteActivo->toCSV();
-		string dniCli, passCli, nombreCli, dirCli, latCli, lonCli;
+		string dniCli, passCli, nombreCli, dirCli, latCli, lonCli, puntosCli;
 		getline(ss, dniCli, ';');
 		getline(ss, passCli, ';');
 		getline(ss, nombreCli, ';');
 		getline(ss, dirCli, ';');
 		getline(ss, latCli, ';');
-		getline(ss, lonCli);
-		cout << "DNI: " << dniCli << endl << "Pass: " << passCli << endl << "Nombre: " << nombreCli << endl << "Direccion: " << dirCli << endl << "Posicion: " << latCli << " " << lonCli << endl;
+		getline(ss, lonCli, ';');
+		getline(ss, puntosCli);
+		cout << "DNI: " << dniCli << endl << "Pass: " << passCli << endl << "Nombre: " << nombreCli << endl << "Direccion: " << dirCli << endl << "Posicion: " << latCli << " " << lonCli << endl << "Puntos: " << puntosCli << endl;
 		return true;
 	}
 	else {
@@ -371,7 +372,13 @@ void bloquearMoto(EcoCityMoto& ecocity) {
 			cout << "Decrementando puntos del cliente..." << endl;
 			clienteActivo->setPuntos(clienteActivo->getPuntos() - 1);
 			if (clienteActivo->getPuntos() == 0) {
-				cout << "matar al cliente" << endl;
+				if (ecocity.eliminarCliente(clienteActivo->getDni())) {
+					cout << "Se ha eliminado al cliente por alcanzar el mínimo de puntos." << endl;
+				}
+				else {
+					cerr << "[bloquearMoto]No se pudo borrar" << endl;
+				}
+				clienteActivo = 0;
 			}
 			else {
 				cout << "Al cliente " << clienteActivo->getDni() << " le quedan " << clienteActivo->getPuntos() << " puntos." << endl;
@@ -481,7 +488,7 @@ void eliminarClientes(EcoCityMoto& ecocity) {
 */
 void menuClientes(EcoCityMoto& ecocity) {
 	if (clienteActivo) {
-		cout << "Cliente seleccionado: " << clienteActivo->getDni() << endl << clienteActivo->getDisplay() << endl;
+		cout << "Cliente seleccionado: " << clienteActivo->getDni() << " Puntos: " << clienteActivo->getPuntos() << endl << clienteActivo->getDisplay() << endl;
 	}
 	else
 		cout << "Actualmente no hay cliente seleccionado" << endl;
