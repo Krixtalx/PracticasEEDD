@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <ctime>
 
 /**
 *@Brief Método encargado de cargar la información desde fichero mediante las funciones del espacio de nombres leerFich
@@ -336,7 +337,7 @@ void EcoCityMoto::setIdUltimo(unsigned _id)
 vector<Moto*>* EcoCityMoto::localizaMotoSinBateria() {
 	vector<Moto*>* mSinBateria = new vector<Moto*>;
 	for(unsigned i = 0; i < motos->size(); i++){
-		if ((*motos)[i]->getEstado() == estatus::sinbateria) {
+		if ((*motos)[i]->getEstado() == estatus::sinbateria && recargas.fueraAmbito((*motos)[i]->getUTM().latitud, (*motos)[i]->getUTM().longitud)) {
 			mSinBateria->push_back((*motos)[i]);
 		}
 	}
@@ -554,6 +555,7 @@ THashCliente* EcoCityMoto::getTabla()
 
 void EcoCityMoto::crearPuntosDeRecarga(UTM minimo, UTM maximo, int diviX, int diviY)
 {
+	srand(82277);
 	MallaRegular<PuntoRecarga> nuevaMalla(minimo.latitud, minimo.longitud, maximo.latitud, maximo.longitud, diviX, diviY);
 	recargas = nuevaMalla;
 	int numInsertar = 300;
@@ -565,13 +567,14 @@ void EcoCityMoto::crearPuntosDeRecarga(UTM minimo, UTM maximo, int diviX, int di
 		PuntoRecarga temp(string(id), posicion);
 		recargas.insertar(temp);
 	}
+	srand(time(0));
 }
 
 string EcoCityMoto::infoRecargas()
 {
 	stringstream ss;
 	ss << "Maximo de elementos en una celda: " << recargas.maxElementosPorCelda() << std::endl << "Media de elementos: " << recargas.mediaElementosPorCelda() << std::endl;
-	ss << "Total de elementos: " << recargas.getNumElementos() << std::endl;
+	ss << "Total de elementos: " << recargas.getNumElementos() << std::endl << "Tamaño de celda X: " << recargas.getTamCelda().first << " Tamaño de celda Y: " << recargas.getTamCelda().second << std::endl;
 	return ss.str();
 }
 

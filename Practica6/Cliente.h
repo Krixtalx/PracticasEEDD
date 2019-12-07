@@ -48,7 +48,7 @@ public:
 	Moto& buscaMotoCercana();
 	void creaItinerario(Moto& m);
 	void desbloqueaMoto(Moto& m);
-	void terminarTrayecto();
+	void terminarTrayecto(bool forzarBateria);
 	void addItinerario(Itinerario* iti);
 	string toCSV();
 	void mostrarMensaje(string texto);

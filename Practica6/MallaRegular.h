@@ -84,6 +84,7 @@ public:
 	float mediaElementosPorCelda();
 	unsigned getNumElementos();
 	void recorrerMalla();
+	pair<float, float> getTamCelda();
 };
 
 
@@ -108,7 +109,7 @@ MallaRegular<T>::MallaRegular(float aXMin, float aYMin, float aXMax, float aYMax
 }
 
 template<class T>
-MallaRegular<T>::MallaRegular(MallaRegular& orig) : xMin(orig.xMin), xMax(orig.xMax), yMin(orig.yMin), yMax(orig.yMax), nDivX(orig.nDivX), nDivY(orig.nDivY), interX(orig.interX), interY(orig.interY)
+MallaRegular<T>::MallaRegular(MallaRegular& orig) : xMin(orig.xMin), xMax(orig.xMax), yMin(orig.yMin), yMax(orig.yMax), nDivX(orig.nDivX), nDivY(orig.nDivY), interX(orig.interX), interY(orig.interY), nElementos(orig.nElementos)
 {
 	buffer = orig.buffer;
 }
@@ -132,6 +133,7 @@ MallaRegular<T>& MallaRegular<T>::operator=(MallaRegular& right)
 	nDivY = right.nDivY;
 	interX = right.interX;
 	interY = right.interY;
+	nElementos = right.nElementos;
 	buffer = right.buffer;
 	return *this;
 }
@@ -228,7 +230,7 @@ bool MallaRegular<T>::fueraAmbito(float x, float y)
 		for (unsigned j = iniciobucleY; j <= finbucleY; j++) {
 			aux = &(buffer[i][j].masCercano(coordenadas));
 			if (aux) {
-				if (abs(x - aux.getX()) <= interX && abs(y - aux.getY()) <= interY) {
+				if (abs(x - aux->getX()) <= interX && abs(y - aux->getY()) <= interY) {
 					return false;
 				}
 			}
@@ -297,5 +299,11 @@ void MallaRegular<T>::recorrerMalla()
 			buffer[i][j].verCelda();
 		}
 	}
+}
+
+template<class T>
+inline pair<float, float> MallaRegular<T>::getTamCelda()
+{
+	return pair<float, float>(interX, interY);
 }
 

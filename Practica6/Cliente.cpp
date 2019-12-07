@@ -279,12 +279,14 @@ void Cliente::desbloqueaMoto(Moto& m)
 /**
 	@brief Desactiva la moto que estubiese usando y genera un valor aleatorio para la duracion del viaje
 */
-void Cliente::terminarTrayecto()
+void Cliente::terminarTrayecto(bool forzarBateria)
 {
 	if (listaItinerarios->size() == 0)
 		throw std::runtime_error("[Cliente::terminarTrayecto] El cliente no tiene itinerarios");
-
-	listaItinerarios->back()->setMinutos(rand() % listaItinerarios->back()->getVehiculo()->getPorcentajeBateria());
+	if (forzarBateria)
+		listaItinerarios->back()->setMinutos(listaItinerarios->back()->getVehiculo()->getPorcentajeBateria());
+	else
+		listaItinerarios->back()->setMinutos(rand() % listaItinerarios->back()->getVehiculo()->getPorcentajeBateria());
 	listaItinerarios->back()->getVehiculo()->setUTM(listaItinerarios->back()->getFin());
 	listaItinerarios->back()->getVehiculo()->seDesactiva(this->getItinerarios().back()->getDuracion(), aplicacion->getLimiteBateria());
 	posicion = listaItinerarios->back()->getVehiculo()->getUTM();
