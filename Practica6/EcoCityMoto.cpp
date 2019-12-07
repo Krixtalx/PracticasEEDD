@@ -561,7 +561,8 @@ void EcoCityMoto::crearPuntosDeRecarga(UTM minimo, UTM maximo, int diviX, int di
 		UTM posicion;
 		posicion.latitud = minimo.latitud + (float)rand() / (float)(RAND_MAX / (maximo.latitud - minimo.latitud));
 		posicion.longitud = minimo.longitud + (float)rand() / (float)(RAND_MAX / (maximo.longitud - minimo.longitud));
-		PuntoRecarga temp(string("Punto de recarga " + (i+1)), posicion);
+		string id("Punto de recarga " + to_string((i + 1)));
+		PuntoRecarga temp(string(id), posicion);
 		recargas.insertar(temp);
 	}
 }

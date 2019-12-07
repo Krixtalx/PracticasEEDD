@@ -117,6 +117,8 @@ void Moto::setPorcentajeBateria(int porcentaje, int limiteBateria)
 	porcentajeBateria = porcentaje;
 	if (porcentajeBateria < limiteBateria)
 		estado = estatus::sinbateria;
+	else
+		estado = estatus::bloqueada;
 }
 int Moto::getPorcentajeBateria()
 {

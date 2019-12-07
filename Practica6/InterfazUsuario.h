@@ -371,7 +371,6 @@ void bloquearMoto(EcoCityMoto& ecocity) {
 		string opcionRecarga;
 		cin >> opcionRecarga;
 		if (opcionRecarga[0] == 'S' || opcionRecarga[0] == 's') {
-			//TODO: cosas de mallas
 			cout << "Buscando posicion mas cercana a" << vehiculo->getUTM().toCSV() << "..." << endl;
 			PuntoRecarga* cercano = ecocity.buscarCercano(vehiculo->getUTM().latitud, vehiculo->getUTM().longitud);
 			if (!cercano) {
@@ -379,6 +378,10 @@ void bloquearMoto(EcoCityMoto& ecocity) {
 				cout << "No se pudo encontrar ningun punto de recarga" << endl;
 				return;
 			}
+			cout << "El punto de recarga mas cercano se encuentra en " << cercano->getX() << " " << cercano->getY() << endl << "Moviendo la moto..." << endl;
+			UTM nuevaPos(cercano->getX(), cercano->getY());
+			vehiculo->setUTM(nuevaPos);
+			vehiculo->setPorcentajeBateria(100, ecocity.getLimiteBateria());
 			if (clienteActivo->getPuntos() < 10)
 				clienteActivo->setPuntos(clienteActivo->getPuntos() + 1);
 			cout << "El cliente " << clienteActivo->getDni() << " tiene " << clienteActivo->getPuntos() << " puntos." << endl;

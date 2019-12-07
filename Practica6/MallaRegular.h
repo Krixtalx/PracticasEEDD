@@ -108,7 +108,7 @@ MallaRegular<T>::MallaRegular(float aXMin, float aYMin, float aXMax, float aYMax
 }
 
 template<class T>
-MallaRegular<T>::MallaRegular(MallaRegular& orig) : xMin(orig.xMin), xMax(orig.xMax), yMin(orig.yMin), yMax(orig.yMax), nDivX(orig.nDivX), nDivY(orig.nDivY)
+MallaRegular<T>::MallaRegular(MallaRegular& orig) : xMin(orig.xMin), xMax(orig.xMax), yMin(orig.yMin), yMax(orig.yMax), nDivX(orig.nDivX), nDivY(orig.nDivY), interX(orig.interX), interY(orig.interY)
 {
 	buffer = orig.buffer;
 }
@@ -130,6 +130,8 @@ MallaRegular<T>& MallaRegular<T>::operator=(MallaRegular& right)
 	yMax = right.yMax;
 	nDivX = right.nDivX;
 	nDivY = right.nDivY;
+	interX = right.interX;
+	interY = right.interY;
 	buffer = right.buffer;
 	return *this;
 }
