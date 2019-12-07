@@ -18,11 +18,12 @@ PuntoRecarga::~PuntoRecarga()
 	//NO HAY NADA AQUI ES IMPOSIBLE QUE PETE ESTO, O SI
 }
 
-PuntoRecarga::PuntoRecarga(PuntoRecarga& orig) : id(orig.id), posicion(orig.posicion)
+PuntoRecarga::PuntoRecarga(const PuntoRecarga& orig) : id(orig.id)
 {
+	posicion = orig.posicion;
 }
 
-PuntoRecarga& PuntoRecarga::operator=(PuntoRecarga& right)
+PuntoRecarga& PuntoRecarga::operator=(const PuntoRecarga& right)
 {
 	if (this == &right) {
 		return *this;
