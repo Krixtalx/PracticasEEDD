@@ -61,6 +61,11 @@ public:
 	vector<string>* getDniClientes();
 	unsigned ultimasColisiones();
 	THashCliente* getTabla();
+
+	void crearPuntosDeRecarga(UTM minimo, UTM maximo, int diviX, int diviY);
+	string infoRecargas();
+	PuntoRecarga* buscarCercano(float x, float y);
+	void verPuntos();
 };
 
 

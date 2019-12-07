@@ -81,6 +81,8 @@ void configuracion(EcoCityMoto& ecocity) {
 	clearScreen();
 }
 
+//===========================================CLIENTES===========================================
+
 /*
 *@Brief función encargada de recoger los datos para insertar un nuevo Cliente en el sistema
 */
@@ -159,6 +161,8 @@ bool buscarCliente(EcoCityMoto& ecocity){
 	}
 	return false;
 }
+
+//=================================ITINERARIOS=================================
 
 /*
 *@Brief Permite ver por consola los itinerarios que tiene un cliente
@@ -360,13 +364,25 @@ void bloquearMoto(EcoCityMoto& ecocity) {
 		}
 	}
 	clienteActivo->terminarTrayecto();
-	cout << "Se ha bloqueado la moto " << clienteActivo->getItinerarios().back()->getVehiculo()->getId() << endl;
-	if (clienteActivo->getItinerarios().back()->getVehiculo()->getPorcentajeBateria() < ecocity.getLimiteBateria()) {
+	Moto* vehiculo = clienteActivo->getItinerarios().back()->getVehiculo();
+	cout << "Se ha bloqueado la moto " << vehiculo->getId() << endl;
+	if (vehiculo->getPorcentajeBateria() < ecocity.getLimiteBateria()) {
 		cout << "Es necesario recargar la moto, ¿buscar el punto de recarga más cercano? [S/n]: ";
 		string opcionRecarga;
 		cin >> opcionRecarga;
 		if (opcionRecarga[0] == 'S' || opcionRecarga[0] == 's') {
-			cout << "hacer cosas de mallas" << endl
+			//TODO: cosas de mallas
+			cout << "Buscando posicion mas cercana a" << vehiculo->getUTM().toCSV() << "..." << endl;
+			PuntoRecarga* cercano = ecocity.buscarCercano(vehiculo->getUTM().latitud, vehiculo->getUTM().longitud);
+			if (!cercano) {
+				clienteActivo = antiguo;
+				cout << "No se pudo encontrar ningun punto de recarga" << endl;
+				return;
+			}
+			if (clienteActivo->getPuntos() < 10)
+				clienteActivo->setPuntos(clienteActivo->getPuntos() + 1);
+			cout << "El cliente " << clienteActivo->getDni() << " tiene " << clienteActivo->getPuntos() << " puntos." << endl;
+
 		}
 		else {
 			cout << "Decrementando puntos del cliente..." << endl;
@@ -381,7 +397,7 @@ void bloquearMoto(EcoCityMoto& ecocity) {
 				clienteActivo = 0;
 			}
 			else {
-				cout << "Al cliente " << clienteActivo->getDni() << " le quedan " << clienteActivo->getPuntos() << " puntos." << endl;
+				cout << "El cliente " << clienteActivo->getDni() << " tiene " << clienteActivo->getPuntos() << " puntos." << endl;
 			}
 		}
 	}
@@ -435,6 +451,8 @@ void gestionItinerarios(EcoCityMoto& ecocity) {
 		break;
 	}
 }
+
+//=================================FIN ITINERARIOS=================================
 
 void borrarCliente(EcoCityMoto& ecocity) {
 	char opcion = 'n';
@@ -568,6 +586,10 @@ void menuClientes(EcoCityMoto& ecocity) {
 		break;
 	}
 }
+
+//===========================================FIN CLIENTES===========================================
+//===========================================MOTOS===========================================
+
 
 /*
 *@Brief Inserta una motocicleta en el vector dinámico de Motos con los datos introducidos por consola
@@ -739,6 +761,64 @@ void menuMotos(EcoCityMoto& ecocity) {
 		break;
 	}
 }
+
+//===========================================FIN MOTOS===========================================
+//===========================================MALLA===========================================
+
+void menuMalla(EcoCityMoto& ecocity) {
+	int opcion;
+	cout << endl << endl << "Submenu de la Malla" << endl << endl;
+	cout << "1 - Generar puntos de recarga" << endl;
+	cout << "2 - Informacion de la malla" << endl;
+	cout << "3 - Ver contenido" << endl;
+	cout << "0 - Salir" << endl;
+	cout << "¿Que desea hacer?: ";
+	cin >> opcion;
+	switch (opcion) {
+	case 1:
+	{
+		clearScreen();
+		UTM minimo, maximo;
+		cout << "Latitud minima: ";
+		cin >> minimo.latitud;
+		cout << "Longitud minima: ";
+		cin >> minimo.longitud;
+		cout << "Latitud maxima: ";
+		cin >> maximo.latitud;
+		cout << "Longitud maxima: ";
+		cin >> maximo.longitud;
+		int divX, divY;
+		cout << "Divisiones en X: ";
+		cin >> divX;
+		cout << "Divisiones en Y: ";
+		cin >> divY;
+		ecocity.crearPuntosDeRecarga(minimo, maximo, divX, divY);
+		break;
+	}
+
+	case 2:
+		clearScreen();
+		cout << ecocity.infoRecargas();
+		break;
+
+	case 3:
+		clearScreen();
+		ecocity.verPuntos();
+		break;
+	case 0:
+		clearScreen();
+		return;
+		break;
+
+	default:
+		clearScreen();
+		cout << "Opción inválida";
+		break;
+	}
+}
+
+//===========================================FIN MALLA===========================================
+//===========================================GESTION DE LAS EEDD===========================================
 
 void mostrarEstado(EcoCityMoto& ecocity) {
 	cout << ecocity.getNumClientes() << " clientes almacenados en la aplicación" << endl;
@@ -1005,7 +1085,7 @@ void IA(EcoCityMoto& ecocity) {
 	delete v;
 }
 
-
+//===========================================FIN GESTION===========================================
 
 /*
 *@Brief Menu principal
@@ -1018,11 +1098,11 @@ bool menuPrincipal(EcoCityMoto& ecocity) {
 		cout << "2 - Configuracion" << endl;
 		cout << "3 - Clientes (Tabla Hash)" << endl;
 		cout << "4 - Motos (STL Vector)" << endl;
-		cout << "5 - Cargar datos" << endl;
-		cout << "6 - Guardar clientes e itinerarios" << endl;
-		cout << "7 - Estado actual" << endl;
-		cout << "8 - Reiniciar información" << endl;
-		cout << "9 - Entrenar IA" << endl;
+		cout << "5 - Puntos de recarga (Malla)" << endl;
+		cout << "6 - Cargar datos" << endl;
+		cout << "7 - Guardar clientes e itinerarios" << endl;
+		cout << "8 - Estado actual" << endl;
+		cout << "9 - Reiniciar información" << endl;
 		cout << "0 - Salir" << endl;
 		cout << "¿Que desea hacer?: ";
 		cin >> opcion;
@@ -1050,26 +1130,27 @@ bool menuPrincipal(EcoCityMoto& ecocity) {
 
 		case 5:
 			clearScreen();
-			menuCarga(ecocity);
+			menuMalla(ecocity);
 			break;
 
 		case 6:
 			clearScreen();
-			ecocity.guardarClientesItinerarios(archivoItinerarios);
+			menuCarga(ecocity);
 			break;
+
 		case 7:
 			clearScreen();
-			mostrarEstado(ecocity);
+			ecocity.guardarClientesItinerarios(archivoItinerarios);
 			break;
 
 		case 8:
 			clearScreen();
-			reiniciarApp(&ecocity);
+			mostrarEstado(ecocity);
 			break;
 
 		case 9:
 			clearScreen();
-			IA(ecocity);
+			reiniciarApp(&ecocity);
 			break;
 
 		case 0:

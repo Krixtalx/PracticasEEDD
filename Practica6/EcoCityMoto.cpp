@@ -551,3 +551,35 @@ THashCliente* EcoCityMoto::getTabla()
 {
 	return clientes;
 }
+
+void EcoCityMoto::crearPuntosDeRecarga(UTM minimo, UTM maximo, int diviX, int diviY)
+{
+	MallaRegular<PuntoRecarga> nuevaMalla(minimo.latitud, minimo.longitud, maximo.latitud, maximo.longitud, diviX, diviY);
+	recargas = nuevaMalla;
+	int numInsertar = 300;
+	for (size_t i = 0; i < numInsertar; i++) {
+		UTM posicion;
+		posicion.latitud = minimo.latitud + (float)rand() / (float)(RAND_MAX / (maximo.latitud - minimo.latitud));
+		posicion.longitud = minimo.longitud + (float)rand() / (float)(RAND_MAX / (maximo.longitud - minimo.longitud));
+		PuntoRecarga temp(string("Punto de recarga " + (i+1)), posicion);
+		recargas.insertar(temp);
+	}
+}
+
+string EcoCityMoto::infoRecargas()
+{
+	stringstream ss;
+	ss << "Maximo de elementos en una celda: " << recargas.maxElementosPorCelda() << std::endl << "Media de elementos: " << recargas.mediaElementosPorCelda() << std::endl;
+	ss << "Total de elementos: " << recargas.getNumElementos() << std::endl;
+	return ss.str();
+}
+
+PuntoRecarga* EcoCityMoto::buscarCercano(float x, float y)
+{
+	return recargas.buscarCercano(x, y);
+}
+
+void EcoCityMoto::verPuntos()
+{
+	recargas.recorrerMalla();
+}

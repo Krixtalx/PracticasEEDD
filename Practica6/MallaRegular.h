@@ -3,6 +3,8 @@
 #include <vector>
 #include <list>
 #include "UTM.h"
+#include <cmath>
+#include <iostream>
 
 template <class T>
 class Celda {
@@ -11,6 +13,7 @@ public:
 	unsigned getNumEle();
 	T& masCercano(UTM coor);
 	void insertar(T dato);
+	void verCelda();
 };
 
 // ---------------------- IMPLEMENTACIONES --------------------------------------------------------
@@ -50,6 +53,14 @@ void Celda<T>::insertar(T dato){
 	lista.push_back(dato);
 }
 
+template<class T>
+void Celda<T>::verCelda()
+{
+	typename list<T>::iterator it;
+	for (it = lista.begin(); it != lista.end(); it++)
+		std::cout << (*it).getX() << " - " << (*it).getY() << std::endl;
+}
+
 
 //-------------------------------------------------------------------------------------------------------------------
 
@@ -59,18 +70,20 @@ class MallaRegular
 {
 	vector<vector<Celda<T>>> buffer;
 	float xMin = 0, xMax = 0, yMin = 0, yMax = 0, interX = 0, interY = 0;
-	unsigned nDivX = 0, nDivY = 0;
+	unsigned nDivX = 0, nDivY = 0, nElementos = 0;
 public:
 	MallaRegular();
 	MallaRegular(float aXMin, float aYMin, float aXMax, float aYMax, int nDivX, int nDivY);
 	MallaRegular(MallaRegular& orig);
 	~MallaRegular();
 	MallaRegular<T>& operator=(MallaRegular& right);
-	T& buscarCercano(float x, float y);
+	T* buscarCercano(float x, float y);
 	bool fueraAmbito(float x, float y);
-	MallaRegular<T>& insertar(T dato);
+	MallaRegular<T>& insertar(T& dato);
 	unsigned maxElementosPorCelda();
 	float mediaElementosPorCelda();
+	unsigned getNumElementos();
+	void recorrerMalla();
 };
 
 
@@ -127,7 +140,7 @@ MallaRegular<T>& MallaRegular<T>::operator=(MallaRegular& right)
 *@Brief Busca el dato más cercano a la posicion que se indica mediantes los parametros x, y
 */
 template<class T>
-T& MallaRegular<T>::buscarCercano(float x, float y)
+T* MallaRegular<T>::buscarCercano(float x, float y)
 {
 	//TODO: excepciones si x, y no estan en rango
 	UTM coordenadas(x, y);
@@ -151,35 +164,6 @@ T& MallaRegular<T>::buscarCercano(float x, float y)
 		iniciobucleY++;
 	if (finbucleY >= (yMax / interY))
 		finbucleY--;
-
-	//if (posX != 0 && posX != (xMax / interX)) {
-	//	iniciobucleX = posX - 1;
-	//	finbucleX = posX + 1;
-	//	if (finbucleX >= nDivX)
-	//		finbucleX--;
-	//}
-	//else if (posX == 0) {
-	//	iniciobucleX = 0;
-	//	finbucleX = posX + 1;
-	//	
-	//}
-	//else {
-	//	iniciobucleX = posX - 1;
-	//	finbucleX = (xMax/interX);
-	//}
-	//
-	//if (posY != 0 && posY != (yMax / interY)) {
-	//	iniciobucleY = posY - 1;
-	//	finbucleY = posY + 1;
-	//}
-	//else if (posY == 0) {
-	//	iniciobucleY = 0;
-	//	finbucleY = posY + 1;
-	//}
-	//else {
-	//	iniciobucleY = posY - 1;
-	//	finbucleY = (yMax / interY);
-	//}
 	while (!aux) {
 		for (unsigned i = iniciobucleX; i <= finbucleX; i++) {
 			for (unsigned j = iniciobucleY; j <= finbucleY; j++) {
@@ -194,6 +178,8 @@ T& MallaRegular<T>::buscarCercano(float x, float y)
 				
 			}
 		}
+		if (iniciobucleX <= 0 && finbucleX >= nDivX && iniciobucleY <= 0 && finbucleY >= nDivY)
+			return 0;
 		if (iniciobucleX-- < 0) {
 			iniciobucleX++;
 		}
@@ -207,7 +193,7 @@ T& MallaRegular<T>::buscarCercano(float x, float y)
 			finbucleY--;
 		}
 	}
-	return *aux;
+	return aux;
 }
 
 /**
@@ -240,7 +226,9 @@ bool MallaRegular<T>::fueraAmbito(float x, float y)
 		for (unsigned j = iniciobucleY; j <= finbucleY; j++) {
 			aux = &(buffer[i][j].masCercano(coordenadas));
 			if (aux) {
-				return false;
+				if (abs(x - aux.getX()) <= interX && abs(y - aux.getY()) <= interY) {
+					return false;
+				}
 			}
 		}
 	}
@@ -252,12 +240,13 @@ bool MallaRegular<T>::fueraAmbito(float x, float y)
 * @pre Es necesario que la clase T tenga implementados los métodos getX() y getY()
 */
 template<class T>
-MallaRegular<T>& MallaRegular<T>::insertar(T dato){
+MallaRegular<T>& MallaRegular<T>::insertar(T& dato){
 	//int posX = (dato.getUTM().latitud - xMin) / interX;
 	//int posY = (yMax - dato.getUTM().longitud) / interY;
 	int posX = (dato.getX() - xMin) / interX;
 	int posY = (dato.getY() - yMin) / interY;
 	buffer[posX][posY].insertar(dato);
+	nElementos++;
 	return *this;
 }
 
@@ -289,5 +278,22 @@ float MallaRegular<T>::mediaElementosPorCelda()
 		}
 	}
 	return totalElem/(nDivX*nDivY);
+}
+
+template<class T>
+inline unsigned MallaRegular<T>::getNumElementos()
+{
+	return nElementos;
+}
+
+template<class T>
+void MallaRegular<T>::recorrerMalla()
+{
+	for (size_t i =	0; i < nDivX; i++)
+	{
+		for (size_t j = 0; j < nDivY; j++) {
+			buffer[i][j].verCelda();
+		}
+	}
 }
 
