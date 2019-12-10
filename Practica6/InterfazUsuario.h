@@ -386,7 +386,13 @@ void bloquearMoto(EcoCityMoto& ecocity) {
 		cin >> opcionRecarga;
 		if (opcionRecarga[0] == 'S' || opcionRecarga[0] == 's') {
 			cout << "Buscando posicion mas cercana a" << vehiculo->getUTM().toCSV() << "..." << endl;
-			PuntoRecarga* cercano = ecocity.buscarCercano(vehiculo->getUTM().latitud, vehiculo->getUTM().longitud);
+			PuntoRecarga* cercano;
+			try {
+				cercano = ecocity.buscarCercano(vehiculo->getUTM().latitud, vehiculo->getUTM().longitud);
+			}
+			catch (std::out_of_range & e) {
+				cerr << e.what();
+			}
 			if (!cercano) {
 				clienteActivo = antiguo;
 				cout << "No se pudo encontrar ningun punto de recarga" << endl;
