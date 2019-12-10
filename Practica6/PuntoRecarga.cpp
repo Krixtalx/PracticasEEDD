@@ -33,11 +33,17 @@ PuntoRecarga& PuntoRecarga::operator=(const PuntoRecarga& right)
 	return *this;
 }
 
+/**
+* @Brief Devuelve la coordenada X del Punto de Recarga
+*/
 float PuntoRecarga::getX()
 {
 	return posicion.latitud;
 }
 
+/**
+* @Brief Devuelve la coordenada Y del Punto de Recarga
+*/
 float PuntoRecarga::getY()
 {
 	return posicion.longitud;

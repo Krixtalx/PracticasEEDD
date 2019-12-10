@@ -18,6 +18,9 @@ public:
 
 // ---------------------- IMPLEMENTACIONES --------------------------------------------------------
 
+/**
+* @Brief Devuelve el nº de elementos que hay en la celda.
+*/
 template<class T>
 unsigned Celda<T>::getNumEle()
 {
@@ -46,16 +49,18 @@ T& Celda<T>::masCercano(UTM coor)
 }
 
 /**
-* @Brief Inserta una copia del dato que se pasa como parametro al final de la lista
+* @Brief Inserta una copia del dato que se pasa como parametro al final de la lista.
 */
 template<class T>
 void Celda<T>::insertar(T dato){
 	lista.push_back(dato);
 }
 
+/**
+* @Brief Muestra las coordenadas de los elementos que hay en la celda.
+*/
 template<class T>
-void Celda<T>::verCelda()
-{
+void Celda<T>::verCelda(){
 	typename list<T>::iterator it;
 	for (it = lista.begin(); it != lista.end(); it++)
 		std::cout << (*it).getX() << " - " << (*it).getY() << std::endl;
@@ -108,17 +113,26 @@ MallaRegular<T>::MallaRegular(float aXMin, float aYMin, float aXMax, float aYMax
 	interY = (yMax - yMin) / nDivY;
 }
 
+/**
+* @Brief Constructor de copia de Malla Regular
+*/
 template<class T>
 MallaRegular<T>::MallaRegular(MallaRegular& orig) : xMin(orig.xMin), xMax(orig.xMax), yMin(orig.yMin), yMax(orig.yMax), nDivX(orig.nDivX), nDivY(orig.nDivY), interX(orig.interX), interY(orig.interY), nElementos(orig.nElementos)
 {
 	buffer = orig.buffer;
 }
 
+/**
+* @Brief Destructor de Malla Regular
+*/
 template<class T>
 MallaRegular<T>::~MallaRegular()
 {
 }
 
+/**
+* @Brief Operador= de Malla Regular
+*/
 template<class T>
 MallaRegular<T>& MallaRegular<T>::operator=(MallaRegular& right)
 {
@@ -142,14 +156,18 @@ MallaRegular<T>& MallaRegular<T>::operator=(MallaRegular& right)
 
 /**
 *@Brief Busca el dato más cercano a la posicion que se indica mediantes los parametros x, y
+*@Return Devuelve el dato que encuentre. Si no encuentra ninguno, devuelve un puntero nulo
+*@Throw Out_of_range si las coordenadas pasadas como parametro no se encuentra en el rango permitido
 */
 template<class T>
 T* MallaRegular<T>::buscarCercano(float x, float y)
 {
-	//TODO: excepciones si x, y no estan en rango
+
+	if (x<xMin || x>xMax || y<yMin || y>yMax)
+		throw std::out_of_range("[MallaRegular::buscarCercano]:Las coordenadas pasadas como parametro no se encuentran en el rango permitido.");
+
 	UTM coordenadas(x, y);
 	int posX = (x - xMin) / interX;
-	//int posY = (yMax - y) / interY;
 	int posY = (y - yMin) / interY;
 	int iniciobucleX, iniciobucleY, finbucleX, finbucleY;
 	double distancia=9999;
@@ -203,11 +221,14 @@ T* MallaRegular<T>::buscarCercano(float x, float y)
 /**
 *@Brief Comprueba si existe un punto fijo a menos de una celda de distancia de la posición
 *@Return true si no hay punto fijo a menos de una celda, false en otro caso
+*@Throw Out_of_range si las coordenadas pasadas como parametro no se encuentra en el rango permitido
 */
 template<class T>
 bool MallaRegular<T>::fueraAmbito(float x, float y)
 {
-	//TODO: excepciones si x, y no estan en rango
+	if (x<xMin || x>xMax || y<yMin || y>yMax)
+		throw std::out_of_range("[MallaRegular::fueraAmbito]:Las coordenadas pasadas como parametro no se encuentran en el rango permitido.");
+
 	UTM coordenadas(x, y);
 	int posX = (x - xMin) / interX;
 	int posY = (y - yMin) / interY;
@@ -245,8 +266,6 @@ bool MallaRegular<T>::fueraAmbito(float x, float y)
 */
 template<class T>
 MallaRegular<T>& MallaRegular<T>::insertar(T& dato){
-	//int posX = (dato.getUTM().latitud - xMin) / interX;
-	//int posY = (yMax - dato.getUTM().longitud) / interY;
 	int posX = (dato.getX() - xMin) / interX;
 	int posY = (dato.getY() - yMin) / interY;
 	buffer[posX][posY].insertar(dato);
@@ -284,12 +303,18 @@ float MallaRegular<T>::mediaElementosPorCelda()
 	return totalElem/(nDivX*nDivY);
 }
 
+/**
+*@Brief Devuelve nº de elementos que hay en las celdas
+*/
 template<class T>
-inline unsigned MallaRegular<T>::getNumElementos()
+unsigned MallaRegular<T>::getNumElementos()
 {
 	return nElementos;
 }
 
+/**
+*@Brief Recorre cada celda y muestra por pantalla sus elementos.
+*/
 template<class T>
 void MallaRegular<T>::recorrerMalla()
 {
@@ -301,8 +326,12 @@ void MallaRegular<T>::recorrerMalla()
 	}
 }
 
+/**
+*@Brief Devuelve el tamaño de las celdas
+*@Return Devuelve un pair donde el primer campo es el tamaño X de la celda y el segundo campo es el tamaño Y de la celda
+*/
 template<class T>
-inline pair<float, float> MallaRegular<T>::getTamCelda()
+pair<float, float> MallaRegular<T>::getTamCelda()
 {
 	return pair<float, float>(interX, interY);
 }
