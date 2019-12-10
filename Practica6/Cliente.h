@@ -9,6 +9,7 @@
 using namespace std;
 
 class EcoCityMoto;
+class PuntoRecarga;
 
 class Cliente {
 private:
@@ -22,12 +23,12 @@ private:
 	UTM posicion;
 	std::list<Itinerario*>* listaItinerarios=0;
 	EcoCityMoto* aplicacion = 0;
-	int puntos = 10;
+	int puntos = 0;
 
 public:
 	Cliente();
 	Cliente(string dni);
-	Cliente(string _dni, string _pass, string _nombre, string _apellido, string _direccion, double _latitud, double _longitud);
+	Cliente(string _dni, string _pass, string _nombre, string _apellido, string _direccion, double _latitud, double _longitud, int _puntos);
 	Cliente(const Cliente& orig);
 	virtual ~Cliente();
 	bool operator<(Cliente& otro);
@@ -53,8 +54,12 @@ public:
 	string toCSV();
 	void mostrarMensaje(string texto);
 	string& getDisplay();
+
 	int getPuntos();
-	void setPuntos(int nuevosPuntos);
+	void decrementarPunto();
+	void incrementarPunto();
+	void puntoRecargaCercano();
+	void recargarMoto(PuntoRecarga* pr);
 };
 
 #endif /* CLIENTE_H */

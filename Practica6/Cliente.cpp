@@ -19,8 +19,8 @@ Cliente::Cliente(string dni): dni(dni) {
 /**
 *@Brief Constructor parametrizado
 */
-Cliente::Cliente(string _dni, string _pass, string _nombre, string _apellido, string _direccion, double _latitud, double _longitud) :
-	dni(_dni), pass(_pass), nombre(_nombre), apellido(_apellido), direccion(_direccion), posicion(_latitud, _longitud), display("No hay moto en uso") {
+Cliente::Cliente(string _dni, string _pass, string _nombre, string _apellido, string _direccion, double _latitud, double _longitud, int _puntos) :
+	dni(_dni), pass(_pass), nombre(_nombre), apellido(_apellido), direccion(_direccion), posicion(_latitud, _longitud), display("No hay moto en uso"), puntos(_puntos) {
 	nombreCompleto = nombre + " " + apellido;
 	listaItinerarios = new std::list<Itinerario*>;
 }
@@ -331,7 +331,28 @@ int Cliente::getPuntos()
 	return puntos;
 }
 
-void Cliente::setPuntos(int nuevosPuntos)
+void Cliente::decrementarPunto()
 {
-	puntos = nuevosPuntos;
+	puntos--;
+}
+
+void Cliente::incrementarPunto()
+{
+	puntos++;
+}
+
+void Cliente::puntoRecargaCercano()
+{
+	PuntoRecarga* encontrado = aplicacion->puntoRecargaCercano(this);
+	if (encontrado) {
+		recargarMoto(encontrado);
+	}
+}
+
+void Cliente::recargarMoto(PuntoRecarga* pr)
+{
+	listaItinerarios->back()->getVehiculo()->recargar(pr);
+	posicion.latitud = pr->getX();
+	posicion.longitud = pr->getY();
+	display = ("Moto recargada en el punto de recarga: " + pr->getID());
 }

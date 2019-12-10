@@ -64,7 +64,7 @@ public:
 
 	void crearPuntosDeRecarga(UTM minimo, UTM maximo, int diviX, int diviY);
 	string infoRecargas();
-	PuntoRecarga* buscarCercano(float x, float y);
+	PuntoRecarga* puntoRecargaCercano(Cliente* cli);
 	void verPuntos();
 };
 

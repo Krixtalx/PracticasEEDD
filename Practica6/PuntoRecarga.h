@@ -20,6 +20,7 @@ public:
 	PuntoRecarga& operator=(const PuntoRecarga& right);
 	float getX();
 	float getY();
+	string getID();
 };
 
 

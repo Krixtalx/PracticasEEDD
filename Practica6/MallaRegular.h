@@ -180,11 +180,11 @@ T* MallaRegular<T>::buscarCercano(float x, float y)
 	finbucleY = posY+1;
 	if (iniciobucleX < 0)
 		iniciobucleX++;
-	if (finbucleX >= (xMax / interX))
+	if (finbucleX >= nDivX)
 		finbucleX--;
 	if (iniciobucleY < 0)
 		iniciobucleY++;
-	if (finbucleY >= (yMax / interY))
+	if (finbucleY >= nDivY)
 		finbucleY--;
 	while (!aux) {
 		for (unsigned i = iniciobucleX; i <= finbucleX; i++) {
@@ -241,11 +241,11 @@ bool MallaRegular<T>::fueraAmbito(float x, float y)
 	finbucleY = posY + 1;
 	if (iniciobucleX < 0)
 		iniciobucleX++;
-	if (finbucleX >= (xMax / interX))
+	if (finbucleX >= nDivX)
 		finbucleX--;
 	if (iniciobucleY < 0)
 		iniciobucleY++;
-	if (finbucleY >= (yMax / interY))
+	if (finbucleY >= nDivY)
 		finbucleY--;
 	for (unsigned i = iniciobucleX; i <= finbucleX; i++) {
 		for (unsigned j = iniciobucleY; j <= finbucleY; j++) {

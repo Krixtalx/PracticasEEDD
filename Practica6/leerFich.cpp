@@ -113,9 +113,8 @@ void leerFich::leeLineaCliente(string& csv, EcoCityMoto* ecocity, Cliente*& cliA
 	dlon = std::stod(longitud);
 	setlocale(LC_ALL, "spanish");
 	//con todos los atributos leídos, se crea el cliente
-	Cliente client(dni, pass, nombre, apellido, direccion, dlat, dlon);
+	Cliente client(dni, pass, nombre, apellido, direccion, dlat, dlon, (rand() % 9) + 1);
 	client.setAplicacion(ecocity);
-	client.setPuntos((rand() % 9) + 1);
 	try {
 		if (!ecocity->nuevoCliente(client))
 			throw std::runtime_error("Error al insertar");
@@ -298,7 +297,7 @@ void leerFich::vectorClientes(string& csv, std::vector<Cliente*>* v)
 	dlon = std::stod(longitud);
 	setlocale(LC_ALL, "spanish");
 	//con todos los atributos leídos, se crea el cliente
-	Cliente* client=new Cliente(dni, pass, nombre, apellido, direccion, dlat, dlon);
+	Cliente* client=new Cliente(dni, pass, nombre, apellido, direccion, dlat, dlon, 10);
 	client->setAplicacion(0);
 	v->push_back(client);
 

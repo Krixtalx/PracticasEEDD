@@ -148,3 +148,16 @@ void Moto::comprobarBateria(int limiteBateria)
 	if (porcentajeBateria < limiteBateria)
 		estado = estatus::sinbateria;
 }
+
+void Moto::recargar(PuntoRecarga* pr)
+{
+	posicion.latitud = pr->getX();
+	posicion.longitud = pr->getY();
+	terminarRecarga();
+}
+
+void Moto::terminarRecarga()
+{
+	porcentajeBateria = 100;
+	estado = bloqueada;
+}

@@ -106,7 +106,7 @@ Moto& EcoCityMoto::localizaMotoCercana(UTM posicion)
 {
 	Moto* masCercana = 0;
 	double menorDistancia = 99999, distancia;
-	Cliente temp("", "", "", "", "", posicion.latitud, posicion.longitud);
+	Cliente temp("", "", "", "", "", posicion.latitud, posicion.longitud, 0);
 	for (int i = motos->size() - 1; i >= 0; i--) {
 		distancia = (*motos)[i]->distanciaCliente(temp);
 		if (distancia < menorDistancia) {
@@ -337,6 +337,9 @@ void EcoCityMoto::setIdUltimo(unsigned _id)
 vector<Moto*>* EcoCityMoto::localizaMotoSinBateria() {
 	vector<Moto*>* mSinBateria = new vector<Moto*>;
 	for(unsigned i = 0; i < motos->size(); i++){
+		if (i == 309) {
+			int x = 5 + 2;
+		}
 		if ((*motos)[i]->getEstado() == estatus::sinbateria && recargas.fueraAmbito((*motos)[i]->getUTM().latitud, (*motos)[i]->getUTM().longitud)) {
 			mSinBateria->push_back((*motos)[i]);
 		}
@@ -578,9 +581,9 @@ string EcoCityMoto::infoRecargas()
 	return ss.str();
 }
 
-PuntoRecarga* EcoCityMoto::buscarCercano(float x, float y)
+PuntoRecarga* EcoCityMoto::puntoRecargaCercano(Cliente* cli)
 {
-	return recargas.buscarCercano(x, y);
+	return recargas.buscarCercano(cli->getPosicion().latitud, cli->getPosicion().longitud);
 }
 
 void EcoCityMoto::verPuntos()

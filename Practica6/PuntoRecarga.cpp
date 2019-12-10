@@ -48,3 +48,8 @@ float PuntoRecarga::getY()
 {
 	return posicion.longitud;
 }
+
+string PuntoRecarga::getID()
+{
+	return id;
+}

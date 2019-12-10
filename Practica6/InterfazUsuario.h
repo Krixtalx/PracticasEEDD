@@ -112,9 +112,8 @@ void insertarCliente(EcoCityMoto& ecocity) {
 			cout << "Valor no válido, sólo se permite un valor entre 1 y 10" << endl;
 		}
 	}
-	Cliente cliente(dni, pass, nombre, apellidos, direccion, latitud, longitud);
+	Cliente cliente(dni, pass, nombre, apellidos, direccion, latitud, longitud, puntos);
 	cliente.setAplicacion(&ecocity);
-	cliente.setPuntos(puntos);
 	cout << "¿Quiere emplear el cliente recién insertado para operaciones futuras? [S/n] ";
 	char opcion = 'S';
 	cin >> opcion;
@@ -385,37 +384,28 @@ void bloquearMoto(EcoCityMoto& ecocity) {
 		string opcionRecarga;
 		cin >> opcionRecarga;
 		if (opcionRecarga[0] == 'S' || opcionRecarga[0] == 's') {
-			cout << "Buscando posicion mas cercana a" << vehiculo->getUTM().toCSV() << "..." << endl;
-			PuntoRecarga* cercano;
-			try {
-				cercano = ecocity.buscarCercano(vehiculo->getUTM().latitud, vehiculo->getUTM().longitud);
-			}
-			catch (std::out_of_range & e) {
-				cerr << e.what();
-			}
+			PuntoRecarga* cercano = ecocity.puntoRecargaCercano(clienteActivo);
 			if (!cercano) {
+				cout << "No se ha encontrado ningun punto de recarga." << endl;
 				clienteActivo = antiguo;
-				cout << "No se pudo encontrar ningun punto de recarga" << endl;
 				return;
 			}
-			cout << "El punto de recarga mas cercano se encuentra en " << cercano->getX() << " " << cercano->getY() << endl << "Moviendo la moto..." << endl;
-			UTM nuevaPos(cercano->getX(), cercano->getY());
-			vehiculo->setUTM(nuevaPos);
-			cout << "La moto ha sido recargada (porcentaje anterior: " << vehiculo->getPorcentajeBateria() << "%, porcentaje actual: ";
-			vehiculo->setPorcentajeBateria(100, ecocity.getLimiteBateria());
-			cout << vehiculo->getPorcentajeBateria() << "%)" << endl;
-			if (clienteActivo->getPuntos() < 10){
-				clienteActivo->setPuntos(clienteActivo->getPuntos() + 1);
-				cout << "El cliente " << clienteActivo->getDni() << " tiene " << clienteActivo->getPuntos() << " puntos." << endl;
-			}
-			else
-			{
-				cout << "El cliente ya dispone del máximo de puntos: " << clienteActivo->getPuntos() << endl;
+			int bateriaAntes = clienteActivo->getItinerarios().back()->getVehiculo()->getPorcentajeBateria();
+			clienteActivo->puntoRecargaCercano();
+			cout << "Moto recargada de " << bateriaAntes << "% a " << clienteActivo->getItinerarios().back()->getVehiculo()->getPorcentajeBateria() << "%" << endl;
+			if (cercano->getX() == clienteActivo->getPosicion().latitud && cercano->getY() == clienteActivo->getPosicion().longitud) {
+				if (clienteActivo->getPuntos() < 10) {
+					clienteActivo->incrementarPunto();
+					cout << "Puntuación incrementada, el cliente " << clienteActivo->getDni() << " dispone de " << clienteActivo->getPuntos() << " puntos." << endl;
+				}
+				else {
+					cout << "El cliente ya dispone de la puntuación máxima." << endl;
+				}
 			}
 		}
 		else {
 			cout << "Decrementando puntos del cliente..." << endl;
-			clienteActivo->setPuntos(clienteActivo->getPuntos() - 1);
+			clienteActivo->decrementarPunto();
 			if (clienteActivo->getPuntos() == 0) {
 				if (ecocity.eliminarCliente(clienteActivo->getDni())) {
 					cout << "Se ha eliminado al cliente por alcanzar el mínimo de puntos." << endl;

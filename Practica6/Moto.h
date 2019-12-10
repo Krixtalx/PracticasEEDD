@@ -4,7 +4,7 @@
 
 #include <string>
 #include "Cliente.h"
-#include "UTM.h"
+#include "PuntoRecarga.h"
 
 struct Estado {
 	bool bloqueada=false;
@@ -43,6 +43,9 @@ public:
 	double distanciaMoto(Moto& otro);
 	double distanciaCliente(Cliente& cliente);
 	void comprobarBateria(int limiteBateria);
+
+	void recargar(PuntoRecarga* pr);
+	void terminarRecarga();
 };
 
 #endif // !MOTO_H
