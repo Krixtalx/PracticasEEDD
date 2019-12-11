@@ -1235,17 +1235,57 @@ bool menuBasico(EcoCityMoto& ecocity, Cliente* cliente) {
 			break;
 
 		case 4:
-			clearScreen();
-			try {
-				cliente->terminarTrayecto(false);
+		{
+			string sinBat;
+			cout << "¿Forzar estado sin batería en la moto? [S/n]: ";
+			cin >> sinBat;
+			if (sinBat[0] == 'S' || sinBat[0] == 's')
+				clienteActivo->terminarTrayecto(true);
+			else
+				clienteActivo->terminarTrayecto(false);
+			Moto* vehiculo = clienteActivo->getItinerarios().back()->getVehiculo();
+			cout << "Se ha bloqueado la moto " << vehiculo->getId() << endl;
+			if (vehiculo->getPorcentajeBateria() < ecocity.getLimiteBateria()) {
+				cout << "Es necesario recargar la moto, ¿buscar el punto de recarga más cercano? [S/n]: ";
+				string opcionRecarga;
+				cin >> opcionRecarga;
+				if (opcionRecarga[0] == 'S' || opcionRecarga[0] == 's') {
+					PuntoRecarga* cercano = ecocity.puntoRecargaCercano(clienteActivo);
+					if (!cercano) {
+						cout << "No se ha encontrado ningun punto de recarga." << endl;
+						break;
+					}
+					int bateriaAntes = clienteActivo->getItinerarios().back()->getVehiculo()->getPorcentajeBateria();
+					clienteActivo->puntoRecargaCercano();
+					cout << "Moto recargada de " << bateriaAntes << "% a " << clienteActivo->getItinerarios().back()->getVehiculo()->getPorcentajeBateria() << "%" << endl;
+					if (cercano->getX() == clienteActivo->getPosicion().latitud && cercano->getY() == clienteActivo->getPosicion().longitud) {
+						if (clienteActivo->getPuntos() < 10) {
+							clienteActivo->incrementarPunto();
+							cout << "Puntuación incrementada, el cliente " << clienteActivo->getDni() << " dispone de " << clienteActivo->getPuntos() << " puntos." << endl;
+						}
+						else {
+							cout << "El cliente ya dispone de la puntuación máxima." << endl;
+						}
+					}
+				}
+				else {
+					cout << "Decrementando puntos del cliente..." << endl;
+					clienteActivo->decrementarPunto();
+					if (clienteActivo->getPuntos() == 0) {
+						if (ecocity.eliminarCliente(clienteActivo->getDni())) {
+							cout << "Se ha eliminado al cliente por alcanzar el mínimo de puntos." << endl;
+						}
+						else {
+							cerr << "[bloquearMoto]No se pudo borrar" << endl;
+						}
+					}
+					else {
+						cout << "El cliente " << clienteActivo->getDni() << " tiene " << clienteActivo->getPuntos() << " puntos." << endl;
+					}
+				}
 			}
-			catch (std::runtime_error & e) {
-				cerr << e.what();
-				return false;
-			}
-			cout << "Moto bloqueada";
 			break;
-
+		}
 		case 5:
 			clearScreen();
 			cout << cliente->getDisplay() << endl;
@@ -1295,6 +1335,7 @@ bool login(EcoCityMoto& ecocity) {
 			cout << "Introduzca su contraseña: ";
 			cin >> pass;
 			if (aux->getPass() == pass) {
+				clienteActivo = aux;
 				menuBasico(ecocity, aux);
 				cout << "¿Quiere salir de la aplicación? [S/n]: ";
 				string opcion;
